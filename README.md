@@ -12,7 +12,7 @@ A multiplayer (3-4 players) online board game similar to the Settles of Catan bu
 Action Cards made, Resource Cards made, game board made, Game mechanics implemented, multiplayer online enabled.
 
 ## Additional Features for Final Version
-Game lobby front end made, Database implemented to store game state, Game animations.
+Game lobby front end made, Database implemented to store game state, keeping track of stats for each player (ie. wins, losses etc.) Game animations.
 
 ## Technologies
 Firebase Database, ReactJS, BoardGame.io, react-game-kit.
