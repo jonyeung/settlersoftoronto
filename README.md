@@ -22,4 +22,4 @@ Firebase Database, ReactJS, BoardGame.io, react-game-kit.
 2. Saving a game state so that others can rejoin when they disconnect
 3. Connecting players to the same game and having their actions/moves on the board be synced across all players
 4. Creating private game "rooms" specific to the players in that lobby
-5. Creating the game board
+5. Ensuring the game logic doesn't break other game rules and that the game flows correctly
