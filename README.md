@@ -1,7 +1,7 @@
 # Project Proposal
 
 ## Team Members:
-David Liu,
+Ziming Liu,
 Tony Zeng,
 Jonathan Yeung.
 
