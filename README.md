@@ -20,6 +20,6 @@ Firebase Database, ReactJS, BoardGame.io, react-game-kit.
 ## Top 5 Technical Challenges
 1. Creating turn based actions and preventing others from interfering
 2. Saving a game state so that others can rejoin when they disconnect
-3. Creating private game "rooms" specific to the players in that lobby
-4. Implementing the game rules
+3. Connecting players to the same game and having their actions/moves on the board be synced across all players
+4. Creating private game "rooms" specific to the players in that lobby
 5. Creating the game board
