@@ -3,7 +3,7 @@
 ## Team Members:
 David Liu,
 Tony Zeng,
-Jonathan Yeung,
+Jonathan Yeung.
 
 ## Description
 A multiplayer (3-4 players) online board game similar to the Settles of Catan but with our own custom rules. 
