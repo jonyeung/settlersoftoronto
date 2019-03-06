@@ -1,0 +1,38 @@
+.Content {
+  margin-top: 100px;
+  width: 100%;
+}
+
+.CenterText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 60vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.CenterText h1 {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 40px;
+}
+
+.CenterText p {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 24px;
+  text-indent: 30pt;
+}
+
+@media (max-width: 700px) {
+  .CenterText {
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .CenterText p {
+    font-size: 18px;
+  }
+}

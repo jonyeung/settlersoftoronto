@@ -1,0 +1,567 @@
+.Background {
+  background-image: url('../../assests/images/night-sky.jpg');
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+@media (max-height: 200px) {
+  .Background {
+    height: 400vh;
+  }
+}
+
+@media (min-height: 300px) {
+  .Background {
+    height: 300vh;
+  }
+}
+
+@media (min-height: 500px) {
+  .Background {
+    height: 180vh;
+  }
+}
+
+@media (min-height: 700px) {
+  .Background {
+    height: 120vh;
+  }
+}
+
+@media (min-height: 850px) {
+  .Background {
+    height: 100vh;
+  }
+}
+
+/* Discovery Group Top */
+@media (min-width: 300px) {
+  .DiscoveryGroupTop {
+    background-color: rgba(255, 255, 255, 0);
+    width: 280px;
+    border-radius: 8px;
+    padding-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+  }
+  
+  .DiscoveryGroupTop p{
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+
+@media (min-width: 500px) {
+  .DiscoveryGroupTop {
+    background-color: rgba(255, 255, 255, 0);
+    height: 10px;
+    width: 480px;
+    border-radius: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .DiscoveryGroupTop p{
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    /* font-family: 'Times New Roman', Times, serif; */
+    margin: auto;
+  }
+}
+
+@media (min-width: 700px) {
+  .DiscoveryGroupTop {
+    background-color: rgba(255, 255, 255, 0);
+    height: 200px;
+    width: 700px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .DiscoveryGroupTop p{
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    /* font-family: 'Times New Roman', Times, serif; */
+    margin: auto;
+  }
+}
+
+@media (min-width: 1000px) {
+  .DiscoveryGroupTop {
+    background-color: rgba(255, 255, 255, 0);
+    height: 250px;
+    width: 1000px;
+    border-radius: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .DiscoveryGroupTop p{
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+    /* font-family: 'Times New Roman', Times, serif; */
+    margin: auto;
+  }
+}
+
+@media (min-width: 1500px) {
+  .DiscoveryGroupTop {
+    background-color: rgba(255, 255, 255, 0);
+    height: 300px;
+    width: 1500px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+
+  }
+  
+  .DiscoveryGroupTop p{
+    color: white;
+    font-size: 80px;
+    font-weight: bold;
+    /* font-family: 'Times New Roman', Times, serif; */
+  }
+}
+
+/* @media (min-height: 200px) {
+  .DiscoveryGroupTop {
+    padding-top: 100px;
+    margin-bottom: 70px;
+  }
+}
+
+@media (min-height: 500px) {
+  .DiscoveryGroupTop {
+    padding-top: 110px;
+  }
+}
+
+@media (min-height: 700px) {
+  .DiscoveryGroupTop {
+    padding-top: 100px;
+  }
+}
+
+@media (min-height: 850px) {
+  .DiscoveryGroupTop {
+    padding-top: 50px;
+  }
+} */
+
+/* Discovery Group middle */
+.DiscoveryGroupMiddle button:hover {
+  background-color: rgb(163, 62, 15);
+}
+
+.DiscoveryGroupMiddle button {
+  transition: background-color 0.2s ease;
+}
+
+@media (min-width: 300px) {
+  .DiscoveryGroupMiddle {
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 100px;
+    width: 280px;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupMiddle p{
+    color: white;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupMiddle button{
+    background-color: rgb(247, 103, 36);
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    height: 30px;
+    width: 115px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .ButtonGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+  }  
+}
+
+@media (min-width: 500px) {
+  .DiscoveryGroupMiddle {
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 150px;
+    width: 480px;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupMiddle p{
+    color: white;
+    font-size: 25px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupMiddle button{
+    background-color: rgb(247, 103, 36);
+    color: white;
+    font-size: 25px;
+    border-radius: 5px;
+    height: 50px;
+    width: 200px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .ButtonGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+  }  
+}
+
+@media (min-width: 700px) {
+  .DiscoveryGroupMiddle {
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 200px;
+    width: 680px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupMiddle p{
+    color: white;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupMiddle button{
+    background-color: rgb(247, 103, 36);
+    color: white;
+    font-size: 25px;
+    border-radius: 5px;
+    height: 70px;
+    width: 260px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .ButtonGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+  }  
+}
+
+@media (min-width: 1000px) {
+  .DiscoveryGroupMiddle {
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 300px;
+    width: 1000px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupMiddle p{
+    color: white;
+    font-size: 55px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupMiddle button{
+    background-color: rgb(247, 103, 36);
+    color: white;
+    font-size: 40px;
+    border-radius: 5px;
+    height: 70px;
+    width: 340px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .ButtonGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 30px;
+  }
+}
+
+/* @media (min-height: 500px) {
+  .DiscoveryGroupMiddle {
+    margin-bottom: 100px;
+  }
+}
+
+@media (min-height: 700px) {
+  .DiscoveryGroupMiddle {
+    margin-bottom: 100px;
+  }
+}
+
+@media (min-height: 850px) {
+} */
+
+/* Discovery Group Bottom */
+.DiscoveryGroupBottom .FontAwesomeIcon:hover{
+  color: rgb(247, 103, 36);
+}
+
+@media (min-width: 300px) {
+  .DiscoveryGroupBottom {
+    background-color: rgba(255, 255, 255, 0);
+    height: 500px;
+    width: 280px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom p{
+    color: white;
+    font-size: 16px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupBottom .FontAwesomeIcon{
+    color: white;
+    margin: auto auto;
+    height: 40px;
+  }
+  
+  .DiscoveryGroupBottom .IconGroup{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel p{
+    font-size: 16px;
+    width: 140px;
+  }
+  
+}
+
+@media (min-width: 500px) {
+  .DiscoveryGroupBottom {
+    background-color: rgba(255, 255, 255, 0);
+    height: 250px;
+    width: 480px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom p{
+    color: white;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupBottom .FontAwesomeIcon{
+    color: white;
+    margin: auto auto;
+    height: 50px;
+  }
+  
+  .DiscoveryGroupBottom .IconGroup{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel p{
+    font-size: 16px;
+    width: 150px;
+  }
+  
+}
+
+@media (min-width: 700px) {
+  .DiscoveryGroupBottom {
+    background-color: rgba(255, 255, 255, 0);
+    height: 300px;
+    width: 700px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom p{
+    color: white;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupBottom .FontAwesomeIcon{
+    color: white;
+    margin: auto auto;
+    height: 80px;
+  }
+  
+  .DiscoveryGroupBottom .IconGroup{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel p{
+    font-size: 16px;
+    width: 200px;
+  }
+  
+}
+
+@media (min-width: 1000px) {
+  .DiscoveryGroupBottom {
+    background-color: rgba(255, 255, 255, 0);
+    height: 300px;
+    width: 1000px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom p{
+    color: white;
+    font-size: 25px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupBottom .FontAwesomeIcon{
+    color: white;
+    margin: auto auto;
+  }
+  
+  .DiscoveryGroupBottom .IconGroup{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel p{
+    font-size: 18px;
+    width: 200px;
+  }
+  
+}
+
+@media (min-width: 1500px) {
+  .DiscoveryGroupBottom {
+    background-color: rgba(255, 255, 255, 0);
+    height: 300px;
+    width: 1000px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom p{
+    color: white;
+    font-size: 25px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .DiscoveryGroupBottom .FontAwesomeIcon{
+    color: white;
+    margin: auto auto;
+  }
+  
+  .DiscoveryGroupBottom .IconGroup{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .DiscoveryGroupBottom .IconLabel p{
+    font-size: 18px;
+    width: 200px;
+  }
+  
+}

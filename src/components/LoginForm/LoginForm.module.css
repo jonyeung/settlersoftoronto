@@ -1,0 +1,88 @@
+.Form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 4;
+  height: 250px;
+  background-color: lightgrey;
+  border-radius: 6px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.Field {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 10px;
+}
+
+.Field label {
+  font-size: 24px;
+}
+
+.Field input {
+  font-size: 20px;
+  width: 400px;
+  height: 40px;
+  padding: 5px;
+  border: 2px solid black;
+}
+
+@media(max-width: 550px) {
+  .Field .Regular {
+    width: 75vw;
+  }  
+}
+
+.Field .Message {
+  font-size: 20px;
+  width: 30vw;
+  height: 200px;
+  padding: 5px;
+  resize: none;
+  border: 2px solid black;
+}
+
+/* @media(max-width: 1200px) {
+  .Field input {
+    width: 80vw;
+  }
+  .Field .Message {
+    width: 80vw;
+  }
+} */
+
+.Field span {
+  color: red;
+}
+
+.Form .SubmitButton:hover {
+  background-color: rgb(163, 62, 15);
+}
+
+.Form .SubmitButton {
+  transition: background-color 0.2s ease;
+}
+
+.Form .SubmitButton {
+  background-color: rgb(247, 103, 36);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  height: 50px;
+  width: 115px;
+  border: none;
+  cursor: pointer;
+  margin-top: 50px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.Form .SubmitButtonLoading {
+  background-color: rgb(70, 50, 41);
+}

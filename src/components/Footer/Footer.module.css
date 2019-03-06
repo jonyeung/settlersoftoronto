@@ -1,0 +1,32 @@
+.Background {
+  background-color: #242424;
+  height: 200px;
+}
+
+.Content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 200px;
+}
+
+.Content p {
+  margin: auto auto;
+  color: white;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+.Content a {
+  color: white;
+}
+
+.Content a:hover {
+  color: rgb(247, 103, 36);
+}
+
+.FontAwesomeIcon:hover {
+  color: red;
+}

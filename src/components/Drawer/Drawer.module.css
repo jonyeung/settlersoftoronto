@@ -1,0 +1,48 @@
+.Background {
+  background-color: rgba(0, 0, 0, .5);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 110;
+}
+
+.Drawer {
+  background-color: rgb(247, 103, 36);
+  width: 280px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 120;
+  transition: transform 0.3s ease-out;
+}
+
+.ItemsGroup {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  padding-left: 20px;
+}
+
+.ItemsGroup a:hover {
+  color: rgba(0, 0, 0, .5);
+  cursor: pointer;
+}
+
+.ItemsGroup a {
+  margin-top: 30px;
+  font-size: 28px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.Open {
+  transform: translateX(0);
+}
+
+.Close {
+  transform: translateX(-100%);
+}

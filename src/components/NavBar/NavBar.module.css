@@ -1,0 +1,138 @@
+.Background {
+  background-color: rgba(255, 255, 255, 1);
+  height: 80px;
+  width: 100%;
+  box-shadow: 0 5px 10px grey;
+  position: fixed;
+  top: 0px;
+  left: 0pxs;
+  z-index: 100;
+}
+
+.Content {
+  display: flex;
+  flex-direction: row;
+  margin-left: 40px;
+  height: 100%;
+  width: 100%;
+}
+
+/* Home Logo */
+.Content a {
+  text-decoration: none;
+}
+
+.Content a h1{
+  color: black;
+}
+
+.Content a h1:hover{
+  color: rgb(247, 103, 36);
+  cursor: pointer;
+}
+
+@media (max-width: 450px) {
+  .Content a h1{
+    margin-top: 15px;
+    margin-bottom: auto;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 450px) {
+  .Content a h1{
+    min-width: 330px;
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 730px) {
+  .Content a h1{
+    width: 380px;
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 1405px) {
+  .Content a h1{
+    width: 400px;
+    font-size: 36px
+  }
+}
+
+/* navbar items */
+.NavItemsGroup a:hover {
+  color: rgb(247, 103, 36);
+  border: 2px solid rgb(247, 103, 36);;
+
+}
+
+.NavItemsGroup a {
+  color: black;
+  text-decoration: none;
+}
+
+.NavItemsGroup a .NavItem:hover {
+  border: 2px solid rgb(247, 103, 36);
+  color: rgb(247, 103, 36);
+  cursor: pointer;
+}
+
+.NavItemsGroup {
+  display: flex;
+  width: 40%;
+  height: 100%;
+  justify-content: flex-end;
+  margin-right: 100px;
+  margin-left: auto;
+}
+
+.NavItemsGroup .ActiveTab {
+  color: rgb(247, 103, 36);
+  border: 2px solid rgb(247, 103, 36);
+}
+
+@media (min-width: 1200px) {
+  .NavItemsGroup a {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+
+  }
+  .NavItemsGroup a .NavItem {
+    font-size: 24px;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    min-width: 150px;
+  }
+
+  .Burger {
+    display: none;
+  }
+}
+
+@media (max-width: 1200px) {
+
+  .Burger {
+    margin-top: auto;
+    margin-bottom: 23px;
+    cursor: pointer;
+  }
+
+  .Burger div {
+    width: 40px;
+    height: 3px;
+    background-color: black;
+    margin-top: 10px;
+    margin-right: 80px;
+  }
+
+  .NavItemsGroup a {
+    display: none
+  }
+}
+
