@@ -1,0 +1,34 @@
+.Board {
+  display: flex;
+  flex-direction: column;
+  margin-top: 80px;
+}
+
+.Board .Row1 {
+  display: flex;
+  justify-content: center;
+}
+
+.Board .Row2 {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+}
+
+.Board .Row3 {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+}
+
+.Board .Row4 {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+}
+
+.Board .Row5 {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+}
