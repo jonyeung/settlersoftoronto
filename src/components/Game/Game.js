@@ -5,6 +5,7 @@ import * as Board from './OriginalMap';
 import GamePlayerToolBar from '../GamePlayerToolBar/GamePlayerToolBar';
 import GamePlayerDevCards from '../GamePlayerDevCards/GamePlayerDevCards';
 import GameButtons from '../GameButtons/GameButtons';
+import TradeModal from '../TradeModal/TradeModal';
 
 
 class Game extends Component {
@@ -16,6 +17,7 @@ class Game extends Component {
   render() {
     return (
       <>
+        {/* <TradeModal></TradeModal> */}
         <GamePlayerToolBar></GamePlayerToolBar>
         <GameButtons></GameButtons>
         <div className={styles.Board}>

@@ -6,9 +6,9 @@ import styles from './GameButtons.module.css';
 class GameButtons extends Component {
   render() {
     return (
-      <div class={styles.Content}>
-        <div class={styles.TradeButton}>Trade Icon</div>
-        <div class={styles.EndTurnButton}>Roll/End Turn Icon</div>
+      <div className={styles.Content}>
+        <div className={styles.TradeButton}>Trade Icon</div>
+        <div className={styles.EndTurnButton}>Roll/End Turn Icon</div>
       </div>
     )
   }
