@@ -1,0 +1,193 @@
+.Hex {
+  margin-left: -62px;
+}
+
+.Hex .EdgeTopLeft {
+  width: 100px;
+  height: 10px;
+  background-color: orange;
+  transform: skewY(-30deg);
+}
+
+.Hex .EdgeTopRight {
+  width: 100px;
+  height: 10px;
+  background-color: orange;
+  margin-left: 100px;
+  margin-top: -10px;
+  transform: skewY(30deg);
+}
+
+.Hex .EdgeMiddleLeft {
+  width: 106px;
+  height: 10px;
+  background-color: orange;
+  margin-top: 69px;
+  transform: rotate(90deg);
+  margin-left: -48px;
+}
+
+.Hex .HexInner {
+  height: 360px;
+  width: 180px;
+  margin-top: -184px;
+  margin-left: 10px;
+  background-color: bisque;
+  /* transform: rotate(150deg); */
+  transform: rotate(120deg);
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.Hex .EdgeMiddleRight {
+  width: 106px;
+  height: 10px;
+  margin-left: 142px;
+  margin-top: -10px;
+  background-color: orange;
+  transform: rotate(90deg);
+}
+
+.Hex .EdgeMiddleRight {
+  width: 106px;
+  height: 10px;
+  margin-left: 142px;
+  margin-top: -10px;
+  background-color: orange;
+  transform: rotate(90deg);
+}
+
+.Hex .EdgeBottomLeft {
+  width: 100px;
+  height: 10px;
+  margin-left: 0px;
+  margin-top: -105px;
+  background-color: orange;
+  transform: skewY(30deg);
+}
+
+.Hex .EdgeBottomRight {
+  width: 100px;
+  height: 10px;
+  margin-left: 100px;
+  margin-top: -10px;
+  background-color: orange;
+  transform: skewY(-30deg);
+}
+
+.Hex .CornerTopMiddle {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 10px;
+  margin-top: -202px;
+  margin-left: 90px;
+  z-index: 100;
+}
+
+.Hex .CornerTopRight {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 10px;
+  margin-top: 35px;
+  margin-left: 183px;
+  z-index: 100;
+}
+
+.Hex .CornerTopLeft {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 10px;
+  margin-top: -20px;
+  margin-left: -3px;
+  z-index: 100;
+}
+
+.Hex .CornerBottomLeft {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 10px;
+  margin-top: 87px;
+  margin-left: -3px;
+  z-index: 100;
+}
+
+.Hex .CornerBottomRight {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 10px;
+  margin-top: -20px;
+  margin-left: 183px;
+  z-index: 100;
+}
+
+.Hex .CornerBottomMiddle {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 10px;
+  margin-top: 33px;
+  margin-left: 90px;
+  z-index: 100;
+}
+
+.HexCircle {
+  display: flex;
+  justify-content: center;
+  visibility: visible;
+  position: relative;
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+  margin-top: -145px;
+  margin-left: 70px;
+  background-color: beige;
+  z-index: 105;
+}
+
+.HexCircle p {
+  margin-top: auto;
+  margin-bottom: auto;
+  font-weight: bold;
+  color: black;
+}
+
+.Hex .EdgeTopLeft:hover, .Hex .EdgeTopMiddle:hover, .Hex .EdgeTopRight:hover, .Hex .EdgeMiddleLeft:hover, .Hex .EdgeMiddleRight:hover, .Hex .EdgeBottomLeft:hover, .Hex .EdgeBottomMiddle:hover, .Hex .EdgeBottomRight:hover, .Hex .CornerTopMiddle:hover, .Hex .CornerTopRight:hover, .Hex .CornerTopLeft:hover, .Hex .CornerBottomLeft:hover, .Hex .CornerBottomRight:hover, .Hex .CornerBottomMiddle:hover, .HexCircle:hover {
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+.Hex .HexIn1 {
+  overflow: hidden;
+  background-color: red;
+  width: 100%;
+  height: 100%;
+  /* transform: rotate(-120deg); */
+  transform: rotate(-60deg);
+}
+
+.Hex .HexIn2 {
+  background-color: black;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  /* background-image: url('https://i.pinimg.com/originals/3d/78/bb/3d78bb1d8a8bbca62192f6a30bd20ba6.jpg'); */
+  visibility: visible;
+  width: 100%;
+  height: 100%;
+  /* transform: rotate(60deg); */
+  transform: rotate(-60deg);
+}
+
+.ForestTile {
+  background-color: green;
+}
