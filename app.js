@@ -24,6 +24,7 @@ let gameState = (function() {
         cities = state.cities;
         currentLargestArmy = 0;
         currentLongestRoad = 0;
+        currentTurn = undefined;
     }
 })
 
@@ -92,6 +93,9 @@ let City = (function() {
 }());
 
 // initialize game state
+// req.body:
+//      numPlayers: total number of players in game
+//      player1, player2, ... : just requires player.username attribute
 app.post('/initialize', function(req, res, next) {
     let numPlayers = req.body.numPlayers;
     let players = [];
@@ -183,7 +187,7 @@ function generateRandomIntArray() {
 // build road
 app.post('/build/road/', function(req, res, next) {
     let gameState = req.body.gameState;
-    let currentPlayer = req.body.player;
+    let currentPlayer = gameState.currentTurn;
     if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
         let road = new Road({player: currentPlayer, start: req.body.start, end: req.body.end});
         gameState.roads.add(road);
@@ -209,25 +213,29 @@ app.post('/build/road/', function(req, res, next) {
 // build settlement
 app.post('/build/settlement/', function(req, res, next) {
     let gameState = req.body.gameState;
-    let currentPlayer = req.body.player;
-    if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
-        let settlement = new Settlement({player: currentPlayer, location: req.body.location});
-        gameState.settlements.add(settlement);
-        currentPlayer.resources.Wood--;
-        currentPlayer.resources.Brick--;
-        currentPlayer.resources.Wheat--;
-        currentPlayer.resources.Sheep--;
-        currentPlayer.VictoryPoint++;
-        checkWinCondition(currentPlayer);
+    if (isValidSettlement(req.body.location, gameState)) {
+        let currentPlayer = gameState.currentTurn;
+        if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
+            let settlement = new Settlement({player: currentPlayer, location: req.body.location});
+            gameState.settlements.add(settlement);
+            currentPlayer.resources.Wood--;
+            currentPlayer.resources.Brick--;
+            currentPlayer.resources.Wheat--;
+            currentPlayer.resources.Sheep--;
+            currentPlayer.VictoryPoint++;
+            checkWinCondition(currentPlayer);
+        } else {
+            return res.status(400).end("Lacking resources");
+        }
     } else {
-        return res.status(400).end("Lacking resources");
+        return res.status(400).end("Not a valid position");
     }
 })
 
 // upgrade to city
 app.post('/build/city/', function(req, res, next) {
     let gameState = req.body.gameState;
-    let currentPlayer = req.body.player;
+    let currentPlayer = gameState.currentTurn;
     if (currentPlayer.resources.Ore > 2 && currentPlayer.resource.Wheat > 1) {
         let city = new City({player: currentPlayer, location: req.body.location});
         gameState.cities.add(city);
@@ -263,7 +271,148 @@ function checkWinCondition(player) {
 
 // trade resources for other resources
 
+// check valid road position
+function isValidRoad(startPoint, endPoint, gameState) {
+    for (let road in gameState.roads) {
+        if (road.startPoint == startPoint && road.endPoint == endPoint) {
+            return false;
+        }
+    }
+    return true;
+}
 
+
+// check valid settlement spot
+function isValidSettlement(location, gameState) {
+    let adjacentLocations = getAdjacentSettlementPositions(location);
+    let connectingRoad = false;
+
+    for (let settlement in gameState.settlements) {
+        // check that the location is not occupied
+        if (settlement.location == location) {
+            return false;
+        }
+        // check that there are no other settlements within 1 space
+        if (adjacentLocations.indexOf(settlement.location) >= 0) {
+            return false;
+        }
+        // check there is a road connecting to the location
+        for (let road in gameState.roads) {
+            if (road.startPoint == location || road.endPoint == location) {
+                connectingRoad = true;
+            }
+        }
+    }
+    return existsConnectingRoad;
+}
+
+function getAdjacentSettlementPositions(location) {
+    let adjacentLocations = [];
+    if (location >= 1 && location <= 3) {
+        adjacentLocations.add(location + 3);
+        adjacentLocations.add(location + 4);
+    }
+    if (location == 4) {
+        adjacentLocations.add(1);
+        adjacentLocations.add(8);
+    }
+    if (location >= 5 && location <= 6) {
+        adjacentLocations.add(location - 4);
+        adjacentLocations.add(location - 3);
+        adjacentLocations.add(location + 4);
+    }
+    if (location == 7) {
+        adjacentLocations.add(3);
+        adjacentLocations.add(11);
+    }
+    if (location >= 8 && location <= 11) {
+        adjacentLocations.add(location - 4);
+        adjacentLocations.add(location + 4);
+        adjacentLocations.add(location + 5);
+    }
+    if (location == 12) {
+        adjacentLocations.add(8);
+        adjacentLocations.add(17);
+    }
+    if (location >= 13 && location <= 15) {
+        adjacentLocations.add(location - 5);
+        adjacentLocations.add(location - 4);
+        adjacentLocations.add(location + 5);
+    }
+    if (location == 16) {
+        adjacentLocations.add(11);
+        adjacentLocations.add(21);
+    }
+    if (location >= 17 && location <= 21) {
+        adjacentLocations.add(location - 5);
+        adjacentLocations.add(location + 5);
+        adjacentLocations.add(location + 6);
+    }
+    if (location == 22) {
+        adjacentLocations.add(17);
+        adjacentLocations.add(28);
+    }
+    if (location >= 23 && location <= 26) {
+        adjacentLocations.add(location - 6);
+        adjacentLocations.add(location - 5);
+        adjacentLocations.add(location + 6);
+    }
+    if (location >= 27 && location <= 28) {
+        adjacentLocations.add(location - 6);
+        adjacentLocations.add(location + 6);
+    }
+    if (location >= 29 && location <= 32) {
+        adjacentLocations.add(location - 6);
+        adjacentLocations.add(location + 5);
+        adjacentLocations.add(location + 6);
+    }
+    if (location == 33) {
+        adjacentLocations.add(27);
+        adjacentLocations.add(38);
+    }
+    if (location >= 34 && location <= 38) {
+        adjacentLocations.add(location - 6);
+        adjacentLocations.add(location - 5);
+        adjacentLocations.add(location + 5);
+    }
+    if (location == 39) {
+        adjacentLocations.add(34);
+        adjacentLocations.add(44);
+    }
+    if (location >= 40 && location <= 42) {
+        adjacentLocations.add(location - 5);
+        adjacentLocations.add(location + 4);
+        adjacentLocations.add(location + 5);
+    }
+    if (location == 43) {
+        adjacentLocations.add(38);
+        adjacentLocations.add(47);
+    }
+    if (location >= 44 && location <= 47) {
+        adjacentLocations.add(location - 5);
+        adjacentLocations.add(location - 4);
+        adjacentLocations.add(location + 4);
+    }
+    if (location == 48) {
+        adjacentLocations.add(44);
+        adjacentLocations.add(52);
+    }
+    if (location >= 49 && location <= 50) {
+        adjacentLocations.add(location - 4);
+        adjacentLocations.add(location + 3);
+        adjacentLocations.add(location + 4);
+    }
+    if (location == 51) {
+        adjacentLocations.add(47);
+        adjacentLocations.add(54);
+    }
+    if (location >= 52 && location <= 54) {
+        adjacentLocations.add(location - 4);
+        adjacentLocations.add(location - 3);
+    }
+
+    return adjacentLocations;
+}
 
 
 
