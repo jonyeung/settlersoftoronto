@@ -31,42 +31,79 @@ class TradeModal extends Component {
       offerAmountOre: 0,
 
       bankTrade: false,
-      playerSelected: 1
+      playerSelected: null,
+      playersAccepted: []
+    }
+
+    this.determinePlayersAcceptedStyle = () => {
+      this.player1Accepted = [styles.Player1, styles.PlayerDisplay];
+      this.player2Accepted = [styles.Player2, styles.PlayerDisplay];
+      this.player3Accepted = [styles.Player3, styles.PlayerDisplay];
+      this.player4Accepted = [styles.Player4, styles.PlayerDisplay];
+
+      this.state.playersAccepted.forEach(() => {
+        if (this.state.playerSelected == 1) {
+          this.player1Accepted[0] = styles.Player1Accepted;
+        }
+        if (this.state.playerSelected == 2) {
+          this.player2Accepted[0] = styles.Player2Accepted;
+        }
+        if (this.state.playerSelected == 3) {
+          this.player3Accepted[0] = styles.Player3Accepted;
+        }
+        if (this.state.playerSelected == 4) {
+          this.player4Accepted[0] = styles.Player4Accepted;
+        }
+      })
+
+      this.player1Accepted = this.player1Accepted.join(' ')
+      this.player2Accepted = this.player2Accepted.join(' ')
+      this.player3Accepted = this.player3Accepted.join(' ')
+      this.player4Accepted = this.player4Accepted.join(' ')
     }
 
     this.selectPlayer = (player) => {
       this.setState({
         ...this.state,
-        playerSelected: player
+        playerSelected: player,
+        bankTrade: false
       })
     }
 
     this.determinePlayerSelectedStyle = () => {
-      this.player1 = [styles.Player1];
-      this.player2 = [styles.Player2];
-      this.player3 = [styles.Player3];
-      this.player4 = [styles.Player4];
-//do this
+      this.player1Selected = [];
+      this.player2Selected = [];
+      this.player3Selected = [];
+      this.player4Selected = [];
+
       switch (this.state.playerSelected) {
         case 1:
+          this.player1Selected[0] = styles.Player1Selected;
           break;
         case 2:
+          this.player2Selected[0] = styles.Player2Selected;
           break;
         case 3:
+          this.player3Selected[0] = styles.Player3Selected;
           break;
         case 4:
+          this.player4Selected[0] = styles.Player4Selected;
           break;
         default:
           break;
       }
-      this.bankTrade = this.bankTrade.join(' ')
+      this.player1Selected = this.player1Selected.join(' ')
+      this.player2Selected = this.player2Selected.join(' ')
+      this.player3Selected = this.player3Selected.join(' ')
+      this.player4Selected = this.player4Selected.join(' ')
     }
 
     this.toggleBankTrade = () => {
       this.setState(
         {
           ...this.state,
-          bankTrade: !this.state.bankTrade
+          bankTrade: !this.state.bankTrade,
+          playerSelected: null
         }
       )
     }
@@ -254,6 +291,9 @@ class TradeModal extends Component {
 
   render() {
     this.determineBankTradeStyle();
+    this.determinePlayersAcceptedStyle();
+    this.determinePlayerSelectedStyle();
+
     return (
       <>
         <div className={styles.Content}>
@@ -350,23 +390,25 @@ class TradeModal extends Component {
 
           <div className={styles.Status}>
             <div className={styles.PlayersResponse}>
-              <div className={[styles.Player1, styles.PlayerDisplay].join(' ')}></div>
-              <div className={[styles.Player2, styles.PlayerDisplay].join(' ')}></div>
-              <div className={[styles.Player3, styles.PlayerDisplay].join(' ')}></div>
+              <div className={this.player1Accepted + ' ' + this.player1Selected} onClick={() => {
+                this.selectPlayer(1)
+              }}></div>
+              <div className={this.player2Accepted + ' ' + this.player2Selected} onClick={() => { this.selectPlayer(2) }}></div>
+              <div className={this.player3Accepted + ' ' + this.player3Selected} onClick={() => { this.selectPlayer(3) }}></div>
+              <div className={this.player4Accepted + ' ' + this.player4Selected} onClick={() => { this.selectPlayer(4) }}></div>
             </div>
 
-
-            <button className={this.bankTrade} onClick={() => { this.toggleBankTrade() }}>Bank Trade</button>
+            <button className={this.bankTrade} onClick={() => { this.toggleBankTrade()}}>Bank Trade</button>
 
             <div className={styles.ConfirmTrade} onClick={() => console.log(this.state)}>
               <div className={styles.Accept}></div>
-              <div className={styles.Cancel}></div>
+              <div className={styles.Cancel} onClick={this.props.closeTradeModal}></div>
             </div>
 
           </div>
         </div>
 
-        <div className={styles.Backdrop}></div>
+        <div className={styles.Backdrop} onClick={this.props.closeTradeModal}></div>
       </>
     )
   }

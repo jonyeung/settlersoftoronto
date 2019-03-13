@@ -10,6 +10,28 @@ import TradeModal from '../TradeModal/TradeModal';
 
 class Game extends Component {
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      tradeModalOpen: false
+    }
+
+    this.openTradeModal = () => {
+      this.setState({
+        ...this.state,
+        tradeModalOpen: true
+      })
+    }
+
+    this.closeTradeModal = () => {
+      this.setState({
+        ...this.state,
+        tradeModalOpen: false
+      })
+    }
+  }
+
   componentDidMount() {
 
   }
@@ -17,10 +39,13 @@ class Game extends Component {
   render() {
     return (
       <>
-        {/* <TradeModal></TradeModal> */}
+        {this.state.tradeModalOpen ? <TradeModal closeTradeModal={this.closeTradeModal} /> : null}
         <GamePlayerToolBar></GamePlayerToolBar>
-        <GameButtons></GameButtons>
+        <GameButtons openTradeModal={this.openTradeModal} />
         <div className={styles.Board}>
+          <div className={styles.Row0}>
+            {Board.Row0}
+          </div>
           <div className={styles.Row1}>
             {Board.Row1}
           </div>
@@ -35,6 +60,9 @@ class Game extends Component {
           </div>
           <div className={styles.Row5}>
             {Board.Row5}
+          </div>
+          <div className={styles.Row6}>
+            {Board.Row6}
           </div>
         </div>
         <GamePlayerDevCards></GamePlayerDevCards>
