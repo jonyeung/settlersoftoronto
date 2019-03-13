@@ -22,7 +22,7 @@ export let Row1 = [
   <Tile
     ResourceType={'Water'}
   ></Tile>,
-  <Tile
+  <Tile class='game_icon'
     ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
@@ -364,15 +364,15 @@ export let Row5 = [
 
 export let Row6 = [
   <Tile
-  ResourceType={'Water'}
-></Tile>,
+    ResourceType={'Water'}
+  ></Tile>,
   <Tile
-  ResourceType={'Water'}
-></Tile>,
+    ResourceType={'Water'}
+  ></Tile>,
   <Tile
-  ResourceType={'Water'}
-></Tile>,
+    ResourceType={'Water'}
+  ></Tile>,
   <Tile
-  ResourceType={'Water'}
-></Tile>
+    ResourceType={'Water'}
+  ></Tile>
 ]
