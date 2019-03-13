@@ -1,8 +1,9 @@
 import React from 'react';
 import Tile from '../Tile/Tile';
 
+
 export let Row1 = [
-  <Tile
+  <Tile class='game_icon'
     ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
