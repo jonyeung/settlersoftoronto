@@ -8,7 +8,7 @@
 .Content .Profile {
   width: 50%;
   height: 100%;
-  background-image: url("../../../media/user.png");
+  /* background-image: url("../../../media/user.png"); */
   background-repeat: no-repeat;
   background-size: 160px;
   background-position: center center;
@@ -42,7 +42,7 @@
 .Content .Info .Item1 .Icon{
   height: 30px;
   width: 20px;
-  background-image: url("../../../media/natural_resources.png");
+  /* background-image: url("../../../media/natural_resources.png"); */
   background-size: 30px;
   background-repeat: no-repeat;
   background-position: center center;
@@ -57,7 +57,7 @@
 .Content .Info .Item2 .Icon{
   height: 30px;
   width: 20px;
-  background-image: url("../../../media/development_cards.png");
+  /* background-image: url("../../../media/development_cards.png"); */
   background-size: 30px;
   background-repeat: no-repeat;
   background-position: center center;
@@ -72,7 +72,7 @@
 .Content .Info .Item3 .Icon{
   height: 30px;
   width: 20px;
-  background-image: url("../../../media/army.png");
+  /* background-image: url("../../../media/army.png"); */
   background-size: 30px;
   background-repeat: no-repeat;
   background-position: center center;
@@ -87,7 +87,7 @@
 .Content .Info .Item4 .Icon{
   height: 30px;
   width: 20px;
-  background-image: url("../../../media/road.jpg");
+  /* background-image: url("../../../media/road.jpg"); */
   background-size: 30px;
   background-repeat: no-repeat;
   background-position: center center;
@@ -106,7 +106,7 @@
   width: 25%;
   margin-top: 5px;
   margin-bottom: 5px;
-  background-image: url("../../../media/victory\ points.png");
+  /* background-image: url("../../../media/victory\ points.png"); */
   background-size: 60px;
   background-repeat: no-repeat;
   background-position: center center;

@@ -6,6 +6,8 @@ import GamePlayerToolBar from '../GamePlayerToolBar/GamePlayerToolBar';
 import GamePlayerDevCards from '../GamePlayerDevCards/GamePlayerDevCards';
 import GameButtons from '../GameButtons/GameButtons';
 import TradeModal from '../TradeModal/TradeModal';
+import ReactDice from 'react-dice-complete'
+import 'react-dice-complete/dist/react-dice-complete.css'
 
 
 class Game extends Component {
@@ -14,7 +16,8 @@ class Game extends Component {
     super(props)
 
     this.state = {
-      tradeModalOpen: false
+      tradeModalOpen: false,
+      showDice: false
     }
 
     this.openTradeModal = () => {
@@ -31,17 +34,60 @@ class Game extends Component {
       })
     }
   }
+  //dice
+  rollAll() {
+    console.log('rolling')
+    this.reactDice.rollAll()
+    setTimeout(() => {
+      console.log('timer set')
+      this.setState({
+        ...this.state,
+        showDice: false
+      })
+    }, 2500);
+
+    this.setState({
+      ...this.state,
+      showDice: true
+    })
+  }
+
+  rollDoneCallback(num) {
+    console.log(`You rolled a ${num}`)
+  }
 
   componentDidMount() {
 
   }
 
   render() {
+    let diceStyle = [styles.DiceRoll, styles.Hidden]
+    if (this.state.showDice) {
+      diceStyle.pop();
+    }
+    diceStyle = diceStyle.join(' ')
+
     return (
       <>
+        {
+          <div className={diceStyle} onClick={() => { this.rollAll() }}>
+            <ReactDice
+              numDice={2}
+              rollDone={this.rollDoneCallback}
+              ref={dice => this.reactDice = dice}
+              rollTime={1}
+              dieSize={200}
+              faceColor={'#f7ecdd'}
+              dotColor={'#333232'}
+              disableIndividual
+            />
+          </div>
+        }
+
         {this.state.tradeModalOpen ? <TradeModal closeTradeModal={this.closeTradeModal} /> : null}
         <GamePlayerToolBar></GamePlayerToolBar>
-        <GameButtons openTradeModal={this.openTradeModal} />
+        <GameButtons openTradeModal={this.openTradeModal}
+          rollDice={() => { this.rollAll() }} />
         <div className={styles.Board}>
           <div className={styles.Row0}>
             {Board.Row0}

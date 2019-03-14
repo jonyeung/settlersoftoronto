@@ -8,7 +8,7 @@ class GameButtons extends Component {
     return (
       <div className={styles.Content}>
         <div className={styles.TradeButton} onClick={this.props.openTradeModal}>Trade Icon</div>
-        <div className={styles.EndTurnButton}>Roll/End Turn Icon</div>
+        <div className={styles.EndTurnButton} onClick={this.props.rollDice}>Roll/End Turn Icon</div>
       </div>
     )
   }
