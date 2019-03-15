@@ -1,0 +1,36 @@
+.Content {
+  display: flex;
+  flex-direction: column;
+  height: 180px;
+  width: 120px;
+  background-color: orangered;
+}
+
+.Content .OfferAmount {
+  display: flex;
+  justify-content: center;
+  height: 30px;
+  width: 25px;
+  margin-top: 3px;
+  margin-left: 3px;
+  background-color: rgba(255, 255, 255, .9);
+  border-radius: 15px;
+}
+
+.Content .AvailableAmount {
+  display: flex;
+  justify-content: center;
+  height: 30px;
+  width: 25px;
+  margin-top: auto;
+  margin-bottom: 3px;
+  margin-left: 3px;
+  background-color: rgba(255, 255, 255, .9);
+  border-radius: 15px;
+}
+
+.Content .AvailableAmount .Amount,
+.Content .OfferAmount .Amount{
+  margin-top: auto;
+  margin-bottom: auto;
+}

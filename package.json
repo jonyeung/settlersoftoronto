@@ -11,6 +11,7 @@
     "npm": "^6.6.0",
     "react": "^16.7.0",
     "react-cookie": "^3.0.8",
+    "react-dice": "^1.0.1",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
@@ -20,7 +21,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "PORT=3005 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

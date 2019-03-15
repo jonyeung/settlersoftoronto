@@ -1,0 +1,232 @@
+.Content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  left: 50%;
+  top: 50%;
+  margin-left: -570px;
+  margin-top: -470px;
+  width: 1100px;
+  height: 900px;
+  z-index: 510;
+  border-radius: 15px;
+  border: 20px solid brown;
+  background-color: burlywood;
+}
+
+.Backdrop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 501;
+}
+
+.Content .Title {
+  font-size: 50px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.Content .Request {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  justify-content: center;
+}
+
+.Content .Request .Title {
+  margin-right: auto;
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 24px;
+}
+
+.Content .Request .ResourceCards {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.Content .Offer {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  justify-content: center;
+}
+
+.Content .Offer .Title {
+  margin-right: auto;
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 24px;
+}
+
+.Content .Offer .ResourceCards {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.Content .Status {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: rgba(106, 102, 110, 1);
+  height: 200px;
+  width: 100%;
+  margin-top: auto;
+}
+
+.Content .Status .PlayersResponse {
+  display: flex;
+}
+
+.Content .Status .PlayersResponse .PlayerDisplay {
+  height: 70px;
+  width: 70px;
+  border-radius: 35px;
+  margin-top: auto;
+  margin-bottom: auto;
+  cursor: pointer;
+}
+
+.Content .Status .PlayersResponse .Player1 {
+  background-color: rgba(134, 29, 93, 0.1);
+}
+
+.Content .Status .PlayersResponse .Player2 {
+  background-color: rgba(0, 93, 164, 0.1);
+}
+
+.Content .Status .PlayersResponse .Player3 {
+  background-color: rgba(70, 159, 72, 0.1);
+}
+
+.Content .Status .PlayersResponse .Player4 {
+  background-color: rgba(255, 232, 156, 0.1);
+}
+
+.Player1Accepted {
+  background-color: rgba(134, 29, 93, 1);
+}
+
+.Player2Accepted {
+  background-color: rgba(0, 93, 164, 1);
+}
+
+.Player3Accepted {
+  background-color: rgba(70, 159, 72, 1);
+}
+
+.Player4Accepted {
+  background-color: rgba(255, 232, 156, 1);
+}
+
+.Hide {
+  visibility: hidden;
+}
+
+.Content .Status .BankTrade {
+  background-color: rgba(255, 255, 255, .9);
+  cursor: pointer;
+  border-radius: 5px;
+  /* border: 5px solid black; */
+  width: 200px;
+  height: 60px;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 24px;
+}
+
+.Content .Status .BankTradeOff {
+  border: 5px solid black;
+}
+
+.Content .Status .BankTradeOn {
+  border: 5px solid orange;
+}
+
+.Content .Status .ConfirmTrade {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 150px;
+  height: 70px;
+}
+
+.Content .Status .ConfirmTrade .Accept {
+  height: 60px;
+  width: 60px;
+  background-color: green;
+  border-radius: 30px;
+  border: 5px solid black;
+  cursor: pointer;
+}
+
+.Content .Status .ConfirmTrade .Cancel {
+  height: 60px;
+  width: 60px;
+  background-color: red;
+  border-radius: 30px;
+  border: 5px solid black;
+  cursor: pointer;
+}
+
+.Player1NotSelected,
+.Player2NotSelected,
+.Player3NotSelected,
+.Player4NotSelected{
+  border: 5px solid black;
+}
+
+.Player1Selected,
+.Player2Selected,
+.Player3Selected,
+.Player4Selected{
+  border: 5px solid orange;
+}
+
+.AmountAdjust .Add:hover,
+.AmountAdjust .Minus:hover,
+.Content .Status .PlayersResponse .PlayerDisplay:hover{
+  border-color: orange;
+}
+
+.Selected {
+  border-color: orange;
+}
+
+.Content .CardGroup {
+  display: flex;
+}
+
+.AmountAdjust {
+  display: flex;
+  flex-direction: column;
+  margin-right: 2px;
+}
+
+.AmountAdjust .Add {
+  height: 30px;
+  width: 30px;
+  background-color: green;
+  border-radius: 15px;
+  border: 2px black solid;
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+
+.AmountAdjust .Minus {
+  height: 30px;
+  width: 30px;
+  background-color: red;
+  border-radius: 15px;
+  border: 2px black solid;
+  cursor: pointer;  
+}

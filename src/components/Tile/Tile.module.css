@@ -1,75 +1,138 @@
 .Hex {
-  margin-left: -62px;
+  margin-left: -53px;
+}
+
+.WaterHex {
+  margin-left: -53px;
+  position: relative;
+  z-index: -1;
+}
+
+.WaterHex .EdgeTopLeft {
+  width: 85px;
+  height: 10px;
+  background-color: navy;
+  transform: skewY(-30deg);
 }
 
 .Hex .EdgeTopLeft {
-  width: 100px;
+  width: 85px;
   height: 10px;
   background-color: orange;
   transform: skewY(-30deg);
 }
 
-.Hex .EdgeTopRight {
-  width: 100px;
+.WaterHex .EdgeTopRight {
+  width: 85px;
   height: 10px;
-  background-color: orange;
-  margin-left: 100px;
+  background-color: navy;
+  margin-left: 85px;
   margin-top: -10px;
   transform: skewY(30deg);
 }
 
-.Hex .EdgeMiddleLeft {
-  width: 106px;
+.Hex .EdgeTopRight {
+  width: 85px;
   height: 10px;
   background-color: orange;
-  margin-top: 69px;
-  transform: rotate(90deg);
-  margin-left: -48px;
+  margin-left: 85px;
+  margin-top: -10px;
+  transform: skewY(30deg);
 }
 
-.Hex .HexInner {
-  height: 360px;
-  width: 180px;
-  margin-top: -184px;
+.WaterHex .EdgeMiddleLeft {
+
+  width: 88px;
+  height: 10px;
+  background-color: navy;
+  margin-top: 57px;
+  transform: rotate(90deg);
+  margin-left: -39px;
+}
+
+.Hex .EdgeMiddleLeft {
+  width: 88px;
+  height: 10px;
+  background-color: orange;
+  margin-top: 57px;
+  transform: rotate(90deg);
+  margin-left: -39px;
+}
+
+.WaterHex .HexInner {
+  /* height: 310px;
+  width: 160px; */
+  height: 300px;
+  width: 150px;
+  margin-top: -155px;
   margin-left: 10px;
   background-color: bisque;
-  /* transform: rotate(150deg); */
   transform: rotate(120deg);
   overflow: hidden;
   visibility: hidden;
 }
 
-.Hex .EdgeMiddleRight {
-  width: 106px;
+.Hex .HexInner {
+  height: 300px;
+  width: 150px;
+  margin-top: -155px;
+  margin-left: 10px;
+  background-color: bisque;
+  transform: rotate(120deg);
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.WaterHex .EdgeMiddleRight {
+  width: 88px;
   height: 10px;
-  margin-left: 142px;
+  margin-left: 121px;
+  margin-top: -10px;
+  background-color: navy;
+  transform: rotate(90deg);
+}
+
+
+.Hex .EdgeMiddleRight {
+  width: 88px;
+  height: 10px;
+  margin-left: 121px;
   margin-top: -10px;
   background-color: orange;
   transform: rotate(90deg);
 }
 
-.Hex .EdgeMiddleRight {
-  width: 106px;
+.WaterHex .EdgeBottomLeft {
+  width: 85px;
   height: 10px;
-  margin-left: 142px;
-  margin-top: -10px;
-  background-color: orange;
-  transform: rotate(90deg);
+  margin-left: 0px;
+  margin-top: -88px;
+  background-color: navy;
+  transform: skewY(30deg);
 }
 
 .Hex .EdgeBottomLeft {
-  width: 100px;
+  width: 85px;
   height: 10px;
   margin-left: 0px;
-  margin-top: -105px;
+  margin-top: -88px;
   background-color: orange;
   transform: skewY(30deg);
 }
 
-.Hex .EdgeBottomRight {
-  width: 100px;
+.WaterHex .EdgeBottomRight {
+  width: 85px;
   height: 10px;
-  margin-left: 100px;
+  margin-left: 85px;
+  margin-top: -10px;
+  background-color: navy;
+  transform: skewY(-30deg);
+}
+
+.Hex .EdgeBottomRight {
+  width: 85px;
+  height: 10px;
+  margin-left: 85px;
   margin-top: -10px;
   background-color: orange;
   transform: skewY(-30deg);
@@ -81,8 +144,8 @@
   height: 20px;
   background-color: green;
   border-radius: 10px;
-  margin-top: -202px;
-  margin-left: 90px;
+  margin-top: -171px;
+  margin-left: 74px;
   z-index: 100;
 }
 
@@ -92,8 +155,8 @@
   height: 20px;
   background-color: green;
   border-radius: 10px;
-  margin-top: 35px;
-  margin-left: 183px;
+  margin-top: 25px;
+  margin-left: 153px;
   z-index: 100;
 }
 
@@ -114,8 +177,8 @@
   height: 20px;
   background-color: green;
   border-radius: 10px;
-  margin-top: 87px;
-  margin-left: -3px;
+  margin-top: 70px;
+  margin-left: -4px;
   z-index: 100;
 }
 
@@ -126,7 +189,7 @@
   background-color: green;
   border-radius: 10px;
   margin-top: -20px;
-  margin-left: 183px;
+  margin-left: 152px;
   z-index: 100;
 }
 
@@ -136,8 +199,8 @@
   height: 20px;
   background-color: green;
   border-radius: 10px;
-  margin-top: 33px;
-  margin-left: 90px;
+  margin-top: 25px;
+  margin-left: 75px;
   z-index: 100;
 }
 
@@ -149,8 +212,8 @@
   height: 60px;
   width: 60px;
   border-radius: 30px;
-  margin-top: -145px;
-  margin-left: 70px;
+  margin-top: -130px;
+  margin-left: 55px;
   background-color: beige;
   z-index: 105;
 }
@@ -167,12 +230,24 @@
   cursor: pointer;
 }
 
-.Hex .HexIn1 {
+.WaterHex .HexIn1, .Hex .HexIn1 {
   overflow: hidden;
   background-color: red;
   width: 100%;
   height: 100%;
   /* transform: rotate(-120deg); */
+  transform: rotate(-60deg);
+}
+
+.WaterHex .HexIn2 {
+  background-color: navy;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  /* background-image: url('https://i.pinimg.com/originals/3d/78/bb/3d78bb1d8a8bbca62192f6a30bd20ba6.jpg'); */
+  visibility: visible;
+  width: 100%;
+  height: 100%;
+  /* transform: rotate(60deg); */
   transform: rotate(-60deg);
 }
 
@@ -184,10 +259,42 @@
   visibility: visible;
   width: 100%;
   height: 100%;
-  /* transform: rotate(60deg); */
+  /* transform: rotate(60deg);*/
   transform: rotate(-60deg);
 }
 
-.ForestTile {
-  background-color: green;
+.WaterHex .Port {
+  display: flex;
+  justify-content: center;
+  visibility: visible;
+  position: relative;
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+  margin-top: -100px;
+  margin-left: 55px;
+  background-color: lightblue;
+  z-index: 105;
 }
+
+.ForestTile {
+  /* background-image: url('../../media/trees.png'); */
+  background-size: 320px;
+}
+
+.BricksTile {
+  /* background-image: url('../../media/bricks.png') */
+}
+
+.WheatTile {
+  /* background-image: url('../../media/wheat.png') */
+}
+
+.RockTile {
+  /* background-image: url('../../media/rocks.png') */
+}
+
+.SheepTile {
+  /* background-image: url('../../media/sheep.jpg') */
+}
+
