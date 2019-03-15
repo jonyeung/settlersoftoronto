@@ -24,3 +24,8 @@ export const ROOM_ACTION_FAILED = 'ROOM_ACTION_FAILED';
 
 export const SET_ROOMS = 'SET_ROOMS';
 export const SET_ROOMS_FAILED = 'SET_ROOMS_FAILED';
+
+export const SELECT_EDGE = 'SELECT_EDGE';
+export const UNSELECT_EDGE = 'UNSELECT_EDGE';
+export const SELECT_CORNER = 'SELECT_CORNER';
+export const UNSELECT_CORNER = 'UNSELECT_CORNER';

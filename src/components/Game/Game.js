@@ -10,6 +10,7 @@ import ReactDice from 'react-dice-complete'
 import 'react-dice-complete/dist/react-dice-complete.css'
 import GameBuildOptions from '../GameBuildOptions/GameBuildOptions';
 import Tile from '../Tile/Tile';
+import MyDashboard from '../MyDashboard/MyDashboard';
 
 
 class Game extends Component {
@@ -23,6 +24,20 @@ class Game extends Component {
 
       //'EDGE' 'CORNER' or null
       buildType: null
+    }
+
+    this.toggleBuildType = (type) => {
+      this.setState({
+        ...this.state,
+        buildType: type
+      })
+    }
+
+    this.closeBuildModal = () => {
+      this.setState({
+        ...this.state,
+        buildType: null
+      })
     }
 
     this.openTradeModal = () => {
@@ -95,7 +110,7 @@ class Game extends Component {
             this.state.buildType === null ?
               null
               :
-              <GameBuildOptions buildType={this.state.buildType} />
+              <GameBuildOptions buildType={this.state.buildType} close={this.closeBuildModal}/>
           }
 
         </div>
@@ -110,27 +125,101 @@ class Game extends Component {
             {Board.Row1.map((Tile) => {
               let newTile = React.cloneElement(
                 Tile,
-                { displayBuildOptions: () => { console.log('display build') } }
+                {
+                  displayEdgeBuildOptions: () => {
+                    this.toggleBuildType('EDGE')
+                  },
+                  displayCornerBuildOptions: () => {
+                    this.toggleBuildType('CORNER')
+                  }
+                }
               )
               return newTile
             })}
           </div>
           <div className={styles.Row2}>
-            {Board.Row2}
+            {Board.Row2.map((Tile) => {
+              let newTile = React.cloneElement(
+                Tile,
+                {
+                  displayEdgeBuildOptions: () => {
+                    this.toggleBuildType('EDGE')
+                  },
+                  displayCornerBuildOptions: () => {
+                    this.toggleBuildType('CORNER')
+                  }
+
+                }
+              )
+              return newTile
+            })}
           </div>
           <div className={styles.Row3}>
-            {Board.Row3}
+            {Board.Row3.map((Tile) => {
+              let newTile = React.cloneElement(
+                Tile,
+                {
+                  displayEdgeBuildOptions: () => {
+                    this.toggleBuildType('EDGE')
+                  },
+                  displayCornerBuildOptions: () => {
+                    this.toggleBuildType('CORNER')
+                  }
+                }
+              )
+              return newTile
+            })}
           </div>
           <div className={styles.Row4}>
-            {Board.Row4}
+            {Board.Row4.map((Tile) => {
+              let newTile = React.cloneElement(
+                Tile,
+                {
+                  displayEdgeBuildOptions: () => {
+                    this.toggleBuildType('EDGE')
+                  },
+                  displayCornerBuildOptions: () => {
+                    this.toggleBuildType('CORNER')
+                  }
+                }
+              )
+              return newTile
+            })}
           </div>
           <div className={styles.Row5}>
-            {Board.Row5}
+            {Board.Row5.map((Tile) => {
+              let newTile = React.cloneElement(
+                Tile,
+                {
+                  displayEdgeBuildOptions: () => {
+                    this.toggleBuildType('EDGE')
+                  },
+                  displayCornerBuildOptions: () => {
+                    this.toggleBuildType('CORNER')
+                  }
+                }
+              )
+              return newTile
+            })}
           </div>
           <div className={styles.Row6}>
-            {Board.Row6}
+            {Board.Row6.map((Tile) => {
+              let newTile = React.cloneElement(
+                Tile,
+                {
+                  displayEdgeBuildOptions: () => {
+                    this.toggleBuildType('EDGE')
+                  },
+                  displayCornerBuildOptions: () => {
+                    this.toggleBuildType('CORNER')
+                  }
+                }
+              )
+              return newTile
+            })}
           </div>
         </div>
+        <MyDashboard></MyDashboard>
         <GamePlayerDevCards></GamePlayerDevCards>
       </>
 

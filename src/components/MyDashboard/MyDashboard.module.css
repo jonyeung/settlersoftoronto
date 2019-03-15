@@ -1,0 +1,100 @@
+.Content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 300px;
+  bottom: 10px;
+  height: 250px;
+  width: 200px;
+  background-color: lightsalmon;
+  border: 10px solid brown;
+  border-radius: 5px;
+}
+
+.Content .Row1 {
+  display: flex;
+  margin: 10px;
+}
+
+.Content .Row2 {
+  display: flex;
+  margin: 10px;
+}
+
+.ResourceIcon {
+  height: 27px;
+  width: 27px;
+  border-radius: 3px;
+  margin-right: 3px;
+}
+
+.ResourceIconMini {
+  height: 13px;
+  width: 13px;
+  border-radius: 3px;
+  margin-right: 3px;
+}
+
+.ResourceAmount {
+  margin: 0;
+  margin-right: 10px;
+}
+
+.Wood {
+  background-color: white;
+}
+
+.Brick {
+  background-color: white;
+}
+
+.Sheep {
+  background-color: white;
+}
+
+.Wheat {
+  background-color: white;
+}
+
+.Ore {
+  background-color: white;
+}
+
+.BuyDevCard {
+  display: flex;
+  height: 60px;
+  margin: 5px;
+  border: 3px solid black;
+  cursor: pointer;
+  background-color: brown;
+}
+
+.BuyDevCard:hover {
+  border: 3px solid rgba(255, 255, 255, 0.5);
+
+}
+
+.BuyDevCard .Icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 3px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  background-color: white;
+}
+
+.BuyDevCard p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.Col {
+  display: flex;
+  flex-direction: column;
+  margin-top: -10px;
+}
+
+.Row {
+  display: flex;
+  flex-direction: row;
+}

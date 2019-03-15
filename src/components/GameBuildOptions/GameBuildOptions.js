@@ -70,7 +70,10 @@ class GameBuildOptions extends Component {
     }
     return (
       <div className={styles.Content}>
-        <p className={styles.Title}>Build</p>
+        <div className={styles.Row}>
+          <p className={styles.Title}>Build</p>
+          <div className={styles.Exit} onClick={this.props.close}></div>
+        </div>
         {show}
       </div>
     )

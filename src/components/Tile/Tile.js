@@ -6,42 +6,71 @@ class Tile extends Component {
 
   render() {
     let corners = <>
-      <div className={styles.CornerTopMiddle} onClick={console.log(this.componentWillReceiveProps)}></div>
+      <div className={styles.CornerTopMiddle} onClick={console.log()}></div>
 
-      <div className={styles.CornerTopRight} onClick={this.props.CornerTopRightAction}></div>
+      <div className={styles.CornerTopRight} onClick={()=>{
+        this.props.CornerTopRightAction()
+        this.props.displayCornerBuildOptions()
+        }}></div>
 
-      <div className={styles.CornerTopLeft} onClick={this.props.CornerTopLeftAction}></div>
+      <div className={styles.CornerTopLeft} onClick={()=>{
+        this.props.CornerTopLeftAction()
+        this.props.displayCornerBuildOptions()
+        }}></div>
 
-      <div className={styles.CornerBottomLeft} onClick={this.props.CornerBottomLeftAction}></div>
+      <div className={styles.CornerBottomLeft} onClick={()=>{
+        this.props.CornerBottomLeftAction()
+        this.props.displayCornerBuildOptions()
+        }}></div>
 
-      <div className={styles.CornerBottomRight} onClick={this.props.CornerBottomRightAction}></div>
+      <div className={styles.CornerBottomRight} onClick={()=>{
+        this.props.CornerBottomRightAction()
+        this.props.displayCornerBuildOptions()
+        }}></div>
 
-      <div className={styles.CornerBottomMiddle} onClick={this.props.CornerBottomMiddleAction}></div>
+      <div className={styles.CornerBottomMiddle} onClick={()=>{
+        this.props.CornerBottomMiddleAction()
+        this.props.displayCornerBuildOptions()
+        }}></div>
     </>
 
     let edgesTop =
       <>
         <div className={styles.EdgeTopLeft} onClick={() => {
           this.props.EdgeTopLeftAction()
-          this.props.displayBuildOptions()
+          this.props.displayEdgeBuildOptions()
         }}>
         </div>
         <div className={styles.EdgeTopRight} onClick={() => {
           this.props.EdgeTopRightAction()
           console.log(this.props)
-          // this.props.displayBuildOptions()
+          this.props.displayEdgeBuildOptions()
         }}></div>
         <div className={styles.EdgeMiddleLeft} onClick={() => {
 
           this.props.EdgeMiddleLeftAction()
-          this.props.displayBuildOptions()
+          this.props.displayEdgeBuildOptions()
         }}></div>
 
         <div className={styles.EdgeMiddleRight} onClick={() => {
           this.props.EdgeMiddleRightAction()
-          this.props.displayBuildOptions()
+          this.props.displayEdgeBuildOptions()
         }}></div>
       </>
+
+    let edgesBottom =
+      <>
+        <div className={styles.EdgeBottomLeft} onClick={() => {
+          this.props.EdgeBottomLeftAction()
+          this.props.displayEdgeBuildOptions()
+        }}></div>
+
+        <div className={styles.EdgeBottomRight} onClick={() => {
+          this.props.EdgeBottomRightAction()
+          this.props.displayEdgeBuildOptions()
+        }}></div>
+      </>
+
 
     return (
       <div className={this.props.ResourceType === 'Water' ? styles.WaterHex : styles.Hex}>
@@ -60,15 +89,7 @@ class Tile extends Component {
           </div>
         </div>
 
-        <div className={styles.EdgeBottomLeft} onClick={() => {
-          this.props.EdgeBottomLeftAction()
-          this.props.displayBuildOptions()
-        }}></div>
-
-        <div className={styles.EdgeBottomRight} onClick={() => {
-          this.props.EdgeBottomRightAction()
-          this.props.displayBuildOptions()
-        }}></div>
+        {edgesBottom}
 
         {this.props.ResourceType === 'Water' ? null : corners}
         {this.props.ResourceType === 'Water' ?
