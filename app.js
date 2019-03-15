@@ -19,12 +19,16 @@ let gameState = (function() {
     return function item(state) {
         players = state.players;
         hexes = state.hexes;
-        roads = state.roads;
-        settlements = state.settlements;
-        cities = state.cities;
+        roads = [];
+        settlements = [];
+        cities = [];
         currentLargestArmy = 0;
         currentLongestRoad = 0;
-        currentTurn = undefined;
+        currentPlayerNum = 0;
+        maxPlayerNum = state.maxPlayers;
+        currentTurn = player[currentPlayerNum];
+        gameOver = false;
+        winner = undefined;
     }
 })
 
@@ -72,7 +76,7 @@ let Hex = (function() {
 
 let Road = (function() {
     return function item(road) {
-        player = road.username;
+        player = road.player;
         startPoint = road.start;
         endPoint = road.end;
     }
@@ -80,14 +84,14 @@ let Road = (function() {
 
 let Settlement = (function() {
     return function item(settlement) {
-        player = settlement.username;
+        player = settlement.player;
         location = settlement.location;
     }
 }());
 
 let City = (function() {
     return function item(city) {
-        player = city.username;
+        player = city.player;
         location = city.location;
     }
 }());
@@ -107,7 +111,10 @@ app.post('/initialize', function(req, res, next) {
     }
     // set up board
     let hexes = setupHexes();
-    
+
+    // return gameState
+    let gameState = new gameState({players: players, hexes: hexes, maxPlayers: numPlayers});
+    return res.json(gameState);
 })
 
 function setupHexes() {
@@ -130,59 +137,115 @@ function setupHexes() {
     dicePositions['16'] = 6;
     dicePositions['17'] = 3;
     dicePositions['18'] = 11;
-    let randomPositions = generateRandomIntArray();
+    let randomResources = generateRandomOrderResources();
     let hexes = [];
-    i=0;
-    // make forest hexes
-    for (i; i < totalWoodWheatSheepHexes; i++) {
-        let position = randomPositions.pop();
-        let hex = new Hex({position: position, resourceType: 'Wood', diceNumber: dict[toString(position)]});
-        hexes.add(hex);
+    let i=1;
+    let desertPosition = Math.floor(Math.random() * 19) + 1;
+    let hex;
+    for (i; i < 20; i++) {
+        if (i == desertPosition) {
+            hex = new Hex({position: i, resourceType:'Desert', diceNumber: 0});
+            hex.robber = true;
+        } else {
+            hex = new Hex({position: i, resourceType: randomResources.pop(), diceNumber: dicePositions[toString(i)]});
+        }
+        hexes.add(hex);   
     }
-    i=0;
-    // make wheat hexes
-    for (i; i < totalWoodWheatSheepHexes; i++) {
-        let position = randomPositions.pop();
-        let hex = new Hex({position: position, resourceType: 'Wheat', diceNumber: dict[toString(position)]});
-        hexes.add(hex);
-    }
-    i=0;
-    // make sheep hexes
-    for (i; i < totalWoodWheatSheepHexes; i++) {
-        let position = randomPositions.pop();
-        let hex = new Hex({position: position, resourceType: 'Sheep', diceNumber: dict[toString(position)]});
-        hexes.add(hex);
-    }
-    i=0;
-    // make ore hexes
-    for (i; i < totalOreBrickHexes; i++) {
-        let position = randomPositions.pop();
-        let hex = new Hex({position: position, resourceType: 'Ore', diceNumber: dict[toString(position)]});
-        hexes.add(hex);
-    }
-    i=0;
-    // make brick hexes
-    for (i; i < totalOreBrickHexes; i++) {
-        let position = randomPositions.pop();
-        let hex = new Hex({position: position, resourceType: 'Brick', diceNumber: dict[toString(position)]});
-        hexes.add(hex);
-    }
-    // set desert hex
-    position = randomPositions.pop();
-    desertHex = new Hex({position: position, resourceType: 'Desert', diceNumber: 0});
-    hexes.add(hex);
+
     return hexes;
 }
 
-function generateRandomIntArray() {
-    for (var i = 0, ar = []; i < totalHexes; i++) {
-        ar[i] = i;
-    }
+function generateRandomOrderResources() {
+    ar = ["Wheat", "Wheat", "Wheat", "Wheat",
+            "Wood", "Wood", "Wood", "Wood",
+            "Sheep", "Sheep", "Sheep", "Sheep",
+            "Ore", "Ore", "Ore",
+            "Brick", "Brick", "Brick"];
     // randomize the array
     ar.sort(function () {
         return Math.random() - 0.5;
     });
 }
+
+// ends current player's turn and goes to the next player
+app.post('/turn/next/', function (req, res, next) {
+    let gameState = req.body.gameState;
+    let currentPlayerNum = gameState.currentPlayerNum;
+    if (currentPlayerNum == gameState.maxPlayerNum) {
+        // go to player 1
+        currentPlayerNum = 1;
+    } else {
+        currentPlayerNum++;
+    }
+    gameState.currentTurn = gameState.players[currentPlayerNum];
+    return res.json(gameState);
+})
+
+// Dice roll (7): current player moves robber to target hex
+app.post('/turn/robber/', function (req, res, next) {
+    let gameState = req.body.gameState;
+    let newRobberHex = req.body.robberPosition;
+    // remove robber from previous location
+    let previousHex = gameState.hexes.find(hex => {
+        return hex.robber == true;
+    });
+    previousHex.robber = false;
+
+    let newHex = gameState.hexes.find(hex => {
+        return hex.hexPosition == newRobberHex;
+    })
+    newHex.robber = true;
+    return res.json(gameState);
+})
+
+// Dice roll (2-6, 8-12): give out resources to players
+app.post('/turn/resources/', function (req, res, next) {
+    let gameState = req.body.gameState;
+    let roll = req.body.roll;
+
+    for (let hex in gameState.hexes) {
+        if (hex.diceNumber == roll && hex.robber == false) {
+            // give resources to all the players that own a settlement on this hex
+            for (let settlement in hex.settlements) {
+                addResource(hex.resourceType, settlement.player);
+            }
+            // give resources to all the players that own a city on this hex
+            for (let city in hex.cities) {
+                addResource(hex.resourceType, city.player);
+            }
+        }
+    }
+    return res.json(gameState);
+})
+
+
+function addResource(resource, currentPlayer) {
+    switch(resource) {
+        case 'Wood':
+            currentPlayer.Wood++;
+            break;
+        case 'Wheat':
+            currentPlayer.Wheat++;
+            break;
+        case 'Ore':
+            currentPlayer.Ore++;
+            break;
+        case 'Brick':
+            currentPlayer.Brick++;
+            break;
+        case 'Sheep':
+            currentPlayer.Sheep++;
+            break;
+    }
+}
+
+// build road (setup): no resource costs, can be placed anywhere
+app.post('/build/setup/road/', function(req, res, next) {
+    let gameState = req.body.gameState;
+    let currentPlayer = gameState.currentTurn;
+    let road = new Road({player: currentPlayer, start: req.body.start, end: req.body.end});
+    gameState.roads.add(road);
+})
 
 // build road
 app.post('/build/road/', function(req, res, next) {
@@ -193,8 +256,10 @@ app.post('/build/road/', function(req, res, next) {
         gameState.roads.add(road);
         currentPlayer.resources.Wood--;
         currentPlayer.resources.Brick--;
+        // TODO: check if this increments longest road
+        // currentPlayer.LongestRoadLength = currentPlayer.LongestRoadLength + 1;
         // check if this exceeds longest road
-        if (hasLongestRoad(currentPlayer)) {
+        if (hasLongestRoad(currentPlayer, gameState)) {
             for (let player in gameState.players) {
                 if (player.OwnsLongestRoad == true) {
                     player.VictoryPoints = player.VictoryPoints - 2;
@@ -203,10 +268,24 @@ app.post('/build/road/', function(req, res, next) {
             }
             currentPlayer.OwnsLongestRoad = true;
             currentPlayer.VictoryPoints = currentPlayer.VictoryPoints + 2;
-            checkWinCondition(currentPlayer);
+            gameState.currentLongestRoad = currentPlayer.LongestRoadLength;
+            checkWinCondition(currentPlayer, gameState);
         }
     } else {
         return res.status(400).end("Lacking resources");
+    }
+})
+
+// build settlement (setup): no resource costs
+app.post('/build/setup/settlement/', function(req, res, next) {
+    let gameState = req.body.gameState;
+    if (isValidSettlement(req.body.location, gameState)) {
+        let currentPlayer = gameState.currentTurn;
+        let settlement = new Settlement({player: currentPlayer, location: req.body.location});
+        addSettlementToHex(settlement, gameState);
+        currentPlayer.VictoryPoint++;
+    } else {
+        return res.status(400).end("Not a valid position");
     }
 })
 
@@ -217,13 +296,13 @@ app.post('/build/settlement/', function(req, res, next) {
         let currentPlayer = gameState.currentTurn;
         if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
             let settlement = new Settlement({player: currentPlayer, location: req.body.location});
-            gameState.settlements.add(settlement);
+            addSettlementToHex(settlement, gameState);
             currentPlayer.resources.Wood--;
             currentPlayer.resources.Brick--;
             currentPlayer.resources.Wheat--;
             currentPlayer.resources.Sheep--;
             currentPlayer.VictoryPoint++;
-            checkWinCondition(currentPlayer);
+            checkWinCondition(currentPlayer, gameState);
         } else {
             return res.status(400).end("Lacking resources");
         }
@@ -232,17 +311,169 @@ app.post('/build/settlement/', function(req, res, next) {
     }
 })
 
+function addSettlementToHex(settlement, gameState) {
+    let hexesToUpdate = getHexesAtLocation(settlement.location, gameState);
+    for (let hex in hexesToUpdate) {
+        hex.settlements.add(settlement);
+    }
+}
+
+function addCityToHex(city, gameState) {
+    let hexesToUpdate = getHexesAtLocation(city.location, gameState);
+    for (let hex in hexesToUpdate) {
+        hex.cities.add(city);
+    }
+}
+
+function getHexesAtLocation(location, gameState) {
+    let hexes = [];
+    if (location == 1 || location == 5 || location == 9 || 
+        location == 13 || location == 8 || location == 4) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 1;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 2 || location == 6 || location == 10 ||
+        location == 14 || location == 9 || location == 5) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 12;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 3 || location == 7 || location == 11 ||
+        location == 15 || location == 10 || location == 6) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 11;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 8 || location == 13 || location == 18 ||
+        location == 23 || location == 17 || location == 12) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 2;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 9 || location == 14 || location == 19 ||
+        location == 24 || location == 18 || location == 13) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 13;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 10 || location == 15 || location == 20 ||
+        location == 25 || location == 19 || location == 14) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 18;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 11 || location == 16 || location == 21 ||
+        location == 26 || location == 20 || location == 15) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 10;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 17 || location == 23 || location == 29 ||
+        location == 34 || location == 28 || location == 22) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 3;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 18 || location == 24 || location == 30 ||
+        location == 35 || location == 29 || location == 23) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 14;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 19 || location == 25 || location == 31 ||
+        location == 36 || location == 30 || location == 24) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 19;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 20 || location == 26 || location == 32 ||
+        location == 37 || location == 31 || location == 25) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 17;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 21 || location == 27 || location == 33 ||
+        location == 38 || location == 32 || location == 26) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 9;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 29 || location == 35 || location == 40 ||
+        location == 44 || location == 39 || location == 34) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 4;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 30 || location == 36 || location == 41 ||
+        location == 45 || location == 40 || location == 35) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 15;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 31 || location == 37 || location == 42 ||
+        location == 46 || location == 41 || location == 36) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 16;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 32 || location == 38 || location == 43 ||
+        location == 47 || location == 42 || location == 37) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 8;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 40 || location == 45 || location == 49 ||
+        location == 52 || location == 48 || location == 44) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 5;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 41 || location == 46 || location == 50 ||
+        location == 53 || location == 49 || location == 45) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 6;
+            });
+            hexes.add(targetHex);
+        }
+    if (location == 42 || location == 47 || location == 51 ||
+        location == 54 || location == 50 || location == 46) {
+            let targetHex = gameState.hexes.find(hex => {
+                return hex.hexPosition == 7;
+            });
+            hexes.add(targetHex);
+        }
+    return hexes;
+}
+
 // upgrade to city
 app.post('/build/city/', function(req, res, next) {
     let gameState = req.body.gameState;
     let currentPlayer = gameState.currentTurn;
     if (currentPlayer.resources.Ore > 2 && currentPlayer.resource.Wheat > 1) {
         let city = new City({player: currentPlayer, location: req.body.location});
-        gameState.cities.add(city);
+        addSettlementToHex(city, gameState);
         currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
         currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
         currentPlayer.VictoryPoint++;
-        checkWinCondition(currentPlayer);
+        checkWinCondition(currentPlayer, gameState);
     } else {
         return res.status(400).end("Lacking resources");
     }
@@ -252,19 +483,30 @@ app.post('/build/city/', function(req, res, next) {
 
 // play dev card
 
-// move robber and if possible take resource card
-
 // check longest road
-
-// check largest army
-
-// check win condition
-function checkWinCondition(player) {
-    if (player.VictoryPoints + player.devCards.VictoryPointCard > 9) {
+function hasLongestRoad(currentPlayer, gameState) {
+    let maxLength = 0;
+    for (let player in gameState.players) {
+        if (player !== currentPlayer) {
+            if (player.LongestRoadLength > maxLength) maxLength = player.LongestRoadLength;
+        }
+    }
+    if (currentPlayer.LongestRoadLength > maxLength && currentPlayer.LongestRoadLength >= 5) {
         return true;
     } else {
         return false;
     }
+
+}
+
+// check largest army
+
+// check win condition
+function checkWinCondition(player, gameState) {
+    if (player.VictoryPoints + player.devCards.VictoryPointCard > 9) {
+        gameState.gameOver = true;
+        gameState.winner = player;
+    } 
 }
 
 // trade resources between players
