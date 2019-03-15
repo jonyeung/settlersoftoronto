@@ -27,6 +27,8 @@ let gameState = (function() {
         currentPlayerNum = 0;
         maxPlayerNum = state.maxPlayers;
         currentTurn = player[currentPlayerNum];
+        gameOver = false;
+        winner = undefined;
     }
 })
 
@@ -267,7 +269,7 @@ app.post('/build/road/', function(req, res, next) {
             currentPlayer.OwnsLongestRoad = true;
             currentPlayer.VictoryPoints = currentPlayer.VictoryPoints + 2;
             gameState.currentLongestRoad = currentPlayer.LongestRoadLength;
-            checkWinCondition(currentPlayer);
+            checkWinCondition(currentPlayer, gameState);
         }
     } else {
         return res.status(400).end("Lacking resources");
@@ -300,7 +302,7 @@ app.post('/build/settlement/', function(req, res, next) {
             currentPlayer.resources.Wheat--;
             currentPlayer.resources.Sheep--;
             currentPlayer.VictoryPoint++;
-            checkWinCondition(currentPlayer);
+            checkWinCondition(currentPlayer, gameState);
         } else {
             return res.status(400).end("Lacking resources");
         }
@@ -471,7 +473,7 @@ app.post('/build/city/', function(req, res, next) {
         currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
         currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
         currentPlayer.VictoryPoint++;
-        checkWinCondition(currentPlayer);
+        checkWinCondition(currentPlayer, gameState);
     } else {
         return res.status(400).end("Lacking resources");
     }
@@ -500,12 +502,11 @@ function hasLongestRoad(currentPlayer, gameState) {
 // check largest army
 
 // check win condition
-function checkWinCondition(player) {
+function checkWinCondition(player, gameState) {
     if (player.VictoryPoints + player.devCards.VictoryPointCard > 9) {
-        return true;
-    } else {
-        return false;
-    }
+        gameState.gameOver = true;
+        gameState.winner = player;
+    } 
 }
 
 // trade resources between players
