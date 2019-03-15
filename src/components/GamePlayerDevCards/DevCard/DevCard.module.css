@@ -6,3 +6,25 @@
   background-color: lightsalmon;
   cursor: pointer;
 }
+
+.ForestCard {
+  background-image: url("../../../media/trees.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.RockCard {
+
+}
+
+.WheatCard{
+
+}
+
+.SheepCard{
+
+}
+
+.BrickCard{
+
+}
