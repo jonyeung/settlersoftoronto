@@ -1,34 +1,69 @@
 .Board {
   display: flex;
   flex-direction: column;
-  margin-top: 80px;
+  height: 98vh;
+  margin-top: 5px;
+  overflow-y: hidden;
+}
+
+.Board .Row0 {
+  display: flex;
+  justify-content: center;
+  margin-left: 0px;
 }
 
 .Board .Row1 {
   display: flex;
   justify-content: center;
+  margin-top: 32px;
 }
 
 .Board .Row2 {
   display: flex;
   justify-content: center;
-  margin-top: 44px;
+  margin-top: 32px;
 }
 
 .Board .Row3 {
   display: flex;
   justify-content: center;
-  margin-top: 44px;
+  margin-top: 32px;
 }
 
 .Board .Row4 {
   display: flex;
   justify-content: center;
-  margin-top: 44px;
+  margin-top: 32px;
 }
 
 .Board .Row5 {
   display: flex;
   justify-content: center;
-  margin-top: 44px;
+  margin-top: 32px;
+}
+
+.Board .Row6 {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.DiceRoll {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 200px;
+  width: 500px;
+  margin-top: -100px;
+  margin-left: -250px;
+  z-index: 900;
+}
+
+.Hidden {
+  visibility: hidden;
+}
+
+.GameBuildOptions {
+  position: relative;
+  z-index: 1000;
 }

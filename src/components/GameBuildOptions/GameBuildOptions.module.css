@@ -1,0 +1,93 @@
+.Content {
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  border: 20px solid brown;
+  background-color: burlywood;
+  z-index: 402;
+  top: 30px;
+  right: 280px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.Content .Title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.Option {
+  display: flex;
+  width: 97%;
+  height: 25%;
+  border: 3px solid black;
+  background-color: brown;
+  margin-bottom: 8px;
+}
+
+.Icon {
+  width: 40px;
+  height: 40px;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 3px;
+  background-color: white;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+.ResourceTitleCol {
+  display: flex;
+  flex-direction: column;
+  margin-top: -10px;
+}
+
+.ResourceTitleCol .Label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ResourceTitleCol .ResourcesNeeded {
+  display: flex;
+  flex-direction: row;
+}
+
+.ResourceIcon {
+  height: 13px;
+  width: 13px;
+  border-radius: 1px;
+  margin-top: -10px;
+  margin-right: 3px;
+  background-color: white;
+}
+
+.Settlement .Icon {
+  background-image: url('../../assests/images/forestTile.gif')
+}
+
+.City .Icon {
+  background-image: url('../../assests/images/forestTile.gif')
+}
+
+.Road .Icon {
+  background-image: url('../../assests/images/forestTile.gif')
+}
+
+.Wood {
+  background-image: url('../../assests/images/forestTile.gif')
+}
+
+.Brick {
+  background-image: url('../../assests/images/forestTile.gif')
+}
+
+.Sheep {
+  background-image: url('../../assests/images/forestTile.gif')
+}
+
+.Wheat {
+  background-image: url('../../assests/images/forestTile.gif')
+}
+
+.Ore {
+  background-image: url('../../assests/images/forestTile.gif')
+}
