@@ -8,6 +8,8 @@ import GameButtons from '../GameButtons/GameButtons';
 import TradeModal from '../TradeModal/TradeModal';
 import ReactDice from 'react-dice-complete'
 import 'react-dice-complete/dist/react-dice-complete.css'
+import GameBuildOptions from '../GameBuildOptions/GameBuildOptions';
+import Tile from '../Tile/Tile';
 
 
 class Game extends Component {
@@ -17,7 +19,10 @@ class Game extends Component {
 
     this.state = {
       tradeModalOpen: false,
-      showDice: false
+      showDice: false,
+
+      //'EDGE' 'CORNER' or null
+      buildType: null
     }
 
     this.openTradeModal = () => {
@@ -69,31 +74,46 @@ class Game extends Component {
 
     return (
       <>
-        {
-          <div className={diceStyle} onClick={() => { this.rollAll() }}>
-            <ReactDice
-              numDice={2}
-              rollDone={this.rollDoneCallback}
-              ref={dice => this.reactDice = dice}
-              rollTime={1}
-              dieSize={200}
-              faceColor={'#f7ecdd'}
-              dotColor={'#333232'}
-              disableIndividual
-            />
-          </div>
-        }
+
+        <div className={diceStyle} onClick={() => { this.rollAll() }}>
+          <ReactDice
+            numDice={2}
+            rollDone={this.rollDoneCallback}
+            ref={dice => this.reactDice = dice}
+            rollTime={1}
+            dieSize={200}
+            faceColor={'#f7ecdd'}
+            dotColor={'#333232'}
+            disableIndividual
+          />
+        </div>
 
         {this.state.tradeModalOpen ? <TradeModal closeTradeModal={this.closeTradeModal} /> : null}
         <GamePlayerToolBar></GamePlayerToolBar>
+        <div className={styles.GameBuildOptions}>
+          {
+            this.state.buildType === null ?
+              null
+              :
+              <GameBuildOptions buildType={this.state.buildType} />
+          }
+
+        </div>
         <GameButtons openTradeModal={this.openTradeModal}
           rollDice={() => { this.rollAll() }} />
         <div className={styles.Board}>
           <div className={styles.Row0}>
             {Board.Row0}
           </div>
+
           <div className={styles.Row1}>
-            {Board.Row1}
+            {Board.Row1.map((Tile) => {
+              let newTile = React.cloneElement(
+                Tile,
+                { displayBuildOptions: () => { console.log('display build') } }
+              )
+              return newTile
+            })}
           </div>
           <div className={styles.Row2}>
             {Board.Row2}
