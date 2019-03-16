@@ -15,8 +15,12 @@ app.use(function (req, res, next){
     next();
 });
 
+let Datastore = require('mongodb'),
+    gameStatesDB = new Datastore({ filename: 'db/gameStates.db', autoload: true, timestampData: true });
+
 let gameState = (function() {
     return function item(state) {
+        gameName = state.gameName;
         players = state.players;
         hexes = state.hexes;
         roads = [];
@@ -26,7 +30,8 @@ let gameState = (function() {
         currentLongestRoad = 0;
         currentPlayerNum = 0;
         maxPlayerNum = state.maxPlayers;
-        currentTurn = player[currentPlayerNum];
+        currentTurn = undefined;
+        turnPhase = 'game not started';
         gameOver = false;
         winner = undefined;
     }
@@ -96,26 +101,56 @@ let City = (function() {
     }
 }());
 
-// initialize game state
-// req.body:
-//      numPlayers: total number of players in game
-//      player1, player2, ... : just requires player.username attribute
-app.post('/initialize', function(req, res, next) {
-    let numPlayers = req.body.numPlayers;
+// create game room
+app.post('/setup/room/', function (req,res,next) {
+    let gameName = req.body.gameName;
     let players = [];
-    let i=0;
-    // initialize players
-    for (i; i < numPlayers; i++) {
-        let player = new Player(req.body.player + toString(i));
-        players.add(player);
-    }
+    let host = new Player(req.body.player);
+    players.add(host);
+
     // set up board
     let hexes = setupHexes();
 
-    // return gameState
-    let gameState = new gameState({players: players, hexes: hexes, maxPlayers: numPlayers});
+    let gameState = new gameState({gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length});
+    gameStatesDB.insert(gameState, function(err, state) {
+        if (err) return res.status(500).end(err);
+        return res.json(state);
+    })
+})
+
+// new player joins
+app.post('/setup/player/', function (req,res,next) {
+    let newPlayer = new Player(req.body.player);
+    gameStatesDB.findOneAndUpdate({'gameName': req.body.gameName}, [{$push: {'players': newPlayer}} , {$inc: {'maxPlayerNum': 1}} ], function(err, state) {
+        if (err) return res.status(500).end(err);
+        return res.json(state);
+    });
+})
+
+// get gameState by name
+app.get('/game/:name/', function (req, res, next) {
+    gameStatesDB.findOne({gameName:req.params.name}, function (err, state) {
+        if (err) return res.status(404).end(err);
+        return res.json(state);
+    })
+})
+
+// game starts
+app.post('/setup/start/', function (req, res, next) {
+    let gameState = req.body.gameState;
+    gameState.currentTurn = players[gameState.currentPlayerNum];
+    gameState.turnPhase = 'setup_placement';
+    gameState = storeGameState(gameState);
     return res.json(gameState);
 })
+
+function storeGameState(gameState) {
+    let gameName = gameState.gameName;
+    gameStatesDB.update({'gameName':gameName}, {$set: gameState}, function (err, gameState) {
+        if (err) return err;
+        return gameState;
+    });
+}
 
 function setupHexes() {
     let dicePositions = {};
@@ -178,6 +213,8 @@ app.post('/turn/next/', function (req, res, next) {
         currentPlayerNum++;
     }
     gameState.currentTurn = gameState.players[currentPlayerNum];
+    gameState.turnPhase = 'roll_phase';
+    gameState = storeGameState(gameState);
     return res.json(gameState);
 })
 
@@ -195,6 +232,8 @@ app.post('/turn/robber/', function (req, res, next) {
         return hex.hexPosition == newRobberHex;
     })
     newHex.robber = true;
+    gameState.turnPhase = 'build/trade/devcard_phase';
+    gameState = storeGameState(gameState);
     return res.json(gameState);
 })
 
@@ -215,6 +254,8 @@ app.post('/turn/resources/', function (req, res, next) {
             }
         }
     }
+    gameState.turnPhase = 'build/trade/devcard_phase';
+    gameState = storeGameState(gameState);
     return res.json(gameState);
 })
 
@@ -245,6 +286,8 @@ app.post('/build/setup/road/', function(req, res, next) {
     let currentPlayer = gameState.currentTurn;
     let road = new Road({player: currentPlayer, start: req.body.start, end: req.body.end});
     gameState.roads.add(road);
+    gameState = storeGameState(gameState);
+    return res.json(gameState);
 })
 
 // build road
@@ -271,6 +314,8 @@ app.post('/build/road/', function(req, res, next) {
             gameState.currentLongestRoad = currentPlayer.LongestRoadLength;
             checkWinCondition(currentPlayer, gameState);
         }
+        gameState = storeGameState(gameState);
+        return res.json(gameState);
     } else {
         return res.status(400).end("Lacking resources");
     }
@@ -284,6 +329,8 @@ app.post('/build/setup/settlement/', function(req, res, next) {
         let settlement = new Settlement({player: currentPlayer, location: req.body.location});
         addSettlementToHex(settlement, gameState);
         currentPlayer.VictoryPoint++;
+        gameState = storeGameState(gameState);
+        return res.json(gameState);
     } else {
         return res.status(400).end("Not a valid position");
     }
@@ -303,6 +350,8 @@ app.post('/build/settlement/', function(req, res, next) {
             currentPlayer.resources.Sheep--;
             currentPlayer.VictoryPoint++;
             checkWinCondition(currentPlayer, gameState);
+            gameState = storeGameState(gameState);
+            return res.json(gameState);
         } else {
             return res.status(400).end("Lacking resources");
         }
@@ -474,6 +523,8 @@ app.post('/build/city/', function(req, res, next) {
         currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
         currentPlayer.VictoryPoint++;
         checkWinCondition(currentPlayer, gameState);
+        gameState = storeGameState(gameState);
+        return res.json(gameState);
     } else {
         return res.status(400).end("Lacking resources");
     }
