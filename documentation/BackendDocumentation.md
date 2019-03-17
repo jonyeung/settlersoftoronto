@@ -26,7 +26,7 @@ build/trade/devcard_phase: current player can choose to build roads/settlements/
 	 - gameName: (string) name of the room
 	 -  username: (string) username of the player
 
-**'start_game', 'end_turn', 'seven_roll'**
+**'start_game', 'begin_main_game', 'end_turn', 'seven_roll'**
  - data:
 	 - gameName: (string) name of the room
 
