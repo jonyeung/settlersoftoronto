@@ -66,35 +66,35 @@
 }
 
 .Settlement .Icon {
-  background-image: url('../../assests/images/forestTile.gif')
+  /* background-image: url('../../assests/images/forestTile.gif') */
 }
 
 .City .Icon {
-  background-image: url('../../assests/images/forestTile.gif')
+  /* background-image: url('../../media/') */
 }
 
 .Road .Icon {
-  background-image: url('../../assests/images/forestTile.gif')
+  background-image: url('../../media/road.jpg')
 }
 
 .Wood {
-  background-image: url('../../assests/images/forestTile.gif')
+  background-image: url('../../media/trees.png')
 }
 
 .Brick {
-  background-image: url('../../assests/images/forestTile.gif')
+  background-image: url('../../media/bricks.png')
 }
 
 .Sheep {
-  background-image: url('../../assests/images/forestTile.gif')
+  background-image: url('../../media/sheep.jpg')
 }
 
 .Wheat {
-  background-image: url('../../assests/images/forestTile.gif')
+  background-image: url('../../media/wheat.png')
 }
 
 .Ore {
-  background-image: url('../../assests/images/forestTile.gif')
+  background-image: url('../../media/rocks.png')
 }
 
 .Content .Exit{

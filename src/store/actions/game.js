@@ -1,30 +1,30 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-projects';
 
-export const selectEdge = (room) => {
+export const selectEdge = (selectedEdgeId) => {
   return (dispatch) => dispatch({
     type: actionTypes.SELECT_EDGE,
-    joinedRoom: room
+    selectedEdgeId: selectedEdgeId
   })
 }
 
-export const unselectEdge = (room) => {
+export const unselectEdge = () => {
   return (dispatch) => dispatch({
     type: actionTypes.UNSELECT_EDGE,
-    joinedRoom: room
+    selectedEdgeId: null
   })
 }
 
-export const selectCorner = (room) => {
+export const selectCorner = (selectedCornerId) => {
   return (dispatch) => dispatch({
     type: actionTypes.SELECT_CORNER,
-    joinedRoom: room
+    selectedCornerId: selectedCornerId
   })
 }
 
-export const unselectCorner = (room) => {
+export const unselectCorner = () => {
   return (dispatch) => dispatch({
     type: actionTypes.UNSELECT_CORNER,
-    joinedRoom: room
+    selectedCornerId: null
   })
 }

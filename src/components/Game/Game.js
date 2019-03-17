@@ -89,7 +89,6 @@ class Game extends Component {
 
     return (
       <>
-
         <div className={diceStyle} onClick={() => { this.rollAll() }}>
           <ReactDice
             numDice={2}
@@ -122,7 +121,7 @@ class Game extends Component {
           </div>
 
           <div className={styles.Row1}>
-            {Board.Row1.map((Tile) => {
+            {Board.Row1.map((Tile, i) => {
               let newTile = React.cloneElement(
                 Tile,
                 {

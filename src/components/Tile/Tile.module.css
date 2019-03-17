@@ -278,23 +278,23 @@
 }
 
 .ForestTile {
-  /* background-image: url('../../media/trees.png'); */
+  background-image: url('../../media/trees.png');
   background-size: 320px;
 }
 
-.BricksTile {
-  /* background-image: url('../../media/bricks.png') */
+.BrickTile {
+  background-image: url('../../media/bricks.png')
 }
 
 .WheatTile {
-  /* background-image: url('../../media/wheat.png') */
+  background-image: url('../../media/wheat.png')
 }
 
 .RockTile {
-  /* background-image: url('../../media/rocks.png') */
+  background-image: url('../../media/rocks.png')
 }
 
 .SheepTile {
-  /* background-image: url('../../media/sheep.jpg') */
+  background-image: url('../../media/sheep.jpg')
 }
 
