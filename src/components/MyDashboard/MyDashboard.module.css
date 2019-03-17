@@ -41,23 +41,38 @@
 }
 
 .Wood {
-  background-color: white;
+  background-image:url("../../media/trees.png");
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: center center;
 }
 
 .Brick {
-  background-color: white;
+  background-image:url("../../media/bricks.png");
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: center center;
 }
 
 .Sheep {
-  background-color: white;
+  background-image:url("../../media/sheep.jpg");
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: center center;
 }
 
 .Wheat {
-  background-color: white;
+  background-image:url("../../media/wheat.png");
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: center center;
 }
 
 .Ore {
-  background-color: white;
+  background-image:url("../../media/rocks.png");
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: center center;
 }
 
 .BuyDevCard {
@@ -81,7 +96,10 @@
   margin-top: 10px;
   margin-right: 10px;
   margin-left: 10px;
-  background-color: white;
+  background-image:url("../../media/development.png");
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: center center;
 }
 
 .BuyDevCard p {
