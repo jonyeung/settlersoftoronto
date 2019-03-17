@@ -173,6 +173,16 @@ io.on('connection', function(socket) {
         io.sockets.emit('start_game', gameState);
     });
 
+    // begin main phase (after all setup is finished)
+    socket.on('begin_main_game', function(data) {
+        let gameState = findGameState(data.gameName);
+        gameState.currentPlayerNum = 0;
+        gameState.currentTurn = players[gameState.currentPlayerNum];
+        gameState.turnPhase = 'roll_phase';
+        gameState = storeGameState(gameState);
+        io.sockets.emit('begin_main_game', gameState);
+    })
+
     // ends current player's turn and goes to the next player
     socket.on('end_turn', function(data) {
         let gameState = findGameState(data.gameName);
