@@ -420,3 +420,8 @@ function getAdjacentSettlementPositions(location) {
 
     return adjacentLocations;
 }
+
+module.exports = {
+    setupHexes: setupHexes,
+    generateRandomOrderResources
+}
