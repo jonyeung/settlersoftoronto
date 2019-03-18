@@ -72,17 +72,6 @@ let Player = (function() {
     }
 }());
 
-let Hex = (function() {
-    return function item(hex) {
-        hexPositon = hex.position;
-        robber = false;
-        resourceType = hex.resourceType;
-        diceNumber = hex.diceNumber;
-        settlements = [];
-        cities = [];
-    }
-}());
-
 let Road = (function() {
     return function item(road) {
         player = road.player;
@@ -292,12 +281,12 @@ io.on('connection', function(socket) {
                         checkWinCondition(currentPlayer, gameState);
                     }
                     gameState = storeGameState(gameState);
-                    io.sockets.emit('build_starting_road', gameState);
+                    io.sockets.emit('build_road', gameState);
                 } else {
-                    io.sockets.emit('build_starting_road', new Error('Insufficient resources'));
+                    io.sockets.emit('build_road', new Error('Insufficient resources'));
                 }
             } else {
-                io.sockets.emit('build_starting_road', new Error('Invalid road position'));
+                io.sockets.emit('build_road', new Error('Invalid road position'));
             }
         }
 
@@ -365,63 +354,6 @@ io.on('connection', function(socket) {
         }
 
     })
-
-    // create game room
-    // socket.on('room_setup', function(data) {
-    // });
-
-    // new player joins
-    // socket.on('player_join', function(data) {
-    // });
-
-    // game starts
-    // socket.on('start_game', function(data) {
-    // });
-
-    // begin main phase (after all setup is finished)
-    // socket.on('begin_main_game', function(data) {
-    // })
-
-    // ends current player's turn and goes to the next player
-    // socket.on('end_turn', function(data) {
-    // });
-
-    
-    // Dice roll (7)
-    // socket.on('seven_roll', function (data) {
-    // });
-
-    // move the robber to the new hex
-    // socket.on('move_robber', function (data) {
-    // });
-
-    // Dice roll (2-6, 8-12): give out resources to players
-    // socket.on('regular_roll', function(data) {
-    // });
-    
-    // build road (setup): no resource costs, can be placed anywhere
-    // socket.on('build_starting_road', function(data) {
-    // });
-
-    
-    // build road
-    // socket.on('build_road', function(data) {
-    // });
-
-
-    // build settlement (setup): no resource costs
-    // socket.on('build_starting_settlement', function(data) {
-    // });
-
-    // build settlement
-    // socket.on('build_settlement', function(data) {
-    // });
-
-
-    // upgrade to city
-    // socket.on('build_city', function(data) {
-    // });
-
 
     // trade resources between players
 

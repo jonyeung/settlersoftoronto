@@ -1,3 +1,14 @@
+let Hex = (function() {
+    return function item(hex) {
+        hexPositon = hex.position;
+        robber = false;
+        resourceType = hex.resourceType;
+        diceNumber = hex.diceNumber;
+        settlements = [];
+        cities = [];
+    }
+}());
+
 function setupHexes() {
     let dicePositions = {};
     dicePositions['1'] = 5;
