@@ -6,8 +6,8 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-  console.log('join room reducer')
-  console.log('action: ', action)
+  // console.log('join room reducer')
+  // console.log('action: ', action)
   switch (action.type) {
     case actionTypes.JOIN_ROOM:
       return {

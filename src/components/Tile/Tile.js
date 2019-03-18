@@ -1,94 +1,135 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styles from './Tile.module.css';
+import * as gameActions from '../../store/actions/game';
+
 
 class Tile extends Component {
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      topLeftCornerStyle: [styles.CornerTopLeft],
+      topMiddleCorner: [styles.CornerTopMiddle],
+      topRightCorner: [styles.CornerTopRight],
+      bottomLeftCorner: [styles.CornerBottomLeft],
+      bottomMiddleCorner: [styles.CornerBottomMiddle],
+      bottomRightCorner: [styles.CornerBottomRight],
+      topLeftCorner: [styles.EdgeTopLeft],
+      topRightEdge: [styles.EdgeTopRight],
+      middleLeftEdge: [styles.EdgeMiddleLeft],
+      middleRightEdge: [styles.EdgeMiddleRight],
+      bottomLeftEdge: [styles.EdgeBottomLeft],
+      bottomRightEdge: [styles.EdgeBottomRight]
+    }
+
+
+    this.determineCornerStyles = () => {
+
+    }
+  }
+
   render() {
     let corners = <>
-      <div className={styles.CornerTopMiddle} onClick={() => {
+      <div className={this.state.topMiddleCorner.join(' ')} onClick={() => {
         this.props.CornerTopMiddleAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.TopMiddleCornerId)
+        this.props.selectCorner(this.props.TopMiddleCornerId)
       }}></div>
 
-      <div className={styles.CornerTopRight} onClick={() => {
+      <div className={this.state.topRightCorner.join(' ')} onClick={() => {
         this.props.CornerTopRightAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.TopRightCornerId)
+        this.props.selectCorner(this.props.TopRightCornerId)
+
       }}></div>
 
-      <div className={styles.CornerTopLeft} onClick={() => {
+      <div className={this.state.topLeftCornerStyle.join(' ')} onClick={() => {
         this.props.CornerTopLeftAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.TopLeftCornerId)
-
+        this.props.selectCorner(this.props.TopLeftCornerId)
       }}></div>
 
-      <div className={styles.CornerBottomLeft} onClick={() => {
+      <div className={this.state.bottomLeftCorner.join(' ')} onClick={() => {
         this.props.CornerBottomLeftAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.BottomLeftCornerId)
-
+        this.props.selectCorner(this.props.BottomLeftCornerId)
       }}></div>
 
-      <div className={styles.CornerBottomRight} onClick={() => {
+      <div className={this.state.bottomRightCorner.join(' ')} onClick={() => {
         this.props.CornerBottomRightAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.BottomRightCornerId)
+        this.props.selectCorner(this.props.BottomRightCornerId)
       }}></div>
 
-      <div className={styles.CornerBottomMiddle} onClick={() => {
+      <div className={this.state.bottomMiddleCorner.join(' ')} onClick={() => {
         this.props.CornerBottomMiddleAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.BottomMiddleCornerId)
+        this.props.selectCorner(this.props.BottomMiddleCornerId)
       }}></div>
     </>
 
     let edgesTop =
       <>
-        <div className={styles.EdgeTopLeft} onClick={() => {
+        <div className={this.state.topLeftCorner.join(' ')} onClick={() => {
           this.props.EdgeTopLeftAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.TopLeftEdgeId)
           console.log([this.props.TopMiddleCornerId, this.props.TopLeftCornerId])
+          this.props.selectEdge([this.props.TopMiddleCornerId, this.props.TopLeftCornerId])
         }}>
         </div>
-        <div className={styles.EdgeTopRight} onClick={() => {
+        <div className={this.state.topRightEdge.join(' ')} onClick={() => {
           this.props.EdgeTopRightAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.TopRightEdgeId)
           console.log([this.props.TopMiddleCornerId, this.props.TopRightCornerId])
+          this.props.selectEdge([this.props.TopMiddleCornerId, this.props.TopRightCornerId])
+
         }}></div>
-        <div className={styles.EdgeMiddleLeft} onClick={() => {
+        <div className={this.state.middleLeftEdge.join(' ')} onClick={() => {
           this.props.EdgeMiddleLeftAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.MiddleLeftEdgeId)
           console.log([this.props.TopLeftCornerId, this.props.BottomLeftCornerId])
+          this.props.selectEdge([this.props.TopLeftCornerId, this.props.BottomLeftCornerId])
+
         }}></div>
 
-        <div className={styles.EdgeMiddleRight} onClick={() => {
+        <div className={this.state.middleRightEdge.join(' ')} onClick={() => {
           this.props.EdgeMiddleRightAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.MiddleRightEdgeId)
           console.log([this.props.TopRightCornerId, this.props.BottomRightCornerId])
+          this.props.selectEdge([this.props.TopRightCornerId, this.props.BottomRightCornerId])
         }}></div>
       </>
 
     let edgesBottom =
       <>
-        <div className={styles.EdgeBottomLeft} onClick={() => {
+        <div className={this.state.bottomLeftEdge.join(' ')} onClick={() => {
           this.props.EdgeBottomLeftAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.BottomLeftEdgeId)
-          console.log([this.props.BottomLeftCornerId, this.props.BottomMiddleCornerId])          
+          console.log([this.props.BottomLeftCornerId, this.props.BottomMiddleCornerId])
+          this.props.selectEdge([this.props.BottomLeftCornerId, this.props.BottomMiddleCornerId])
+
         }}></div>
 
-        <div className={styles.EdgeBottomRight} onClick={() => {
+        <div className={this.state.bottomRightEdge.join(' ')} onClick={() => {
           this.props.EdgeBottomRightAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.BottomRightEdgeId)
           console.log([this.props.BottomMiddleCornerId, this.props.BottomRightCornerId])
+          this.props.selectEdge([this.props.BottomMiddleCornerId, this.props.BottomRightCornerId])
+
         }}></div>
       </>
 
@@ -124,25 +165,25 @@ class Tile extends Component {
 
         <div className={styles.HexInner}>
           <div className={styles.HexIn1}>
-            <div className={resourceTypeStyle.join(' ')} onClick={() => { 
+            <div className={resourceTypeStyle.join(' ')} onClick={() => {
               console.log(this.props.HexId)
             }}>
             </div>
+          </div>
         </div>
-      </div>
 
-        { edgesBottom }
+        {edgesBottom}
 
-    { this.props.ResourceType === 'Water' ? null : corners }
-    {
-      this.props.ResourceType === 'Water' ?
-      <div className={styles.Port}>
-      </div>
-      :
-      <div className={styles.HexCircle} onClick={this.props.HexCircleAction}>
-        <p>5</p>
-      </div>
-    }
+        {this.props.ResourceType === 'Water' ? null : corners}
+        {
+          this.props.ResourceType === 'Water' ?
+            <div className={styles.Port}>
+            </div>
+            :
+            <div className={styles.HexCircle} onClick={this.props.HexCircleAction}>
+              <p>5</p>
+            </div>
+        }
       </div >
     )
   }
@@ -155,4 +196,13 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Tile);
+const mapDispatchToProps = dispatch => {
+  return {
+    selectEdge: (selectedEdgeId) => dispatch(gameActions.selectEdge(selectedEdgeId)),
+    unselectEdge: () => dispatch(gameActions.unselectEdge()),
+    selectCorner: (selectCorner) => dispatch(gameActions.selectCorner(selectCorner)),
+    unselectCorner: () => dispatch(gameActions.unselectCorner()),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tile);

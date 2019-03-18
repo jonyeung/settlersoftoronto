@@ -298,3 +298,18 @@
   background-image: url('../../media/sheep.jpg')
 }
 
+.Player1{
+  background-color: purple;
+}
+
+.Player2{
+  background-color: blue;
+}
+
+.Player3{
+  background-color: peru;
+}
+
+.Player4{
+  background-color: red;
+}

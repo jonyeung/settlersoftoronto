@@ -11,6 +11,7 @@ import 'react-dice-complete/dist/react-dice-complete.css'
 import GameBuildOptions from '../GameBuildOptions/GameBuildOptions';
 import Tile from '../Tile/Tile';
 import MyDashboard from '../MyDashboard/MyDashboard';
+import io from 'socket.io-client';
 
 
 class Game extends Component {
@@ -26,6 +27,23 @@ class Game extends Component {
       buildType: null
     }
 
+    this.socket = io.connect('http://localhost:3000')
+
+    this.socket.on('room_setup', (res) => {
+    })
+
+    this.socket.on('player_join', (res) => {
+    })
+
+    this.socket.on('room_setup', (res) => {
+    })
+
+    this.socket.on('room_setup', (res) => {
+    })
+
+    this.socket.on('room_setup', (res) => {
+    })
+    
     this.toggleBuildType = (type) => {
       this.setState({
         ...this.state,

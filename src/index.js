@@ -14,8 +14,7 @@ import signInReducer from './store/reducers/signIn';
 import authReducer from './store/reducers/auth';
 import joinRoomReducer from './store/reducers/joinRoom';
 import lobbyReducer from './store/reducers/lobby';
-
-
+import gameReducer from './store/reducers/game';
 
 import './index.css';
 import App from './App';
@@ -32,7 +31,8 @@ const rootReducer = combineReducers({
   authReducer: authReducer,
 
   joinRoomReducer: joinRoomReducer,
-  lobbyReducer: lobbyReducer
+  lobbyReducer: lobbyReducer,
+  gameReducer: gameReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
