@@ -6,3 +6,7 @@
   background-color: lightsalmon;
   cursor: pointer;
 }
+
+.Knight {
+  background-image: url('../../../media/natural_resources.png')
+}

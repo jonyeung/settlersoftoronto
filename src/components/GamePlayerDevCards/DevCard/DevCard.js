@@ -4,8 +4,16 @@ import styles from './DevCard.module.css';
 
 class DevCard extends Component {
   render() {
+    let cardStyle = [styles.Content]
+    switch (this.props.cardType) {
+      case 'KNIGHT':
+        cardStyle.push(styles.Knight)
+        break;
+      default:
+        break;
+    }
     return (
-      <div className={styles.Content}>
+      <div className={cardStyle.join(' ')}>
       </div>
     )
   }

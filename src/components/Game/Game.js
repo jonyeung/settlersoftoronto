@@ -29,21 +29,50 @@ class Game extends Component {
 
     this.socket = io.connect('http://localhost:3000')
 
+    this.socket.emit('PLAYER_CONNECT', {
+      string: 'room_setup',
+      gameName: 'game1',
+      username: 'davidhost'
+    })
+
     this.socket.on('room_setup', (res) => {
+      console.log('room_setup socket', res)
+      // this.props.updateGameState();
     })
 
     this.socket.on('player_join', (res) => {
     })
 
-    this.socket.on('room_setup', (res) => {
+    this.socket.on('start_game', (res) => {
     })
 
-    this.socket.on('room_setup', (res) => {
+    this.socket.on('begin_main_game', (res) => {
     })
 
-    this.socket.on('room_setup', (res) => {
+    this.socket.on('seven_roll', (res) => {
     })
-    
+
+    this.socket.on('move_robber', (res) => {
+    })
+
+    this.socket.on('regular_roll', (res) => {
+    })
+
+    this.socket.on('build_starting_road', (res) => {
+    })
+
+    this.socket.on('build_road', (res) => {
+    })
+
+    this.socket.on('build_starting_settlement', (res) => {
+    })
+
+    this.socket.on('build_settlement', (res) => {
+    })
+
+    this.socket.on('build_city', (res) => {
+    })
+
     this.toggleBuildType = (type) => {
       this.setState({
         ...this.state,
@@ -95,7 +124,7 @@ class Game extends Component {
   }
 
   componentDidMount() {
-
+    //run room setup
   }
 
   render() {
@@ -127,7 +156,7 @@ class Game extends Component {
             this.state.buildType === null ?
               null
               :
-              <GameBuildOptions buildType={this.state.buildType} close={this.closeBuildModal}/>
+              <GameBuildOptions buildType={this.state.buildType} close={this.closeBuildModal} />
           }
 
         </div>

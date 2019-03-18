@@ -28,3 +28,19 @@ export const unselectCorner = () => {
     selectedCornerId: null
   })
 }
+
+export const updateGameState = (newGameState) => {
+  return (dispatch) => dispatch({
+    type: actionTypes.UPDATE_GAME_STATE,
+    newGameState: newGameState
+  })
+}
+
+// export const roomSetup = (socket) => {
+// 	return (dispatch) => {
+// 		socket.on('initialList',(res)=>{
+// 		   console.dir(res)
+// 		   dispatch(initialItems(res))
+// 	   })
+// 	}	
+// }
