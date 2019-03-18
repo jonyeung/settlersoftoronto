@@ -12,7 +12,7 @@ import GameBuildOptions from '../GameBuildOptions/GameBuildOptions';
 import Tile from '../Tile/Tile';
 import MyDashboard from '../MyDashboard/MyDashboard';
 import io from 'socket.io-client';
-
+import * as gameActions from '../../store/actions/game';
 
 class Game extends Component {
 
@@ -30,17 +30,19 @@ class Game extends Component {
     this.socket = io.connect('http://localhost:3000')
 
     this.socket.emit('PLAYER_CONNECT', {
-      string: 'room_setup',
+      string: 'player_join',
       gameName: 'game1',
-      username: 'davidhost'
+      username: 'tony'
     })
 
     this.socket.on('room_setup', (res) => {
       console.log('room_setup socket', res)
-      // this.props.updateGameState();
+      this.props.updateGameState(res);
     })
 
     this.socket.on('player_join', (res) => {
+      console.log('player_join socket', res)
+      this.props.updateGameState(res);
     })
 
     this.socket.on('start_game', (res) => {
@@ -280,4 +282,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Game);
+const mapDispatchToProps = dispatch => {
+  return {
+    updateGameState: (newGameState) => dispatch(gameActions.updateGameState(newGameState))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

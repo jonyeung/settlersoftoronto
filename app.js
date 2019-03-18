@@ -150,9 +150,13 @@ io.on('connection', function (socket) {
         if (req.string == 'player_join') {
             let gameName = req.gameName;
             let newPlayer = new Player(req.username);
-            gameStatesDB.findOneAndUpdate({ 'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
+            gameStatesDB.findOne({'gameName': gameName}, function(err, state) {
                 if (err) io.sockets.emit('player_join', err);
-                io.sockets.emit('player_join', state);
+                gameStatesDB.update({'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
+                    if (err) io.sockets.emit('player_join', err);
+                    console.log(state)
+                    io.sockets.emit('player_join', state);
+                });
             });
         }
 
