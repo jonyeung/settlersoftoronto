@@ -144,10 +144,11 @@ io.on('connection', function(socket) {
             // add the host
             let players = [];
             let host = new Player(req.username);
-            players.add(host);
+            players.push(host);
     
+            console.log(boardFunctions)
             // set up board
-            let hexes = setupHexes();
+            let hexes = boardFunctions.setupHexes();
     
             let gameState = new gameState({gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length});
             gameStatesDB.insert(gameState, function(err, state) {
