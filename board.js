@@ -1,13 +1,27 @@
-let Hex = (function() {
-    return function item(hex) {
-        hexPositon = hex.position;
-        robber = false;
-        resourceType = hex.resourceType;
-        diceNumber = hex.diceNumber;
-        settlements = [];
-        cities = [];
+let Hex = (function(hex) {
+    return {
+        hexPositon : hex.position,
+        robber : false,
+        resourceType : hex.resourceType,
+        diceNumber : hex.diceNumber,
+        settlements : [],
+        cities : [],
     }
-}());
+});
+
+function generateRandomOrderResources() {
+    ar = ["Wheat", "Wheat", "Wheat", "Wheat",
+            "Wood", "Wood", "Wood", "Wood",
+            "Sheep", "Sheep", "Sheep", "Sheep",
+            "Ore", "Ore", "Ore",
+            "Brick", "Brick", "Brick"];
+    // randomize the array
+    ar.sort(function () {
+        return Math.random() - 0.5;
+    });
+
+    return ar
+}
 
 function setupHexes() {
     let dicePositions = {};
@@ -29,6 +43,9 @@ function setupHexes() {
     dicePositions['16'] = 6;
     dicePositions['17'] = 3;
     dicePositions['18'] = 11;
+    let index = 1;
+    index= index.toString()
+    console.log('dicePositions', dicePositions[index])
     let randomResources = generateRandomOrderResources();
     let hexes = [];
     let i=1;
@@ -39,24 +56,12 @@ function setupHexes() {
             hex = new Hex({position: i, resourceType:'Desert', diceNumber: 0});
             hex.robber = true;
         } else {
-            hex = new Hex({position: i, resourceType: randomResources.pop(), diceNumber: dicePositions[toString(i)]});
+            hex = new Hex({position: i, resourceType: randomResources.pop(), diceNumber: dicePositions[i.toString()]});
         }
-        hexes.add(hex);   
+        hexes.push(hex);   
     }
 
     return hexes;
-}
-
-function generateRandomOrderResources() {
-    ar = ["Wheat", "Wheat", "Wheat", "Wheat",
-            "Wood", "Wood", "Wood", "Wood",
-            "Sheep", "Sheep", "Sheep", "Sheep",
-            "Ore", "Ore", "Ore",
-            "Brick", "Brick", "Brick"];
-    // randomize the array
-    ar.sort(function () {
-        return Math.random() - 0.5;
-    });
 }
 
 function addResource(resource, currentPlayer) {
@@ -82,14 +87,14 @@ function addResource(resource, currentPlayer) {
 function addSettlementToHex(settlement, gameState) {
     let hexesToUpdate = getHexesAtLocation(settlement.location, gameState);
     for (let hex in hexesToUpdate) {
-        hex.settlements.add(settlement);
+        hex.settlements.push(settlement);
     }
 }
 
 function addCityToHex(city, gameState) {
     let hexesToUpdate = getHexesAtLocation(city.location, gameState);
     for (let hex in hexesToUpdate) {
-        hex.cities.add(city);
+        hex.cities.push(city);
     }
 }
 
@@ -100,133 +105,133 @@ function getHexesAtLocation(location, gameState) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 1;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 2 || location == 6 || location == 10 ||
         location == 14 || location == 9 || location == 5) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 12;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 3 || location == 7 || location == 11 ||
         location == 15 || location == 10 || location == 6) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 11;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 8 || location == 13 || location == 18 ||
         location == 23 || location == 17 || location == 12) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 2;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 9 || location == 14 || location == 19 ||
         location == 24 || location == 18 || location == 13) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 13;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 10 || location == 15 || location == 20 ||
         location == 25 || location == 19 || location == 14) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 18;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 11 || location == 16 || location == 21 ||
         location == 26 || location == 20 || location == 15) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 10;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 17 || location == 23 || location == 29 ||
         location == 34 || location == 28 || location == 22) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 3;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 18 || location == 24 || location == 30 ||
         location == 35 || location == 29 || location == 23) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 14;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 19 || location == 25 || location == 31 ||
         location == 36 || location == 30 || location == 24) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 19;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 20 || location == 26 || location == 32 ||
         location == 37 || location == 31 || location == 25) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 17;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 21 || location == 27 || location == 33 ||
         location == 38 || location == 32 || location == 26) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 9;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 29 || location == 35 || location == 40 ||
         location == 44 || location == 39 || location == 34) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 4;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 30 || location == 36 || location == 41 ||
         location == 45 || location == 40 || location == 35) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 15;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 31 || location == 37 || location == 42 ||
         location == 46 || location == 41 || location == 36) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 16;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 32 || location == 38 || location == 43 ||
         location == 47 || location == 42 || location == 37) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 8;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 40 || location == 45 || location == 49 ||
         location == 52 || location == 48 || location == 44) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 5;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 41 || location == 46 || location == 50 ||
         location == 53 || location == 49 || location == 45) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 6;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     if (location == 42 || location == 47 || location == 51 ||
         location == 54 || location == 50 || location == 46) {
             let targetHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == 7;
             });
-            hexes.add(targetHex);
+            hexes.push(targetHex);
         }
     return hexes;
 }
@@ -316,106 +321,106 @@ function isValidSettlement(location, currentPlayer, gameState) {
 function getAdjacentSettlementPositions(location) {
     let adjacentLocations = [];
     if (location >= 1 && location <= 3) {
-        adjacentLocations.add(location + 3);
-        adjacentLocations.add(location + 4);
+        adjacentLocations.push(location + 3);
+        adjacentLocations.push(location + 4);
     }
     if (location == 4) {
-        adjacentLocations.add(1);
-        adjacentLocations.add(8);
+        adjacentLocations.push(1);
+        adjacentLocations.push(8);
     }
     if (location >= 5 && location <= 6) {
-        adjacentLocations.add(location - 4);
-        adjacentLocations.add(location - 3);
-        adjacentLocations.add(location + 4);
+        adjacentLocations.push(location - 4);
+        adjacentLocations.push(location - 3);
+        adjacentLocations.push(location + 4);
     }
     if (location == 7) {
-        adjacentLocations.add(3);
-        adjacentLocations.add(11);
+        adjacentLocations.push(3);
+        adjacentLocations.push(11);
     }
     if (location >= 8 && location <= 11) {
-        adjacentLocations.add(location - 4);
-        adjacentLocations.add(location + 4);
-        adjacentLocations.add(location + 5);
+        adjacentLocations.push(location - 4);
+        adjacentLocations.push(location + 4);
+        adjacentLocations.push(location + 5);
     }
     if (location == 12) {
-        adjacentLocations.add(8);
-        adjacentLocations.add(17);
+        adjacentLocations.push(8);
+        adjacentLocations.push(17);
     }
     if (location >= 13 && location <= 15) {
-        adjacentLocations.add(location - 5);
-        adjacentLocations.add(location - 4);
-        adjacentLocations.add(location + 5);
+        adjacentLocations.push(location - 5);
+        adjacentLocations.push(location - 4);
+        adjacentLocations.push(location + 5);
     }
     if (location == 16) {
-        adjacentLocations.add(11);
-        adjacentLocations.add(21);
+        adjacentLocations.push(11);
+        adjacentLocations.push(21);
     }
     if (location >= 17 && location <= 21) {
-        adjacentLocations.add(location - 5);
-        adjacentLocations.add(location + 5);
-        adjacentLocations.add(location + 6);
+        adjacentLocations.push(location - 5);
+        adjacentLocations.push(location + 5);
+        adjacentLocations.push(location + 6);
     }
     if (location == 22) {
-        adjacentLocations.add(17);
-        adjacentLocations.add(28);
+        adjacentLocations.push(17);
+        adjacentLocations.push(28);
     }
     if (location >= 23 && location <= 26) {
-        adjacentLocations.add(location - 6);
-        adjacentLocations.add(location - 5);
-        adjacentLocations.add(location + 6);
+        adjacentLocations.push(location - 6);
+        adjacentLocations.push(location - 5);
+        adjacentLocations.push(location + 6);
     }
     if (location >= 27 && location <= 28) {
-        adjacentLocations.add(location - 6);
-        adjacentLocations.add(location + 6);
+        adjacentLocations.push(location - 6);
+        adjacentLocations.push(location + 6);
     }
     if (location >= 29 && location <= 32) {
-        adjacentLocations.add(location - 6);
-        adjacentLocations.add(location + 5);
-        adjacentLocations.add(location + 6);
+        adjacentLocations.push(location - 6);
+        adjacentLocations.push(location + 5);
+        adjacentLocations.push(location + 6);
     }
     if (location == 33) {
-        adjacentLocations.add(27);
-        adjacentLocations.add(38);
+        adjacentLocations.push(27);
+        adjacentLocations.push(38);
     }
     if (location >= 34 && location <= 38) {
-        adjacentLocations.add(location - 6);
-        adjacentLocations.add(location - 5);
-        adjacentLocations.add(location + 5);
+        adjacentLocations.push(location - 6);
+        adjacentLocations.push(location - 5);
+        adjacentLocations.push(location + 5);
     }
     if (location == 39) {
-        adjacentLocations.add(34);
-        adjacentLocations.add(44);
+        adjacentLocations.push(34);
+        adjacentLocations.push(44);
     }
     if (location >= 40 && location <= 42) {
-        adjacentLocations.add(location - 5);
-        adjacentLocations.add(location + 4);
-        adjacentLocations.add(location + 5);
+        adjacentLocations.push(location - 5);
+        adjacentLocations.push(location + 4);
+        adjacentLocations.push(location + 5);
     }
     if (location == 43) {
-        adjacentLocations.add(38);
-        adjacentLocations.add(47);
+        adjacentLocations.push(38);
+        adjacentLocations.push(47);
     }
     if (location >= 44 && location <= 47) {
-        adjacentLocations.add(location - 5);
-        adjacentLocations.add(location - 4);
-        adjacentLocations.add(location + 4);
+        adjacentLocations.push(location - 5);
+        adjacentLocations.push(location - 4);
+        adjacentLocations.push(location + 4);
     }
     if (location == 48) {
-        adjacentLocations.add(44);
-        adjacentLocations.add(52);
+        adjacentLocations.push(44);
+        adjacentLocations.push(52);
     }
     if (location >= 49 && location <= 50) {
-        adjacentLocations.add(location - 4);
-        adjacentLocations.add(location + 3);
-        adjacentLocations.add(location + 4);
+        adjacentLocations.push(location - 4);
+        adjacentLocations.push(location + 3);
+        adjacentLocations.push(location + 4);
     }
     if (location == 51) {
-        adjacentLocations.add(47);
-        adjacentLocations.add(54);
+        adjacentLocations.push(47);
+        adjacentLocations.push(54);
     }
     if (location >= 52 && location <= 54) {
-        adjacentLocations.add(location - 4);
-        adjacentLocations.add(location - 3);
+        adjacentLocations.push(location - 4);
+        adjacentLocations.push(location - 3);
     }
 
     return adjacentLocations;

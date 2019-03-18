@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
-app.use(function (req, res, next){
+app.use(function (req, res, next) {
     console.log("HTTP request", req.method, req.url, req.body);
     next();
 });
@@ -22,81 +22,81 @@ app.use(function (req, res, next){
 let Datastore = require('nedb'),
     gameStatesDB = new Datastore({ filename: 'db/gameStates.db', autoload: true, timestampData: true });
 
-let gameState = (function() {
-    return function item(state) {
-        gameName = state.gameName;
-        players = state.players;
-        hexes = state.hexes;
-        roads = [];
-        settlements = [];
-        cities = [];
-        currentLargestArmy = 0;
-        currentLongestRoad = 0;
-        currentPlayerNum = 0;
-        maxPlayerNum = state.maxPlayers;
-        currentTurn = undefined;
-        turnPhase = 'game not started';
-        gameOver = false;
-        winner = undefined;
-    }
+let GameState = (function (state) {
+        return {
+            gameName: state.gameName,
+            players: state.players,
+            hexes: state.hexes,
+            roads: [],
+            settlements: [],
+            cities: [],
+            currentLargestArmy: 0,
+            currentLongestRoad: 0,
+            currentPlayerNum: 0,
+            maxPlayerNum: state.maxPlayers,
+            currentTurn: null,
+            turnPhase: 'game not started',
+            gameOver: false,
+            winner: null
+        }
 })
 
-let Player = (function() {
-    return function item(player) {
-        this.username = player.username;
-        resources = {
+let Player = (function (playerName) {
+    return {
+        username : playerName,
+        resources : {
             Wood: 0,
             Sheep: 0,
             Ore: 0,
             Brick: 0,
             Wheat: 0
-        };
-        devCards = {
+        },
+        devCards : {
             Knight: 0,
             VictoryPointCard: 0,
             RoadBuilding: 0,
             Monopoly: 0,
             YearOfPlenty: 0
-        };
-        knightsPlayed = 0;
-        VictoryPoints = 0;
-        LongestRoadLength = 0;
-        OwnsLargestArmy = false;
-        OwnsLongestRoad = false;
-        OwnsSheepPort = false;
-        OwnsWoodPort = false;
-        OwnsOrePort = false;
-        OwnsBrickPort = false;
-        OwnsWheatPort = false;
-        Owns3For1Port = false;
+        },
+        knightsPlayed : 0,
+        VictoryPoints : 0,
+        LongestRoadLength : 0,
+        OwnsLargestArmy : false,
+        OwnsLongestRoad : false,
+        OwnsSheepPort : false,
+        OwnsWoodPort : false,
+        OwnsOrePort : false,
+        OwnsBrickPort : false,
+        OwnsWheatPort : false,
+        Owns3For1Port : false,
     }
-}());
+});
 
-let Road = (function() {
-    return function item(road) {
-        player = road.player;
-        startPoint = road.start;
-        endPoint = road.end;
+let Road = (function (road) {
+    return {
+        player : road.player,
+        startPoint : road.start,
+        endPoint : road.end,
     }
-}());
+});
 
-let Settlement = (function() {
-    return function item(settlement) {
-        player = settlement.player;
-        location = settlement.location;
+let Settlement = (function (settlement) {
+    return {
+        player : settlement.player,
+        location : settlement.location,
     }
-}());
+});
 
-let City = (function() {
-    return function item(city) {
-        player = city.player;
-        location = city.location;
+let City = (function (city) {
+    return {
+        player : city.player,
+        location : city.location,
     }
-}());
+});
 
 // get gameState from DB
 function findGameState(gameName) {
-    gameStatesDB.findOne({gameName:gameName}, function (err, state) {
+    gameStatesDB.findOne({ gameName: gameName }, function (err, state) {
         if (err) return err;
         return state;
     })
@@ -105,7 +105,7 @@ function findGameState(gameName) {
 // store gameState into DB
 function storeGameState(gameState) {
     let gameName = gameState.gameName;
-    gameStatesDB.update({'gameName':gameName}, {$set: gameState}, function (err, gameState) {
+    gameStatesDB.update({ 'gameName': gameName }, { $set: gameState }, function (err, gameState) {
         if (err) return err;
         return gameState;
     });
@@ -121,43 +121,43 @@ let server = app.listen(PORT, function (err) {
 
 let io = socket(server);
 
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
     console.log('socket connection successful');
 
     socket.on('PLAYER_CONNECT', (req) => {
 
         // create game room
-        if(req.string == 'room_setup') {
+        if (req.string == 'room_setup') {
             let gameName = req.gameName;
 
             // add the host
             let players = [];
             let host = new Player(req.username);
             players.push(host);
-    
-            console.log(boardFunctions)
+
             // set up board
             let hexes = boardFunctions.setupHexes();
-    
-            let gameState = new gameState({gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length});
-            gameStatesDB.insert(gameState, function(err, state) {
+
+            let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
+            console.log('gameState: ', gameState)
+            gameStatesDB.insert(gameState, function (err, state) {
                 if (err) io.sockets.emit('room_setup', err);
                 io.sockets.emit('room_setup', state);
             });
         }
 
         // new player joins
-        if(req.string == 'player_join') {
+        if (req.string == 'player_join') {
             let gameName = req.gameName;
             let newPlayer = new Player(req.username);
-            gameStatesDB.findOneAndUpdate({'gameName': gameName}, [{$push: {'players': newPlayer}} , {$inc: {'maxPlayerNum': 1}} ], function(err, state) {
+            gameStatesDB.findOneAndUpdate({ 'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
                 if (err) io.sockets.emit('player_join', err);
                 io.sockets.emit('player_join', state);
             });
         }
 
         // game starts
-        if(req.string == 'start_game') {
+        if (req.string == 'start_game') {
             let gameState = findGameState(req.gameName);
             gameState.currentTurn = players[gameState.currentPlayerNum];
             gameState.turnPhase = 'setup_placement';
@@ -166,7 +166,7 @@ io.on('connection', function(socket) {
         }
 
         // begin main phase (after all setup done)
-        if(req.string == 'begin_main_game') {
+        if (req.string == 'begin_main_game') {
             let gameState = findGameState(req.gameName);
             gameState.currentPlayerNum = 0;
             gameState.currentTurn = players[gameState.currentPlayerNum];
@@ -176,7 +176,7 @@ io.on('connection', function(socket) {
         }
 
         // ends current player's turn and goes to the next player
-        if(req.string == 'end_turn') {
+        if (req.string == 'end_turn') {
             let gameState = findGameState(req.gameName);
             let currentPlayerNum = gameState.currentPlayerNum;
             if (currentPlayerNum == gameState.maxPlayerNum) {
@@ -192,7 +192,7 @@ io.on('connection', function(socket) {
         }
 
         // Dice roll (7)
-        if(req.string == 'seven_roll') {
+        if (req.string == 'seven_roll') {
             let gameState = findGameState(req.gameName);
             gameState.phase = 'move_robber';
             gameState = storeGameState(gameState);
@@ -200,10 +200,10 @@ io.on('connection', function(socket) {
         }
 
         // move the robber to the new hex
-        if(req.string == 'move_robber') {
+        if (req.string == 'move_robber') {
             let gameState = findGameState(req.gameName);
             let newRobberHex = req.robberPosition;
-    
+
             // remove robber from previous location
             let previousHex = gameState.hexes.find(hex => {
                 return hex.robber == true;
@@ -220,7 +220,7 @@ io.on('connection', function(socket) {
         }
 
         // Dice roll (2-6, 8-12): give out resources to players
-        if(req.string == 'regular_roll') {
+        if (req.string == 'regular_roll') {
             let gameState = findGameState(req.gameName);
             let roll = req.roll;
 
@@ -242,12 +242,12 @@ io.on('connection', function(socket) {
         }
 
         // build road (setup): no resource costs, can be placed anywhere
-        if(req.string == 'build_starting_road') {
+        if (req.string == 'build_starting_road') {
             let gameState = findGameState(data.gameName);
             let currentPlayer = gameState.currentTurn;
-            if(isValidRoad(data.start, data.end, gameState)) {
-                let road = new Road({player: currentPlayer, start: data.start, end: data.end});
-                gameState.roads.add(road);
+            if (isValidRoad(data.start, data.end, gameState)) {
+                let road = new Road({ player: currentPlayer, start: data.start, end: data.end });
+                gameState.roads.push(road);
                 gameState = storeGameState(gameState);
                 io.sockets.emit('build_starting_road', gameState);
             } else {
@@ -259,11 +259,11 @@ io.on('connection', function(socket) {
         if (req.string == 'build_road') {
             let gameState = findGameState(req.gameName);
             let currentPlayer = gameState.currentTurn;
-    
-            if(isValidRoad(req.start, req.end, gameState)) {
+
+            if (isValidRoad(req.start, req.end, gameState)) {
                 if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
-                    let road = new Road({player: currentPlayer, start: req.start, end: req.end});
-                    gameState.roads.add(road);
+                    let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
+                    gameState.roads.push(road);
                     currentPlayer.resources.Wood--;
                     currentPlayer.resources.Brick--;
                     // TODO: check if this increments longest road
@@ -296,8 +296,8 @@ io.on('connection', function(socket) {
             let gameState = findGameState(req.gameName);
             if (isValidSettlement(req.location, gameState.currentTurn, gameState)) {
                 let currentPlayer = gameState.currentTurn;
-                let settlement = new Settlement({player: currentPlayer, location: req.location});
-                gameState.settlements.add(settlement);
+                let settlement = new Settlement({ player: currentPlayer, location: req.location });
+                gameState.settlements.push(settlement);
                 addSettlementToHex(settlement, gameState);
                 currentPlayer.VictoryPoint++;
                 gameState = storeGameState(gameState);
@@ -308,13 +308,13 @@ io.on('connection', function(socket) {
         }
 
         // build settlement
-        if(req.string == 'build_settlement') {
+        if (req.string == 'build_settlement') {
             let gameState = findGameState(req.gameName);
             if (isValidSettlement(req.location, gameState.currentTurn, gameState)) {
                 let currentPlayer = gameState.currentTurn;
                 if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
-                    let settlement = new Settlement({player: currentPlayer, location: req.location});
-                    gameState.settlements.add(settlement);
+                    let settlement = new Settlement({ player: currentPlayer, location: req.location });
+                    gameState.settlements.push(settlement);
                     addSettlementToHex(settlement, gameState);
                     currentPlayer.resources.Wood--;
                     currentPlayer.resources.Brick--;
@@ -338,7 +338,7 @@ io.on('connection', function(socket) {
             let currentPlayer = gameState.currentTurn;
             if (checkValidCity(req.location, gameState, currentPlayer)) {
                 if (currentPlayer.resources.Ore > 2 && currentPlayer.resource.Wheat > 1) {
-                    let city = new City({player: currentPlayer, location: req.location});
+                    let city = new City({ player: currentPlayer, location: req.location });
                     addCityToHex(city, gameState);
                     currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
                     currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
@@ -351,7 +351,7 @@ io.on('connection', function(socket) {
                 }
             } else {
                 io.sockets.emit('build_city', new Error('Invalid city position'))
-            } 
+            }
         }
 
     })
