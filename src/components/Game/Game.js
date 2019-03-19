@@ -35,11 +35,18 @@ class Game extends Component {
       username: 'tony'
     })
 
-    // this.socket.emit('PLAYER_CONNECT', {
-    //   string: 'player_join',
-    //   gameName: 'game1',
-    //   username: 'david'
-    // })
+    this.davidJoins = () => {
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'player_join',
+        gameName: 'game1',
+        username: 'david'
+      })
+    }
+
+    this.socket.on('PLAYER_CONNECT', (res) => {
+      console.log('response socket', res)
+      this.props.updateGameState(res);
+    })
 
 
     // this.socket.emit('PLAYER_CONNECT', {
@@ -55,45 +62,45 @@ class Game extends Component {
     //   username: 'mike'
     // })
 
-    this.socket.on('room_setup', (res) => {
-      console.log('room_setup socket', res)
-      this.props.updateGameState(res);
-    })
+    // this.socket.on('room_setup', (res) => {
+    //   console.log('room_setup socket', res)
+    //   this.props.updateGameState(res);
+    // })
 
-    this.socket.on('player_join', (res) => {
-      console.log('player_join socket', res)
-      this.props.updateGameState(res);
-    })
+    // this.socket.on('player_join', (res) => {
+    //   console.log('player_join socket', res)
+    //   this.props.updateGameState(res);
+    // })
 
-    this.socket.on('start_game', (res) => {
-    })
+    // this.socket.on('start_game', (res) => {
+    // })
 
-    this.socket.on('begin_main_game', (res) => {
-    })
+    // this.socket.on('begin_main_game', (res) => {
+    // })
 
-    this.socket.on('seven_roll', (res) => {
-    })
+    // this.socket.on('seven_roll', (res) => {
+    // })
 
-    this.socket.on('move_robber', (res) => {
-    })
+    // this.socket.on('move_robber', (res) => {
+    // })
 
-    this.socket.on('regular_roll', (res) => {
-    })
+    // this.socket.on('regular_roll', (res) => {
+    // })
 
-    this.socket.on('build_starting_road', (res) => {
-    })
+    // this.socket.on('build_starting_road', (res) => {
+    // })
 
-    this.socket.on('build_road', (res) => {
-    })
+    // this.socket.on('build_road', (res) => {
+    // })
 
-    this.socket.on('build_starting_settlement', (res) => {
-    })
+    // this.socket.on('build_starting_settlement', (res) => {
+    // })
 
-    this.socket.on('build_settlement', (res) => {
-    })
+    // this.socket.on('build_settlement', (res) => {
+    // })
 
-    this.socket.on('build_city', (res) => {
-    })
+    // this.socket.on('build_city', (res) => {
+    // })
 
     this.renderTile = (Tile) => {
       let resourceType = null;
@@ -117,10 +124,6 @@ class Game extends Component {
             ResourceType: resourceType
           }
         )
-      }
-      if(newTile.props.HexId === 19){
-        console.log('resourceType', resourceType)
-        console.log('frontend hex id 19',Tile)
       }
       return newTile
     }
@@ -188,6 +191,7 @@ class Game extends Component {
 
     return (
       <>
+        <button className={styles.Test} onClick={this.davidJoins}>Test</button>
         <div className={diceStyle} onClick={() => { this.rollAll() }}>
           <ReactDice
             numDice={2}
@@ -234,7 +238,6 @@ class Game extends Component {
           <div className={styles.Row3}>
             {Board.Row3.map((Tile) => {
               let newTile = this.renderTile(Tile)
-              console.log('Row3: ', newTile)
               return newTile
             })}
           </div>
