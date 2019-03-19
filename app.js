@@ -96,7 +96,7 @@ let City = (function (city) {
 
 // get gameState from DB
 function findGameState(gameName) {
-    gameStatesDB.findOne({ gameName: gameName }, function (err, state) {
+    gameStatesDB.findOne({ "_id": gameName }, function (err, state) {
         if (err) return err;
         return state;
     })
