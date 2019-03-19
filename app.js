@@ -154,6 +154,7 @@ io.on('connection', function (socket) {
             gameState.players.push(newPlayer);
             gameState.maxPlayerNum++;
             gameState = storeGameState(gameState);
+            console.log('gameState', gameState)
             io.sockets.emit('PLAYER_CONNECT', gameState);
             // gameStatesDB.update({'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
             //     if (err) io.sockets.emit('PLAYER_CONNECT', err);
