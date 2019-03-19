@@ -141,8 +141,8 @@ io.on('connection', function (socket) {
             let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
             console.log('gameState: ', gameState)
             gameStatesDB.insert(gameState, function (err, state) {
-                if (err) io.sockets.emit('room_setup', err);
-                io.sockets.emit('room_setup', state);
+                if (err) io.sockets.emit('PLAYER_CONNECT', err);
+                io.sockets.emit('PLAYER_CONNECT', state);
             });
         }
 
@@ -150,13 +150,10 @@ io.on('connection', function (socket) {
         if (req.string == 'player_join') {
             let gameName = req.gameName;
             let newPlayer = new Player(req.username);
-            gameStatesDB.findOne({'gameName': gameName}, function(err, state) {
-                if (err) io.sockets.emit('player_join', err);
-                gameStatesDB.update({'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
-                    if (err) io.sockets.emit('player_join', err);
-                    console.log(state)
-                    io.sockets.emit('player_join', state);
-                });
+            gameStatesDB.update({'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
+                if (err) io.sockets.emit('PLAYER_CONNECT', err);
+                console.log(state)
+                io.sockets.emit('PLAYER_CONNECT', state);
             });
         }
 
@@ -166,7 +163,7 @@ io.on('connection', function (socket) {
             gameState.currentTurn = players[gameState.currentPlayerNum];
             gameState.turnPhase = 'setup_placement';
             gameState = storeGameState(gameState);
-            io.sockets.emit('start_game', gameState);
+            io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // begin main phase (after all setup done)
@@ -176,7 +173,7 @@ io.on('connection', function (socket) {
             gameState.currentTurn = players[gameState.currentPlayerNum];
             gameState.turnPhase = 'roll_phase';
             gameState = storeGameState(gameState);
-            io.sockets.emit('begin_main_game', gameState);
+            io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // ends current player's turn and goes to the next player
@@ -192,7 +189,7 @@ io.on('connection', function (socket) {
             gameState.currentTurn = gameState.players[currentPlayerNum];
             gameState.turnPhase = 'roll_phase';
             gameState = storeGameState(gameState);
-            io.sockets.emit('end_turn', gameState);
+            io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // Dice roll (7)
@@ -200,7 +197,7 @@ io.on('connection', function (socket) {
             let gameState = findGameState(req.gameName);
             gameState.phase = 'move_robber';
             gameState = storeGameState(gameState);
-            io.sockets.emit('seven_roll', gameState);
+            io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // move the robber to the new hex
@@ -220,7 +217,7 @@ io.on('connection', function (socket) {
             newHex.robber = true;
             gameState.turnPhase = 'build/trade/devcard_phase';
             gameState = storeGameState(gameState);
-            io.sockets.emit('move_robber', gameState);
+            io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // Dice roll (2-6, 8-12): give out resources to players
@@ -242,7 +239,7 @@ io.on('connection', function (socket) {
             }
             gameState.turnPhase = 'build/trade/devcard_phase';
             gameState = storeGameState(gameState);
-            io.sockets.emit('regular_roll', gameState);
+            io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // build road (setup): no resource costs, can be placed anywhere
@@ -253,9 +250,9 @@ io.on('connection', function (socket) {
                 let road = new Road({ player: currentPlayer, start: data.start, end: data.end });
                 gameState.roads.push(road);
                 gameState = storeGameState(gameState);
-                io.sockets.emit('build_starting_road', gameState);
+                io.sockets.emit('PLAYER_CONNECT', gameState);
             } else {
-                io.sockets.emit('build_starting_road', new Error('Invalid road position'));
+                io.sockets.emit('PLAYER_CONNECT', new Error('Invalid road position'));
             }
         }
 
@@ -286,12 +283,12 @@ io.on('connection', function (socket) {
                         checkWinCondition(currentPlayer, gameState);
                     }
                     gameState = storeGameState(gameState);
-                    io.sockets.emit('build_road', gameState);
+                    io.sockets.emit('PLAYER_CONNECT', gameState);
                 } else {
-                    io.sockets.emit('build_road', new Error('Insufficient resources'));
+                    io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
                 }
             } else {
-                io.sockets.emit('build_road', new Error('Invalid road position'));
+                io.sockets.emit('PLAYER_CONNECT', new Error('Invalid road position'));
             }
         }
 
@@ -305,9 +302,9 @@ io.on('connection', function (socket) {
                 addSettlementToHex(settlement, gameState);
                 currentPlayer.VictoryPoint++;
                 gameState = storeGameState(gameState);
-                io.sockets.emit('build_starting_settlement', gameState);
+                io.sockets.emit('PLAYER_CONNECT', gameState);
             } else {
-                io.sockets.emit('build_starting_settlement', new Error('Invalid settlement position'));
+                io.sockets.emit('PLAYER_CONNECT', new Error('Invalid settlement position'));
             }
         }
 
@@ -327,12 +324,12 @@ io.on('connection', function (socket) {
                     currentPlayer.VictoryPoint++;
                     checkWinCondition(currentPlayer, gameState);
                     gameState = storeGameState(gameState);
-                    io.sockets.emit('build_settlement', gameState);
+                    io.sockets.emit('PLAYER_CONNECT', gameState);
                 } else {
-                    io.sockets.emit('build_settlement', new Error('Insufficient resources'));
+                    io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
                 }
             } else {
-                io.sockets.emit('build_settlement', new Error('Invalid settlement position'));
+                io.sockets.emit('PLAYER_CONNECT', new Error('Invalid settlement position'));
             }
         }
 
@@ -349,12 +346,12 @@ io.on('connection', function (socket) {
                     currentPlayer.VictoryPoint++;
                     checkWinCondition(currentPlayer, gameState);
                     gameState = storeGameState(gameState);
-                    io.sockets.emit('build_city', gameState);
+                    io.sockets.emit('PLAYER_CONNECT', gameState);
                 } else {
-                    io.sockets.emit('build_city', new Error('Insufficient resources'));
+                    io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
                 }
             } else {
-                io.sockets.emit('build_city', new Error('Invalid city position'))
+                io.sockets.emit('PLAYER_CONNECT', new Error('Invalid city position'))
             }
         }
 
