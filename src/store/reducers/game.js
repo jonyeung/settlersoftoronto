@@ -18,7 +18,7 @@ const initialState = {
   turnPhase: 'game not started',
   gameOver: false,
   winner: null,
-  id: null,
+  _id: null,
 
   error: false
 }

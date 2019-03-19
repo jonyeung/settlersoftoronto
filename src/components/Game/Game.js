@@ -36,6 +36,7 @@ class Game extends Component {
     })
 
     this.davidJoins = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
       this.socket.emit('PLAYER_CONNECT', {
         string: 'player_join',
         username: 'david',
@@ -280,7 +281,7 @@ class Game extends Component {
 
 const mapStateToProps = state => {
   return {
-    gameStateId: state.gameReducer.id,
+    gameStateId: state.gameReducer._id,
     hexes: state.gameReducer.hexes,
     error: state.lobbyReducer.error
   };
