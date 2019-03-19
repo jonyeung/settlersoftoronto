@@ -298,6 +298,10 @@
   background-image: url('../../media/sheep.jpg')
 }
 
+.DesertTile {
+  background-image: url('../../media')
+}
+
 .Player1{
   background-color: purple;
 }

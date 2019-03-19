@@ -30,10 +30,30 @@ class Game extends Component {
     this.socket = io.connect('http://localhost:3000')
 
     this.socket.emit('PLAYER_CONNECT', {
-      string: 'player_join',
+      string: 'room_setup',
       gameName: 'game1',
       username: 'tony'
     })
+
+    // this.socket.emit('PLAYER_CONNECT', {
+    //   string: 'player_join',
+    //   gameName: 'game1',
+    //   username: 'david'
+    // })
+
+
+    // this.socket.emit('PLAYER_CONNECT', {
+    //   string: 'player_join',
+    //   gameName: 'game1',
+    //   username: 'henry'
+    // })
+
+
+    // this.socket.emit('PLAYER_CONNECT', {
+    //   string: 'player_join',
+    //   gameName: 'game1',
+    //   username: 'mike'
+    // })
 
     this.socket.on('room_setup', (res) => {
       console.log('room_setup socket', res)
@@ -74,6 +94,36 @@ class Game extends Component {
 
     this.socket.on('build_city', (res) => {
     })
+
+    this.renderTile = (Tile) => {
+      let resourceType = null;
+      let newTile = null;
+
+      if (Tile.props.ResourceType === 'Water') {
+        newTile = React.cloneElement(
+          Tile,
+        )
+      } else {
+        this.props.hexes[Tile.props.HexId - 1] ? resourceType = this.props.hexes[Tile.props.HexId - 1].resourceType : resourceType = null
+        newTile = React.cloneElement(
+          Tile,
+          {
+            displayEdgeBuildOptions: () => {
+              this.toggleBuildType('EDGE')
+            },
+            displayCornerBuildOptions: () => {
+              this.toggleBuildType('CORNER')
+            },
+            ResourceType: resourceType
+          }
+        )
+      }
+      if(newTile.props.HexId === 19){
+        console.log('resourceType', resourceType)
+        console.log('frontend hex id 19',Tile)
+      }
+      return newTile
+    }
 
     this.toggleBuildType = (type) => {
       this.setState({
@@ -171,82 +221,32 @@ class Game extends Component {
 
           <div className={styles.Row1}>
             {Board.Row1.map((Tile, i) => {
-              let newTile = React.cloneElement(
-                Tile,
-                {
-                  displayEdgeBuildOptions: () => {
-                    this.toggleBuildType('EDGE')
-                  },
-                  displayCornerBuildOptions: () => {
-                    this.toggleBuildType('CORNER')
-                  }
-                }
-              )
+              let newTile = this.renderTile(Tile)
               return newTile
             })}
           </div>
           <div className={styles.Row2}>
             {Board.Row2.map((Tile) => {
-              let newTile = React.cloneElement(
-                Tile,
-                {
-                  displayEdgeBuildOptions: () => {
-                    this.toggleBuildType('EDGE')
-                  },
-                  displayCornerBuildOptions: () => {
-                    this.toggleBuildType('CORNER')
-                  }
-
-                }
-              )
+              let newTile = this.renderTile(Tile)
               return newTile
             })}
           </div>
           <div className={styles.Row3}>
             {Board.Row3.map((Tile) => {
-              let newTile = React.cloneElement(
-                Tile,
-                {
-                  displayEdgeBuildOptions: () => {
-                    this.toggleBuildType('EDGE')
-                  },
-                  displayCornerBuildOptions: () => {
-                    this.toggleBuildType('CORNER')
-                  }
-                }
-              )
+              let newTile = this.renderTile(Tile)
+              console.log('Row3: ', newTile)
               return newTile
             })}
           </div>
           <div className={styles.Row4}>
             {Board.Row4.map((Tile) => {
-              let newTile = React.cloneElement(
-                Tile,
-                {
-                  displayEdgeBuildOptions: () => {
-                    this.toggleBuildType('EDGE')
-                  },
-                  displayCornerBuildOptions: () => {
-                    this.toggleBuildType('CORNER')
-                  }
-                }
-              )
+              let newTile = this.renderTile(Tile)
               return newTile
             })}
           </div>
           <div className={styles.Row5}>
             {Board.Row5.map((Tile) => {
-              let newTile = React.cloneElement(
-                Tile,
-                {
-                  displayEdgeBuildOptions: () => {
-                    this.toggleBuildType('EDGE')
-                  },
-                  displayCornerBuildOptions: () => {
-                    this.toggleBuildType('CORNER')
-                  }
-                }
-              )
+              let newTile = this.renderTile(Tile)
               return newTile
             })}
           </div>
@@ -277,14 +277,15 @@ class Game extends Component {
 
 const mapStateToProps = state => {
   return {
-    rooms: state.lobbyReducer.rooms,
+    hexes: state.gameReducer.hexes,
     error: state.lobbyReducer.error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateGameState: (newGameState) => dispatch(gameActions.updateGameState(newGameState))
+    updateGameState: (newGameState) => dispatch(gameActions.updateGameState(newGameState)),
+
   }
 }
 

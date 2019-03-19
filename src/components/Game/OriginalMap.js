@@ -23,7 +23,6 @@ export let Row1 = [
     ResourceType={'Water'}
   ></Tile>,
   <Tile class='game_icon'
-    ResourceType={'FOREST'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -56,7 +55,6 @@ export let Row1 = [
   ></Tile>,
 
   <Tile
-    ResourceType={'ORE'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -89,7 +87,6 @@ export let Row1 = [
   ></Tile>,
 
   <Tile
-    ResourceType={'WHEAT'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -129,7 +126,6 @@ export let Row2 = [
     ResourceType={'Water'}
   ></Tile>,
   <Tile
-    ResourceType={'BRICK'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -160,7 +156,6 @@ export let Row2 = [
     BottomRightCornerId={18}
     BottomMiddleCornerId={23}
   ></Tile>, <Tile
-    ResourceType={'ORE'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -191,7 +186,6 @@ export let Row2 = [
     BottomRightCornerId={19}
     BottomMiddleCornerId={24}
   ></Tile>, <Tile
-    ResourceType={'SHEEP'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -222,7 +216,6 @@ export let Row2 = [
     BottomRightCornerId={20}
     BottomMiddleCornerId={25}
   ></Tile>, <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -263,7 +256,6 @@ export let Row3 = [
     ResourceType={'Water'}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -295,7 +287,6 @@ export let Row3 = [
     BottomMiddleCornerId={34}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -327,7 +318,6 @@ export let Row3 = [
     BottomMiddleCornerId={35}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -359,7 +349,6 @@ export let Row3 = [
     BottomMiddleCornerId={36}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -391,7 +380,6 @@ export let Row3 = [
     BottomMiddleCornerId={37}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -432,7 +420,6 @@ export let Row4 = [
     ResourceType={'Water'}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -463,7 +450,6 @@ export let Row4 = [
     BottomRightCornerId={40}
     BottomMiddleCornerId={44}
   ></Tile>, <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -494,7 +480,6 @@ export let Row4 = [
     BottomRightCornerId={41}
     BottomMiddleCornerId={45}
   ></Tile>, <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -525,7 +510,6 @@ export let Row4 = [
     BottomRightCornerId={42}
     BottomMiddleCornerId={46}
   ></Tile>, <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -566,7 +550,6 @@ export let Row5 = [
     ResourceType={'Water'}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -598,7 +581,6 @@ export let Row5 = [
     BottomMiddleCornerId={52}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}
@@ -630,7 +612,6 @@ export let Row5 = [
     BottomMiddleCornerId={53}
   ></Tile>,
   <Tile
-    ResourceType={'Forest'}
     EdgeTopLeftAction={() => { console.log('EdgeTopLeftAction') }}
     EdgeTopRightAction={() => { console.log('EdgeTopRightAction') }}
     EdgeMiddleLeftAction={() => { console.log('EdgeMiddleLeftAction') }}

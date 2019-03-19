@@ -135,19 +135,19 @@ class Tile extends Component {
 
     let resourceTypeStyle = [styles.HexIn2]
     switch (this.props.ResourceType) {
-      case ('FOREST'):
+      case ('Wood'):
         resourceTypeStyle.push(styles.ForestTile)
         break;
-      case ('BRICK'):
+      case ('Brick'):
         resourceTypeStyle.push(styles.BrickTile)
         break;
-      case ('WHEAT'):
+      case ('Wheat'):
         resourceTypeStyle.push(styles.WheatTile)
         break;
-      case ('ORE'):
+      case ('Ore'):
         resourceTypeStyle.push(styles.RockTile)
         break;
-      case ('SHEEP'):
+      case ('Sheep'):
         resourceTypeStyle.push(styles.SheepTile)
         break;
       default:
