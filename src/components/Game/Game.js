@@ -38,8 +38,8 @@ class Game extends Component {
     this.davidJoins = () => {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'player_join',
-        gameName: 'game1',
-        username: 'david'
+        username: 'david',
+        gameName: this.props.gameStateId
       })
     }
 
@@ -280,6 +280,7 @@ class Game extends Component {
 
 const mapStateToProps = state => {
   return {
+    gameStateId: state.gameReducer.id,
     hexes: state.gameReducer.hexes,
     error: state.lobbyReducer.error
   };
