@@ -40,7 +40,48 @@ class Game extends Component {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'player_join',
         username: 'david',
-        gameName: this.props.gameStateId
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testStart = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'start_game',
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testBeginMain = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'begin_main_game',
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testEndTurn = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'end_turn',
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testSevenRoll = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'seven_roll',
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testMoveRobber = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'move_robber',
+        robberPosition: '4',
+        gameState: this.props.gameState
       })
     }
 
@@ -192,7 +233,12 @@ class Game extends Component {
 
     return (
       <>
-        <button className={styles.Test} onClick={this.davidJoins}>Test</button>
+        <button className={styles.Test} onClick={this.davidJoins}>AddPlayer</button>
+        <button className={styles.Test2} onClick={this.testStart}>StartGame</button>
+        <button className={styles.Test3} onClick={this.testBeginMain}>BeginMainGame</button>
+        <button className={styles.Test4} onClick={this.testMoveRobber}>move robber</button>
+
+
         <div className={diceStyle} onClick={() => { this.rollAll() }}>
           <ReactDice
             numDice={2}
@@ -283,7 +329,8 @@ const mapStateToProps = state => {
   return {
     gameStateId: state.gameReducer._id,
     hexes: state.gameReducer.hexes,
-    error: state.lobbyReducer.error
+    error: state.lobbyReducer.error,
+    gameState: state.gameReducer
   };
 };
 

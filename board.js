@@ -1,6 +1,6 @@
 let Hex = (function(hex) {
     return {
-        hexPositon : hex.position,
+        hexPosition : hex.position,
         robber : false,
         resourceType : hex.resourceType,
         diceNumber : hex.diceNumber,
@@ -45,7 +45,6 @@ function setupHexes() {
     dicePositions['18'] = 11;
     let index = 1;
     index= index.toString()
-    console.log('dicePositions', dicePositions[index])
     let randomResources = generateRandomOrderResources();
     let hexes = [];
     let i=1;
