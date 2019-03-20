@@ -19,9 +19,9 @@
 .Content .Profile {
   width: 50%;
   height: 100%;
-  background-image: url("../../../media/user.png"); 
+  background-image: url("../../../media/user_purple.png"); 
   background-repeat: no-repeat;
-  background-size: 150px;
+  background-size: contain;
   background-position: center center;
 }
 
