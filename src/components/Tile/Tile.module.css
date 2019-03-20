@@ -218,6 +218,11 @@
   z-index: 105;
 }
 
+.HexCircle .Robber {
+  background-image:url('../../media/thief.jpg');
+  background-size:70px;
+}
+
 .HexCircle p {
   margin-top: auto;
   margin-bottom: auto;
@@ -298,9 +303,30 @@
   background-image: url('../../media/sheep.jpg')
 }
 
-/* .DesertTile {
-  background-image: url('../../media')
-} */
+.HouseTile :hover{
+  background-image: url('../../media/house_icon.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: cubic-bezier(0.47, 0, 0.745, 0.715);
+  transition-delay: 2s;
+}
+
+.CityTile :hover{
+  background-image: url('../../media/city_icon.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: cubic-bezier(0.47, 0, 0.745, 0.715);
+  transition-delay: 2s;
+}
+
+.DesertTile {
+  background-image: url('../../media/desert.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
 
 .Player1{
   background-color: purple;

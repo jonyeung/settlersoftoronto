@@ -163,6 +163,9 @@
 .Content .Status .ConfirmTrade .Accept {
   height: 60px;
   width: 60px;
+  background-image: url("../../media/checkmark.png");
+  background-position: center;
+  background-size:85px;
   background-color: green;
   border-radius: 30px;
   border: 5px solid black;
@@ -172,6 +175,9 @@
 .Content .Status .ConfirmTrade .Cancel {
   height: 60px;
   width: 60px;
+  background-image: url("../../media/crossmark.png");
+  background-position: center;
+  background-size:90px;
   background-color: red;
   border-radius: 30px;
   border: 5px solid black;
@@ -185,9 +191,19 @@
   border: 5px solid black;
 }
 
-.Player1Selected,
-.Player2Selected,
-.Player3Selected,
+.Player1Selected {
+  border: 5px solid orange;
+  background-color:  rgb(92, 4, 64);
+}
+
+.Player2Selected {
+  border: 5px solid orange;
+}
+
+.Player3Selected{
+  border: 5px solid orange;
+}
+
 .Player4Selected{
   border: 5px solid orange;
 }
@@ -200,6 +216,7 @@
 
 .Selected {
   border-color: orange;
+  background-color:  rgb(92, 4, 64);
 }
 
 .Content .CardGroup {
@@ -215,6 +232,9 @@
 .AmountAdjust .Add {
   height: 30px;
   width: 30px;
+  background-image: url("../../media/plus.png");
+  background-position: center;
+  background-size:40px;
   background-color: green;
   border-radius: 15px;
   border: 2px black solid;
@@ -225,6 +245,9 @@
 .AmountAdjust .Minus {
   height: 30px;
   width: 30px;
+  background-image: url("../../media/minus.jpg");
+  background-position: center;
+  background-size:40px;
   background-color: red;
   border-radius: 15px;
   border: 2px black solid;

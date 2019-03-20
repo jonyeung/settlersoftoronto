@@ -19,13 +19,21 @@
   background-size:120px;
 }
 
-.EndTurnButton {
+.RollButton{
   width: 100%;
   height: 45%;
   background-image: url("../../media/dice.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size:100px;
+}
+.EndTurnButton {
+  width: 100%;
+  height: 45%;
+  background-image: url("../../media/endturn.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size:80px;
 }
 
 .EndTurnButton:hover,

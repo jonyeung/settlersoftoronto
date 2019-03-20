@@ -66,39 +66,66 @@
 }
 
 .Settlement .Icon {
-  /* background-image: url('../../assests/images/forestTile.gif') */
+  background-image: url('../../media/house.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .City .Icon {
-  /* background-image: url('../../media/') */
+  background-image: url('../../media/city.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
 }
 
 .Road .Icon {
-  background-image: url('../../media/road.jpg')
+  background-image: url('../../media/road.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .Wood {
-  background-image: url('../../media/trees.png')
+  background-image: url('../../media/trees.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
 }
 
 .Brick {
-  background-image: url('../../media/bricks.png')
+  background-image: url('../../media/bricks.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
 }
 
 .Sheep {
-  background-image: url('../../media/sheep.jpg')
+  background-image: url('../../media/sheep.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
 }
 
 .Wheat {
-  background-image: url('../../media/wheat.png')
+  background-image: url('../../media/wheat.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
 }
 
 .Ore {
-  background-image: url('../../media/rocks.png')
+  background-image: url('../../media/rocks.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
 }
 
 .Content .Exit{
-  background-color: red;
+  background-image: url('../../media/crossmark.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 35px;
   height: 20px;
   width: 20px;
   margin-top: auto;

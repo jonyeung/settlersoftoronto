@@ -8,8 +8,28 @@ class ResourceCard extends Component {
     super(props);
   }
   render() {
+    let resource = [styles.Content] 
+    switch(this.props.resource){
+      case ("Wood"):
+        resource.push(styles.Wood)
+        break;
+      case("Sheep"):
+        resource.push(styles.Sheep)
+        break;
+      case("Rock"):
+        resource.push(styles.Rock)
+        break;
+      case("Brick"):
+        resource.push(styles.Brick)
+        break;
+      case("Wheat"):
+        resource.push(styles.Wheat)
+        break;
+      default:
+        break;
+    }
     return (
-      <div className={styles.Content}>
+      <div className={resource.join(' ')}>
 
         <div className={styles.OfferAmount}>
           <p className={styles.Amount}>{this.props.offerAmount}</p>

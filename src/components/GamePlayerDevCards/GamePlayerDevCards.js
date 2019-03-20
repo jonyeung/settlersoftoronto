@@ -8,10 +8,10 @@ class GamePlayerToolBar extends Component {
     return (
       <div className={styles.Content}>
         <DevCard cardType={'KNIGHT'}></DevCard>
-        <DevCard cardType={'KNIGHT'}></DevCard>
-        <DevCard cardType={'KNIGHT'}></DevCard>
-        <DevCard cardType={'KNIGHT'}></DevCard>
-        <DevCard cardType={'KNIGHT'}></DevCard>
+        <DevCard cardType={'VICTORYPOINT'}></DevCard>
+        <DevCard cardType={'ROADBUILDER'}></DevCard>
+        <DevCard cardType={'YEAROFPLENTY'}></DevCard>
+        <DevCard cardType={'MONOPOLY'}></DevCard>
       </div>
     )
   }

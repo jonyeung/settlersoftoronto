@@ -307,35 +307,35 @@ class TradeModal extends Component {
                   <div className={styles.Add} onClick={() => { this.increaseRequest(RESOURCES.WOOD) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseRequest(RESOURCES.WOOD) }}></div>
                 </div>
-                <ResourceCard hideAvailableAmount offerAmount={this.state.requestAmountWood} />
+                <ResourceCard resource={'Wood'} hideAvailableAmount offerAmount={this.state.requestAmountWood} />
               </div>
               <div className={styles.CardGroup}>
                 <div className={styles.AmountAdjust}>
                   <div className={styles.Add} onClick={() => { this.increaseRequest(RESOURCES.BRICK) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseRequest(RESOURCES.BRICK) }}></div>
                 </div>
-                <ResourceCard hideAvailableAmount offerAmount={this.state.requestAmountBrick} />
+                <ResourceCard resource={'Sheep'} hideAvailableAmount offerAmount={this.state.requestAmountBrick} />
               </div>
               <div className={styles.CardGroup}>
                 <div className={styles.AmountAdjust}>
                   <div className={styles.Add} onClick={() => { this.increaseRequest(RESOURCES.SHEEP) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseRequest(RESOURCES.SHEEP) }}></div>
                 </div>
-                <ResourceCard hideAvailableAmount offerAmount={this.state.requestAmountSheep} />
+                <ResourceCard resource={'Brick'} hideAvailableAmount offerAmount={this.state.requestAmountSheep} />
               </div>
               <div className={styles.CardGroup}>
                 <div className={styles.AmountAdjust}>
                   <div className={styles.Add} onClick={() => { this.increaseRequest(RESOURCES.WHEAT) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseRequest(RESOURCES.WHEAT) }}></div>
                 </div>
-                <ResourceCard hideAvailableAmount offerAmount={this.state.requestAmountWheat} />
+                <ResourceCard resource={'Rock'} hideAvailableAmount offerAmount={this.state.requestAmountWheat} />
               </div>
               <div className={styles.CardGroup}>
                 <div className={styles.AmountAdjust}>
                   <div className={styles.Add} onClick={() => { this.increaseRequest(RESOURCES.ORE) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseRequest(RESOURCES.ORE) }}></div>
                 </div>
-                <ResourceCard hideAvailableAmount offerAmount={this.state.requestAmountOre} />
+                <ResourceCard resource={'Wheat'} hideAvailableAmount offerAmount={this.state.requestAmountOre} />
               </div>
 
             </div>
@@ -350,7 +350,7 @@ class TradeModal extends Component {
                   <div className={styles.Add} onClick={() => { this.increaseOffer(RESOURCES.WOOD) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseOffer(RESOURCES.WOOD) }}></div>
                 </div>
-                <ResourceCard availableAmount={this.state.availableAmount}
+                <ResourceCard resource={'Wood'} availableAmount={this.state.availableAmount}
                   offerAmount={this.state.offerAmountWood} />
               </div>
               <div className={styles.CardGroup}>
@@ -358,7 +358,7 @@ class TradeModal extends Component {
                   <div className={styles.Add} onClick={() => { this.increaseOffer(RESOURCES.BRICK) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseOffer(RESOURCES.BRICK) }}></div>
                 </div>
-                <ResourceCard availableAmount={this.state.availableAmount}
+                <ResourceCard resource={'Sheep'} availableAmount={this.state.availableAmount}
                   offerAmount={this.state.offerAmountBrick} />
               </div>
               <div className={styles.CardGroup}>
@@ -366,7 +366,7 @@ class TradeModal extends Component {
                   <div className={styles.Add} onClick={() => { this.increaseOffer(RESOURCES.SHEEP) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseOffer(RESOURCES.SHEEP) }}></div>
                 </div>
-                <ResourceCard availableAmount={this.state.availableAmount}
+                <ResourceCard resource={'Brick'} availableAmount={this.state.availableAmount}
                   offerAmount={this.state.offerAmountSheep} />
               </div>
               <div className={styles.CardGroup}>
@@ -374,7 +374,7 @@ class TradeModal extends Component {
                   <div className={styles.Add} onClick={() => { this.increaseOffer(RESOURCES.WHEAT) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseOffer(RESOURCES.WHEAT) }}></div>
                 </div>
-                <ResourceCard availableAmount={this.state.availableAmount}
+                <ResourceCard resource={'Rock'} availableAmount={this.state.availableAmount}
                   offerAmount={this.state.offerAmountWheat} />
               </div>
               <div className={styles.CardGroup}>
@@ -382,7 +382,7 @@ class TradeModal extends Component {
                   <div className={styles.Add} onClick={() => { this.increaseOffer(RESOURCES.ORE) }}></div>
                   <div className={styles.Minus} onClick={() => { this.decreaseOffer(RESOURCES.ORE) }}></div>
                 </div>
-                <ResourceCard availableAmount={this.state.availableAmount}
+                <ResourceCard resource={'Wheat'} availableAmount={this.state.availableAmount}
                   offerAmount={this.state.offerAmountOre} />
               </div>
             </div>

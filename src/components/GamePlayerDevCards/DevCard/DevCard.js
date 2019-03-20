@@ -9,6 +9,18 @@ class DevCard extends Component {
       case 'KNIGHT':
         cardStyle.push(styles.Knight)
         break;
+      case 'VICTORYPOINT':
+        cardStyle.push(styles.VictoryPoint)
+        break;
+      case 'ROADBUILDER':
+        cardStyle.push(styles.RoadBuilder)
+        break;
+      case 'YEAROFPLENTY':
+        cardStyle.push(styles.YearOfPlenty)
+        break;
+      case 'MONOPOLY':
+        cardStyle.push(styles.Monopoly)
+        break;
       default:
         break;
     }

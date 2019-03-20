@@ -1,11 +1,41 @@
 .Content {
   display: flex;
   flex-direction: column;
-  height: 180px;
+  height: 175px;
   width: 120px;
   background-color: orangered;
 }
 
+.Wood {
+  background-image:url("../../../media/trees.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.Sheep {
+  background-image:url("../../../media/sheep.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.Brick {
+  background-image:url("../../../media/bricks.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.Rock {
+  background-image:url("../../../media/rocks.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+}
+
+.Wheat{
+  background-image:url("../../../media/wheat.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
 .Content .OfferAmount {
   display: flex;
   justify-content: center;
