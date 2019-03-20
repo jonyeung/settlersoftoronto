@@ -23,74 +23,74 @@ let Datastore = require('nedb'),
     gameStatesDB = new Datastore({ filename: 'db/gameStates.db', autoload: true, timestampData: true });
 
 let GameState = (function (state) {
-        return {
-            gameName: state.gameName,
-            players: state.players,
-            hexes: state.hexes,
-            roads: [],
-            settlements: [],
-            cities: [],
-            currentLargestArmy: 0,
-            currentLongestRoad: 0,
-            currentPlayerNum: 0,
-            maxPlayerNum: state.maxPlayers,
-            currentTurn: null,
-            turnPhase: 'game not started',
-            gameOver: false,
-            winner: null
-        }
+    return {
+        gameName: state.gameName,
+        players: state.players,
+        hexes: state.hexes,
+        roads: [],
+        settlements: [],
+        cities: [],
+        currentLargestArmy: 0,
+        currentLongestRoad: 0,
+        currentPlayerNum: 0,
+        maxPlayerNum: state.maxPlayers,
+        currentTurn: null,
+        turnPhase: 'game not started',
+        gameOver: false,
+        winner: null
+    }
 })
 
 let Player = (function (playerName) {
     return {
-        username : playerName,
-        resources : {
+        username: playerName,
+        resources: {
             Wood: 0,
             Sheep: 0,
             Ore: 0,
             Brick: 0,
             Wheat: 0
         },
-        devCards : {
+        devCards: {
             Knight: 0,
             VictoryPointCard: 0,
             RoadBuilding: 0,
             Monopoly: 0,
             YearOfPlenty: 0
         },
-        knightsPlayed : 0,
-        VictoryPoints : 0,
-        LongestRoadLength : 0,
-        OwnsLargestArmy : false,
-        OwnsLongestRoad : false,
-        OwnsSheepPort : false,
-        OwnsWoodPort : false,
-        OwnsOrePort : false,
-        OwnsBrickPort : false,
-        OwnsWheatPort : false,
-        Owns3For1Port : false,
+        knightsPlayed: 0,
+        VictoryPoints: 0,
+        LongestRoadLength: 0,
+        OwnsLargestArmy: false,
+        OwnsLongestRoad: false,
+        OwnsSheepPort: false,
+        OwnsWoodPort: false,
+        OwnsOrePort: false,
+        OwnsBrickPort: false,
+        OwnsWheatPort: false,
+        Owns3For1Port: false,
     }
 });
 
 let Road = (function (road) {
     return {
-        player : road.player,
-        startPoint : road.start,
-        endPoint : road.end,
+        player: road.player,
+        startPoint: road.start,
+        endPoint: road.end,
     }
 });
 
 let Settlement = (function (settlement) {
     return {
-        player : settlement.player,
-        location : settlement.location,
+        player: settlement.player,
+        location: settlement.location,
     }
 });
 
 let City = (function (city) {
     return {
-        player : city.player,
-        location : city.location,
+        player: city.player,
+        location: city.location,
     }
 });
 
@@ -139,7 +139,6 @@ io.on('connection', function (socket) {
             let hexes = boardFunctions.setupHexes();
 
             let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
-            console.log('gameState: ', gameState)
             gameStatesDB.insert(gameState, function (err, state) {
                 if (err) io.sockets.emit('PLAYER_CONNECT', err);
                 io.sockets.emit('PLAYER_CONNECT', state);
@@ -148,13 +147,10 @@ io.on('connection', function (socket) {
 
         // new player joins
         if (req.string == 'player_join') {
-            let gameName = req.gameName;
             let newPlayer = new Player(req.username);
-            let gameState = findGameState(req.gameName);
+            let gameState = req.gameState;
             gameState.players.push(newPlayer);
             gameState.maxPlayerNum++;
-            gameState = storeGameState(gameState);
-            console.log('gameState', gameState)
             io.sockets.emit('PLAYER_CONNECT', gameState);
             // gameStatesDB.update({'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
             //     if (err) io.sockets.emit('PLAYER_CONNECT', err);
@@ -165,64 +161,69 @@ io.on('connection', function (socket) {
 
         // game starts
         if (req.string == 'start_game') {
-            let gameState = findGameState(req.gameName);
-            gameState.currentTurn = players[gameState.currentPlayerNum];
+            let gameState = req.gameState;
+            gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
             gameState.turnPhase = 'setup_placement';
-            gameState = storeGameState(gameState);
+            // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // begin main phase (after all setup done)
         if (req.string == 'begin_main_game') {
-            let gameState = findGameState(req.gameName);
+            let gameState = req.gameState;
             gameState.currentPlayerNum = 0;
-            gameState.currentTurn = players[gameState.currentPlayerNum];
+            gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
             gameState.turnPhase = 'roll_phase';
-            gameState = storeGameState(gameState);
+            // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // ends current player's turn and goes to the next player
         if (req.string == 'end_turn') {
-            let gameState = findGameState(req.gameName);
+            let gameState = req.gameState;
             let currentPlayerNum = gameState.currentPlayerNum;
-            if (currentPlayerNum == gameState.maxPlayerNum) {
+            gameState.currentPlayerNum++;
+            if (gameState.currentPlayerNum == gameState.maxPlayerNum) {
                 // go to player 1
-                currentPlayerNum = 1;
-            } else {
-                currentPlayerNum++;
+                gameState.currentPlayerNum = 0;
             }
-            gameState.currentTurn = gameState.players[currentPlayerNum];
+            gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
             gameState.turnPhase = 'roll_phase';
-            gameState = storeGameState(gameState);
+            // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // Dice roll (7)
         if (req.string == 'seven_roll') {
-            let gameState = findGameState(req.gameName);
-            gameState.phase = 'move_robber';
-            gameState = storeGameState(gameState);
+            let gameState = req.gameState;
+            gameState.turnPhase = 'move_robber';
+            // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // move the robber to the new hex
         if (req.string == 'move_robber') {
-            let gameState = findGameState(req.gameName);
+            let gameState = req.gameState
             let newRobberHex = req.robberPosition;
-
             // remove robber from previous location
             let previousHex = gameState.hexes.find(hex => {
-                return hex.robber == true;
+                return hex.robber === true;
             });
+            // console.log(previousHex)
             previousHex.robber = false;
             // set the new robber hex
-            let newHex = gameState.hexes.find(hex => {
+            let newHex = {
+                robber: false
+            };
+            console.log('newHex', newHex)
+            newHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == newRobberHex;
             })
+            console.log('newHex2', newHex)
             newHex.robber = true;
+
             gameState.turnPhase = 'build/trade/devcard_phase';
-            gameState = storeGameState(gameState);
+            // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 

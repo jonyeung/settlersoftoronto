@@ -76,3 +76,30 @@
   top: 50vh;
   z-index: 10000;
 }
+
+.Test2 {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 25vw;
+  top: 70vh;
+  z-index: 10000;
+}
+
+.Test3 {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 25vw;
+  top: 90vh;
+  z-index: 10000;
+}
+
+.Test4 {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 25vw;
+  top: 110vh;
+  z-index: 10000;
+}
