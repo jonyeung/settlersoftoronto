@@ -9,13 +9,13 @@ Jonathan Yeung.
 A multiplayer (3-4 players) online board game similar to the Settles of Catan but with our own custom rules. 
 
 ## Key Features by Beta
-Action Cards made, Resource Cards made, game board made, Game mechanics implemented, multiplayer online enabled.
+Action Cards made, Resource Cards made, some game mechanics implemented, random board generation implemented.
 
 ## Additional Features for Final Version
 Game lobby front end made, Database implemented to store game state, keeping track of stats for each player (ie. wins, losses etc.) Game animations.
 
 ## Technologies
-Firebase Database, ReactJS, BoardGame.io, react-game-kit.
+Firebase Database, ReactJS, BoardGame.io, react-game-kit, WebSockets.io
 
 ## Top 5 Technical Challenges
 1. Creating turn based actions and preventing others from interfering
