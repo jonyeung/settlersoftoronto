@@ -85,6 +85,64 @@ class Game extends Component {
       })
     }
 
+    this.testBuildSetupRoad1 = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'build_starting_road',
+        start: 5,
+        end: 9,
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testBuildSetupRoad2 = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'build_starting_road',
+        start: 24,
+        end: 30,
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testBuildSetupSettlement1 = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'build_starting_settlement',
+        location: 9,
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testBuildSetupSettlement2 = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'build_starting_settlement',
+        location: 30,
+        gameState: this.props.gameState
+      })
+    }
+
+    this.testRegularRoll = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'regular_roll',
+        roll: 5,
+        gameState: this.props.gameState
+      })
+    }
+
+
+    this.testBuildRoad = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'build_road',
+        start: 5,
+        end: 9,
+        gameState: this.props.gameState
+      })
+    }
+
     this.socket.on('PLAYER_CONNECT', (res) => {
       console.log('response socket', res)
       this.props.updateGameState(res);
@@ -236,7 +294,13 @@ class Game extends Component {
         <button className={styles.Test} onClick={this.davidJoins}>AddPlayer</button>
         <button className={styles.Test2} onClick={this.testStart}>StartGame</button>
         <button className={styles.Test3} onClick={this.testBeginMain}>BeginMainGame</button>
-        <button className={styles.Test4} onClick={this.testMoveRobber}>move robber</button>
+        <button className={styles.Test4a} onClick={this.testEndTurn}>next turn</button>
+        <button className={styles.Test4} onClick={this.testBuildSetupRoad1}>build start road (5 9)</button>
+        <button className={styles.Test4b} onClick={this.testBuildSetupRoad2}>build start road (24 30)</button>
+        <button className={styles.Test5} onClick={this.testBuildSetupSettlement1}>build start settlement (9)</button>
+        <button className={styles.Test5b} onClick={this.testBuildSetupSettlement2}>build start settlement (30)</button>
+        <button className={styles.Test6} onClick={this.testRegularRoll}>regular roll</button>
+
 
 
         <div className={diceStyle} onClick={() => { this.rollAll() }}>

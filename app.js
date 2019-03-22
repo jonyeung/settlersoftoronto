@@ -41,8 +41,10 @@ let GameState = (function (state) {
     }
 })
 
+let playerId = 0;
 let Player = (function (playerName) {
     return {
+        _id: playerId++,
         username: playerName,
         resources: {
             Wood: 0,
@@ -94,6 +96,10 @@ let City = (function (city) {
     }
 });
 
+function getPlayerByID(playerID, gameState) {
+    return gameState.players[playerID]
+}
+
 // get gameState from DB
 function findGameState(gameName) {
     gameStatesDB.findOne({ "_id": gameName }, function (err, state) {
@@ -129,7 +135,7 @@ io.on('connection', function (socket) {
         // create game room
         if (req.string == 'room_setup') {
             let gameName = req.gameName;
-
+            id = 0
             // add the host
             let players = [];
             let host = new Player(req.username);
@@ -163,6 +169,7 @@ io.on('connection', function (socket) {
         if (req.string == 'start_game') {
             let gameState = req.gameState;
             gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
+            gameState.currentTurn.username = "mutated"
             gameState.turnPhase = 'setup_placement';
             // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
@@ -173,6 +180,7 @@ io.on('connection', function (socket) {
             let gameState = req.gameState;
             gameState.currentPlayerNum = 0;
             gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
+            gameState.currentTurn.username = "mutated2"
             gameState.turnPhase = 'roll_phase';
             // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
@@ -181,7 +189,6 @@ io.on('connection', function (socket) {
         // ends current player's turn and goes to the next player
         if (req.string == 'end_turn') {
             let gameState = req.gameState;
-            let currentPlayerNum = gameState.currentPlayerNum;
             gameState.currentPlayerNum++;
             if (gameState.currentPlayerNum == gameState.maxPlayerNum) {
                 // go to player 1
@@ -209,17 +216,14 @@ io.on('connection', function (socket) {
             let previousHex = gameState.hexes.find(hex => {
                 return hex.robber === true;
             });
-            // console.log(previousHex)
             previousHex.robber = false;
             // set the new robber hex
             let newHex = {
                 robber: false
             };
-            console.log('newHex', newHex)
             newHex = gameState.hexes.find(hex => {
                 return hex.hexPosition == newRobberHex;
             })
-            console.log('newHex2', newHex)
             newHex.robber = true;
 
             gameState.turnPhase = 'build/trade/devcard_phase';
@@ -229,34 +233,40 @@ io.on('connection', function (socket) {
 
         // Dice roll (2-6, 8-12): give out resources to players
         if (req.string == 'regular_roll') {
-            let gameState = findGameState(req.gameName);
+            let gameState = req.gameState
             let roll = req.roll;
 
-            for (let hex in gameState.hexes) {
+            gameState.hexes.forEach(hex => {
                 if (hex.diceNumber == roll && hex.robber == false) {
                     // give resources to all the players that own a settlement on this hex
-                    for (let settlement in hex.settlements) {
-                        addResource(hex.resourceType, settlement.player);
-                    }
+                    hex.settlements.forEach(settlement => {
+                        boardFunctions.addResource(hex.resourceType, getPlayerByID(settlement.player, gameState));
+                    });
+
                     // give resources to all the players that own a city on this hex
-                    for (let city in hex.cities) {
-                        addResource(hex.resourceType, city.player);
-                    }
+                    hex.cities.forEach(city => {
+                        boardFunctions.addResource(hex.resourceType, city.player);
+                    });
                 }
-            }
+            });
             gameState.turnPhase = 'build/trade/devcard_phase';
-            gameState = storeGameState(gameState);
+            // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
         }
 
         // build road (setup): no resource costs, can be placed anywhere
         if (req.string == 'build_starting_road') {
-            let gameState = findGameState(data.gameName);
+            let gameState = req.gameState;
+            // for some reason this does not work (currentTurn no longer references players in gamestate, is only a copy)
+            // let currentPlayer = gameState.currentTurn;
+            // bandaid fix:
+            gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
             let currentPlayer = gameState.currentTurn;
-            if (isValidRoad(data.start, data.end, gameState)) {
-                let road = new Road({ player: currentPlayer, start: data.start, end: data.end });
+            
+            if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
+                let road = new Road({ player: currentPlayer._id, start: req.start, end: req.end });
                 gameState.roads.push(road);
-                gameState = storeGameState(gameState);
+                // gameState = storeGameState(gameState);
                 io.sockets.emit('PLAYER_CONNECT', gameState);
             } else {
                 io.sockets.emit('PLAYER_CONNECT', new Error('Invalid road position'));
@@ -265,10 +275,13 @@ io.on('connection', function (socket) {
 
         // build road
         if (req.string == 'build_road') {
-            let gameState = findGameState(req.gameName);
+            let gameState = req.gameState
+            //let currentPlayer = gameState.currentTurn;
+            // bandaid fix:
+            gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
             let currentPlayer = gameState.currentTurn;
 
-            if (isValidRoad(req.start, req.end, gameState)) {
+            if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                 if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
                     let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
                     gameState.roads.push(road);
@@ -277,19 +290,19 @@ io.on('connection', function (socket) {
                     // TODO: check if this increments longest road
                     // currentPlayer.LongestRoadLength = currentPlayer.LongestRoadLength + 1;
                     // check if this exceeds longest road
-                    if (hasLongestRoad(currentPlayer, gameState)) {
-                        for (let player in gameState.players) {
-                            if (player.OwnsLongestRoad == true) {
-                                player.VictoryPoints = player.VictoryPoints - 2;
-                            }
-                            player.OwnsLongestRoad = false;
-                        }
-                        currentPlayer.OwnsLongestRoad = true;
-                        currentPlayer.VictoryPoints = currentPlayer.VictoryPoints + 2;
-                        gameState.currentLongestRoad = currentPlayer.LongestRoadLength;
-                        checkWinCondition(currentPlayer, gameState);
-                    }
-                    gameState = storeGameState(gameState);
+                    // if (hasLongestRoad(currentPlayer, gameState)) {
+                    //     for (let player in gameState.players) {
+                    //         if (player.OwnsLongestRoad == true) {
+                    //             player.VictoryPoints = player.VictoryPoints - 2;
+                    //         }
+                    //         player.OwnsLongestRoad = false;
+                    //     }
+                    //     currentPlayer.OwnsLongestRoad = true;
+                    //     currentPlayer.VictoryPoints = currentPlayer.VictoryPoints + 2;
+                    //     gameState.currentLongestRoad = currentPlayer.LongestRoadLength;
+                    //     checkWinCondition(currentPlayer, gameState);
+                    // }
+                    // gameState = storeGameState(gameState);
                     io.sockets.emit('PLAYER_CONNECT', gameState);
                 } else {
                     io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
@@ -301,14 +314,19 @@ io.on('connection', function (socket) {
 
         // build settlement (setup): no resource costs
         if (req.string == 'build_starting_settlement') {
-            let gameState = findGameState(req.gameName);
-            if (isValidSettlement(req.location, gameState.currentTurn, gameState)) {
+            let gameState = req.gameState;
+            if (boardFunctions.isValidSettlement(req.location, gameState.currentTurn, gameState)) {
+                //let currentPlayer = gameState.currentTurn;
+                // bandaid fix:
+                gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
-                let settlement = new Settlement({ player: currentPlayer, location: req.location });
+
+                let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
+                console.log(settlement)
                 gameState.settlements.push(settlement);
-                addSettlementToHex(settlement, gameState);
+                boardFunctions.addSettlementToHex(settlement, gameState);
                 currentPlayer.VictoryPoint++;
-                gameState = storeGameState(gameState);
+                // gameState = storeGameState(gameState);
                 io.sockets.emit('PLAYER_CONNECT', gameState);
             } else {
                 io.sockets.emit('PLAYER_CONNECT', new Error('Invalid settlement position'));
@@ -319,7 +337,11 @@ io.on('connection', function (socket) {
         if (req.string == 'build_settlement') {
             let gameState = findGameState(req.gameName);
             if (isValidSettlement(req.location, gameState.currentTurn, gameState)) {
+                //let currentPlayer = gameState.currentTurn;
+                // bandaid fix:
+                gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
+
                 if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
                     let settlement = new Settlement({ player: currentPlayer, location: req.location });
                     gameState.settlements.push(settlement);

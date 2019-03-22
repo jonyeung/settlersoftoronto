@@ -64,30 +64,20 @@ function setupHexes() {
 }
 
 function addResource(resource, currentPlayer) {
-    switch(resource) {
-        case 'Wood':
-            currentPlayer.Wood++;
-            break;
-        case 'Wheat':
-            currentPlayer.Wheat++;
-            break;
-        case 'Ore':
-            currentPlayer.Ore++;
-            break;
-        case 'Brick':
-            currentPlayer.Brick++;
-            break;
-        case 'Sheep':
-            currentPlayer.Sheep++;
-            break;
-    }
+    console.log(resource)
+    if (resource == 'Brick') currentPlayer.resources.Brick++
+    if (resource == 'Wood') currentPlayer.resources.Wood++
+    if (resource == 'Wheat') currentPlayer.resources.Wheat++
+    if (resource == 'Ore') currentPlayer.resources.Ore++
+    if (resource == 'Sheep') currentPlayer.resources.Sheep++
+    console.log(currentPlayer.resources)
 }
 
 function addSettlementToHex(settlement, gameState) {
     let hexesToUpdate = getHexesAtLocation(settlement.location, gameState);
-    for (let hex in hexesToUpdate) {
+    hexesToUpdate.forEach(hex => {
         hex.settlements.push(settlement);
-    }
+    });
 }
 
 function addCityToHex(city, gameState) {
@@ -279,42 +269,54 @@ function checkWinCondition(player, gameState) {
 
 // check valid road position
 function isValidRoad(startPoint, endPoint, gameState) {
-    for (let road in gameState.roads) {
+    let isValid = true;
+    gameState.roads.forEach(road => {
         if (road.startPoint == startPoint && road.endPoint == endPoint) {
-            return false;
+            isValid = false;
         }
         if (road.startPoint == endPoint && road.endPoint == startPoint) {
-            return false;
+            isValid = false;
         }
-    }
-    return true;
+    });
+    return isValid;
 }
 
+
+function getPlayerByID(playerID, gameState) {
+    return gameState.players[playerID]
+}
 
 // check valid settlement spot
 function isValidSettlement(location, currentPlayer, gameState) {
     let adjacentLocations = getAdjacentSettlementPositions(location);
+    let validSettlement = true;
     let connectingRoad = false;
+    roads = gameState.roads;
 
-    for (let settlement in gameState.settlements) {
+    // check there is a player owned road connecting to the location
+    roads.forEach(road => {
+        let roadOwner = getPlayerByID(road.player, gameState);
+        if (road.startPoint == location || road.endPoint == location) {
+            if (roadOwner.username == currentPlayer.username) {
+                connectingRoad = true;
+            }
+        }
+    });
+
+    gameState.settlements.forEach(settlement => {
         // check that the location is not occupied
         if (settlement.location == location) {
-            return false;
+            validSettlement = false;
         }
         // check that there are no other settlements within 1 space
         if (adjacentLocations.indexOf(settlement.location) >= 0) {
-            return false;
+            validSettlement = false;
         }
-        // check there is a player owned road connecting to the location
-        for (let road in gameState.roads) {
-            if (road.startPoint == location || road.endPoint == location) {
-                if (road.player.username == currentPlayer.username) {
-                    connectingRoad = true;
-                }
-            }
-        }
-    }
-    return connectingRoad;
+        
+    })
+    console.log("valid spot:", validSettlement)
+    console.log("connecting road:", connectingRoad)
+    return validSettlement && connectingRoad;
 }
 
 function getAdjacentSettlementPositions(location) {
@@ -427,5 +429,9 @@ function getAdjacentSettlementPositions(location) {
 
 module.exports = {
     setupHexes: setupHexes,
-    generateRandomOrderResources
+    generateRandomOrderResources,
+    isValidRoad,
+    isValidSettlement,
+    addSettlementToHex,
+    addResource
 }

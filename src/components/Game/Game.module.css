@@ -73,7 +73,7 @@
   height: 100px;
   width: 100px;
   left: 25vw;
-  top: 50vh;
+  top: 10vh;
   z-index: 10000;
 }
 
@@ -82,7 +82,7 @@
   height: 100px;
   width: 100px;
   left: 25vw;
-  top: 70vh;
+  top: 30vh;
   z-index: 10000;
 }
 
@@ -91,11 +91,56 @@
   height: 100px;
   width: 100px;
   left: 25vw;
-  top: 90vh;
+  top: 50vh;
   z-index: 10000;
 }
 
 .Test4 {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 25vw;
+  top: 70vh;
+  z-index: 10000;
+}
+
+.Test4a {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 10vw;
+  top: 70vh;
+  z-index: 10000;
+}
+
+.Test4b {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 45vw;
+  top: 70vh;
+  z-index: 10000;
+}
+
+.Test5 {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 25vw;
+  top: 90vh;
+  z-index: 10000;
+}
+
+.Test5b {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  left: 45vw;
+  top: 90vh;
+  z-index: 10000;
+}
+
+.Test6 {
   position: absolute;
   height: 100px;
   width: 100px;
