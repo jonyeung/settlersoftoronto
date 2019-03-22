@@ -135,7 +135,7 @@ io.on('connection', function (socket) {
         // create game room
         if (req.string == 'room_setup') {
             let gameName = req.gameName;
-            id = 0
+            playerId = 0
             // add the host
             let players = [];
             let host = new Player(req.username);
@@ -181,7 +181,7 @@ io.on('connection', function (socket) {
             gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
             gameState.turnPhase = 'roll_phase';
             // gameState = storeGameState(gameState);
-            io.sockets.emit('PLAYER_CONNECT', gameState);
+            io.sockets.emit('PLAYER_CONNECT', gameState)
         }
 
         // ends current player's turn and goes to the next player

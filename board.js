@@ -302,8 +302,9 @@ function isValidSettlement(location, currentPlayer, gameState) {
 
     // check there is a player owned road connecting to the location
     roads.forEach(road => {
+        console.log(road)
         let roadOwner = getPlayerByID(road.player, gameState);
-        if (road.startPoint == location || road.endPoint == location) {
+        if (road.startPoint == road.location || road.endPoint == location) {
             if (roadOwner.username == currentPlayer.username) {
                 connectingRoad = true;
             }
