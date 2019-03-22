@@ -169,7 +169,6 @@ io.on('connection', function (socket) {
         if (req.string == 'start_game') {
             let gameState = req.gameState;
             gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
-            gameState.currentTurn.username = "mutated"
             gameState.turnPhase = 'setup_placement';
             // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
@@ -180,7 +179,6 @@ io.on('connection', function (socket) {
             let gameState = req.gameState;
             gameState.currentPlayerNum = 0;
             gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
-            gameState.currentTurn.username = "mutated2"
             gameState.turnPhase = 'roll_phase';
             // gameState = storeGameState(gameState);
             io.sockets.emit('PLAYER_CONNECT', gameState);
@@ -322,7 +320,6 @@ io.on('connection', function (socket) {
                 let currentPlayer = gameState.currentTurn;
 
                 let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
-                console.log(settlement)
                 gameState.settlements.push(settlement);
                 boardFunctions.addSettlementToHex(settlement, gameState);
                 currentPlayer.VictoryPoint++;
