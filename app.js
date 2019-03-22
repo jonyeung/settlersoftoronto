@@ -322,7 +322,7 @@ io.on('connection', function (socket) {
                 let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
                 gameState.settlements.push(settlement);
                 boardFunctions.addSettlementToHex(settlement, gameState);
-                currentPlayer.VictoryPoint++;
+                getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
                 // gameState = storeGameState(gameState);
                 io.sockets.emit('PLAYER_CONNECT', gameState);
             } else {
@@ -347,7 +347,7 @@ io.on('connection', function (socket) {
                     currentPlayer.resources.Brick--;
                     currentPlayer.resources.Wheat--;
                     currentPlayer.resources.Sheep--;
-                    currentPlayer.VictoryPoint++;
+                    currentPlayer.VictoryPoints++;
                     checkWinCondition(currentPlayer, gameState);
                     gameState = storeGameState(gameState);
                     io.sockets.emit('PLAYER_CONNECT', gameState);
@@ -369,7 +369,7 @@ io.on('connection', function (socket) {
                     addCityToHex(city, gameState);
                     currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
                     currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
-                    currentPlayer.VictoryPoint++;
+                    currentPlayer.VictoryPoints++;
                     checkWinCondition(currentPlayer, gameState);
                     gameState = storeGameState(gameState);
                     io.sockets.emit('PLAYER_CONNECT', gameState);
