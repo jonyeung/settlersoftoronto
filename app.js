@@ -317,7 +317,7 @@ io.on('connection', function (socket) {
                 //let currentPlayer = gameState.currentTurn;
                 // bandaid fix:
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
-                let currentPlayer = gameState.currentTurn;
+                let currentPlayer = gameState.currentTurn
 
                 let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
                 gameState.settlements.push(settlement);

@@ -25,37 +25,44 @@ function generateRandomOrderResources() {
 
 function setupHexes() {
     let dicePositions = {};
-    dicePositions['1'] = 5;
-    dicePositions['2'] = 2;
-    dicePositions['3'] = 6;
-    dicePositions['4'] = 3;
-    dicePositions['5'] = 8;
-    dicePositions['6'] = 10;
-    dicePositions['7'] = 9;
-    dicePositions['8'] = 12;
-    dicePositions['9'] = 11;
-    dicePositions['10'] = 4;
-    dicePositions['11'] = 8;
-    dicePositions['12'] = 10;
-    dicePositions['13'] = 9;
-    dicePositions['14'] = 4;
-    dicePositions['15'] = 5;
-    dicePositions['16'] = 6;
-    dicePositions['17'] = 3;
-    dicePositions['18'] = 11;
+    dicePositions['0'] = 5;
+    dicePositions['1'] = 2;
+    dicePositions['2'] = 6;
+    dicePositions['3'] = 3;
+    dicePositions['4'] = 8;
+    dicePositions['5'] = 10;
+    dicePositions['6'] = 9;
+    dicePositions['7'] = 12;
+    dicePositions['8'] = 11;
+    dicePositions['9'] = 4;
+    dicePositions['10'] = 8;
+    dicePositions['11'] = 10;
+    dicePositions['12'] = 9;
+    dicePositions['13'] = 4;
+    dicePositions['14'] = 5;
+    dicePositions['15'] = 6;
+    dicePositions['16'] = 3;
+    dicePositions['17'] = 11;
     let index = 1;
     index= index.toString()
     let randomResources = generateRandomOrderResources();
     let hexes = [];
-    let i=1;
     let desertPosition = Math.floor(Math.random() * 19) + 1;
     let hex;
-    for (i; i < 20; i++) {
+
+    let i=0;
+    let desertSet = false;
+    for (i; i < 19; i++) {
         if (i == desertPosition) {
-            hex = new Hex({position: i, resourceType:'Desert', diceNumber: 0});
+            hex = new Hex({position: i, resourceType:'Desert', diceNumer: null});
             hex.robber = true;
+            desertSet = true;
         } else {
-            hex = new Hex({position: i, resourceType: randomResources.pop(), diceNumber: dicePositions[i.toString()]});
+            if (desertSet) {
+                hex = new Hex({position: i, resourceType: randomResources.pop(), diceNumber: dicePositions[(i-1).toString()]});
+            } else {
+                hex = new Hex({position: i, resourceType: randomResources.pop(), diceNumber: dicePositions[i.toString()]});
+            }
         }
         hexes.push(hex);   
     }
