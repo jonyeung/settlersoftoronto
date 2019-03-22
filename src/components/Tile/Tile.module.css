@@ -323,9 +323,10 @@
 
 .DesertTile {
   background-image: url('../../media/desert.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+}
+
+.Robber {
+  background-color: black;
 }
 
 .Player1{

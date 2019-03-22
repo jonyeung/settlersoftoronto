@@ -23,7 +23,8 @@ class GamePlayerToolBar extends Component {
           devCards: this.props.players[playerNum - 1].devCards,
           knightsPlayed: this.props.players[playerNum - 1].knightsPlayed,
           resources: this.props.players[playerNum - 1].resources,
-          username: this.props.players[playerNum - 1].username
+          username: this.props.players[playerNum - 1].username,
+          playerNum: playerNum
         }
       } else {
         return {

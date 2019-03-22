@@ -205,13 +205,27 @@ class Game extends Component {
     this.renderTile = (Tile) => {
       let resourceType = null;
       let newTile = null;
+      let diceNumber = 0;
+      let robber = false;
+      let roads = {
+        
+      }
 
       if (Tile.props.ResourceType === 'Water') {
         newTile = React.cloneElement(
           Tile,
         )
       } else {
-        this.props.hexes[Tile.props.HexId - 1] ? resourceType = this.props.hexes[Tile.props.HexId - 1].resourceType : resourceType = null
+        if(this.props.hexes[Tile.props.HexId - 1]) {
+          let currentHex = this.props.hexes[Tile.props.HexId - 1];
+          resourceType = currentHex.resourceType
+          diceNumber = currentHex.diceNumber
+          currentHex.robber === true ? robber = true : robber = false
+
+        } else {
+          resourceType = null
+        }
+        // this.props.hexes[Tile.props.HexId - 1] ? resourceType = this.props.hexes[Tile.props.HexId - 1].resourceType : resourceType = null
         newTile = React.cloneElement(
           Tile,
           {
@@ -221,7 +235,9 @@ class Game extends Component {
             displayCornerBuildOptions: () => {
               this.toggleBuildType('CORNER')
             },
-            ResourceType: resourceType
+            ResourceType: resourceType,
+            diceNumber: diceNumber,
+            hasRobber: robber
           }
         )
       }
@@ -381,7 +397,7 @@ class Game extends Component {
             })}
           </div>
         </div>
-        <MyDashboard></MyDashboard>
+        <MyDashboard playerInfo={this.props.players[this.props.playerTurn]}></MyDashboard>
         <GamePlayerDevCards></GamePlayerDevCards>
       </>
 
@@ -394,7 +410,9 @@ const mapStateToProps = state => {
     gameStateId: state.gameReducer._id,
     hexes: state.gameReducer.hexes,
     error: state.lobbyReducer.error,
-    gameState: state.gameReducer
+    gameState: state.gameReducer,
+    players: state.gameReducer.players,
+    playerTurn: state.gameReducer.currentPlayerNum
   };
 };
 

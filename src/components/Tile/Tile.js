@@ -21,16 +21,25 @@ class Tile extends Component {
       middleLeftEdge: [styles.EdgeMiddleLeft],
       middleRightEdge: [styles.EdgeMiddleRight],
       bottomLeftEdge: [styles.EdgeBottomLeft],
-      bottomRightEdge: [styles.EdgeBottomRight]
+      bottomRightEdge: [styles.EdgeBottomRight],
     }
 
+    this.hexCircleStyle = [styles.HexCircle]
 
     this.determineCornerStyles = () => {
 
     }
+
+    this.determineHexCircle = () => {
+      this.hexCircleStyle = [styles.HexCircle]
+      if (this.props.hasRobber === true) {
+        this.hexCircleStyle.push(styles.Robber);
+      }
+    }
   }
 
   render() {
+    this.determineHexCircle()
     let corners = <>
       <div className={this.state.topMiddleCorner.join(' ')} onClick={() => {
         this.props.CornerTopMiddleAction()
@@ -150,6 +159,9 @@ class Tile extends Component {
       case ('Sheep'):
         resourceTypeStyle.push(styles.SheepTile)
         break;
+      case ('Desert'):
+        resourceTypeStyle.push(styles.DesertTile)
+        break;
       default:
         break;
     }
@@ -175,13 +187,14 @@ class Tile extends Component {
         {edgesBottom}
 
         {this.props.ResourceType === 'Water' ? null : corners}
+
         {
           this.props.ResourceType === 'Water' ?
             <div className={styles.Port}>
             </div>
             :
-            <div className={styles.HexCircle} onClick={this.props.HexCircleAction}>
-              <p>5</p>
+            <div className={this.hexCircleStyle.join(' ')} onClick={this.props.HexCircleAction}>
+              <p>{this.props.diceNumber}</p>
             </div>
         }
       </div >
