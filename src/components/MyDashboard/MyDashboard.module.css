@@ -43,28 +43,28 @@
 .Wood {
   background-image:url("../../media/trees.png");
   background-repeat: no-repeat;
-  background-size: 50px;
+  background-size: 35px;
   background-position: center center;
 }
 
 .Brick {
   background-image:url("../../media/bricks.png");
   background-repeat: no-repeat;
-  background-size: 50px;
+  background-size: 35px;
   background-position: center center;
 }
 
 .Sheep {
   background-image:url("../../media/sheep.jpg");
   background-repeat: no-repeat;
-  background-size: 50px;
+  background-size: 35px;
   background-position: center center;
 }
 
 .Wheat {
   background-image:url("../../media/wheat.png");
   background-repeat: no-repeat;
-  background-size: 50px;
+  background-size: 35px;
   background-position: center center;
 }
 
