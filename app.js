@@ -320,6 +320,7 @@ io.on('connection', function (socket) {
                 let currentPlayer = gameState.currentTurn
 
                 let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
+                console.log(settlement)
                 gameState.settlements.push(settlement);
                 boardFunctions.addSettlementToHex(settlement, gameState);
                 getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;

@@ -59,9 +59,9 @@ function setupHexes() {
             desertSet = true;
         } else {
             if (desertSet) {
-                hex = new Hex({position: i, resourceType: randomResources.pop(), diceNumber: dicePositions[(i-1).toString()]});
+                hex = new Hex({position: i+1, resourceType: randomResources.pop(), diceNumber: dicePositions[(i-1).toString()]});
             } else {
-                hex = new Hex({position: i, resourceType: randomResources.pop(), diceNumber: dicePositions[i.toString()]});
+                hex = new Hex({position: i+1, resourceType: randomResources.pop(), diceNumber: dicePositions[i.toString()]});
             }
         }
         hexes.push(hex);   
