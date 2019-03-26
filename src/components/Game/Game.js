@@ -210,6 +210,8 @@ class Game extends Component {
       let roads = {
         
       }
+      let settlements = []
+      let cities = []
 
       if (Tile.props.ResourceType === 'Water') {
         newTile = React.cloneElement(
@@ -221,7 +223,7 @@ class Game extends Component {
           resourceType = currentHex.resourceType
           diceNumber = currentHex.diceNumber
           currentHex.robber === true ? robber = true : robber = false
-
+          settlements = currentHex.settlements
         } else {
           resourceType = null
         }
@@ -237,7 +239,9 @@ class Game extends Component {
             },
             ResourceType: resourceType,
             diceNumber: diceNumber,
-            hasRobber: robber
+            hasRobber: robber,
+            settlements: settlements,
+            cities: cities
           }
         )
       }

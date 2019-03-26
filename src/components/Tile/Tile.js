@@ -9,25 +9,133 @@ class Tile extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      topLeftCornerStyle: [styles.CornerTopLeft],
-      topMiddleCorner: [styles.CornerTopMiddle],
-      topRightCorner: [styles.CornerTopRight],
-      bottomLeftCorner: [styles.CornerBottomLeft],
-      bottomMiddleCorner: [styles.CornerBottomMiddle],
-      bottomRightCorner: [styles.CornerBottomRight],
-      topLeftCorner: [styles.EdgeTopLeft],
-      topRightEdge: [styles.EdgeTopRight],
-      middleLeftEdge: [styles.EdgeMiddleLeft],
-      middleRightEdge: [styles.EdgeMiddleRight],
-      bottomLeftEdge: [styles.EdgeBottomLeft],
-      bottomRightEdge: [styles.EdgeBottomRight],
-    }
+    // this.state = {
+    //   topLeftCornerStyle: [styles.CornerTopLeft],
+    //   topMiddleCorner: [styles.CornerTopMiddle],
+    //   topRightCorner: [styles.CornerTopRight],
+    //   bottomLeftCorner: [styles.CornerBottomLeft],
+    //   bottomMiddleCorner: [styles.CornerBottomMiddle],
+    //   bottomRightCorner: [styles.CornerBottomRight],
+    //   topLeftCorner: [styles.EdgeTopLeft],
+    //   topRightEdge: [styles.EdgeTopRight],
+    //   middleLeftEdge: [styles.EdgeMiddleLeft],
+    //   middleRightEdge: [styles.EdgeMiddleRight],
+    //   bottomLeftEdge: [styles.EdgeBottomLeft],
+    //   bottomRightEdge: [styles.EdgeBottomRight],
+    // }
+
+    this.topLeftCorner = [styles.CornerTopLeft]
+    this.topMiddleCorner = [styles.CornerTopMiddle]
+    this.topRightCorner = [styles.CornerTopRight]
+    this.bottomLeftCorner = [styles.CornerBottomLeft]
+    this.bottomMiddleCorner = [styles.CornerBottomMiddle]
+    this.bottomRightCorner = [styles.CornerBottomRight]
+
+    this.topLeftEdge = [styles.EdgeTopLeft]
+    this.topRightEdge = [styles.EdgeTopRight]
+    this.middleLeftEdge = [styles.EdgeMiddleLeft]
+    this.middleRightEdge = [styles.EdgeMiddleRight]
+    this.bottomLeftEdge = [styles.EdgeBottomLeft]
+    this.bottomRightEdge = [styles.EdgeBottomRight]
 
     this.hexCircleStyle = [styles.HexCircle]
 
     this.determineCornerStyles = () => {
+      let playerHouseStyle = null;
+      let playerCityStyle = null;
 
+      if (this.props.ResourceType === 'Water') {
+        return
+      }
+      this.topLeftCorner = [styles.CornerTopLeft]
+      this.topMiddleCorner = [styles.CornerTopMiddle]
+      this.topRightCorner = [styles.CornerTopRight]
+      this.bottomLeftCorner = [styles.CornerBottomLeft]
+      this.bottomMiddleCorner = [styles.CornerBottomMiddle]
+      this.bottomRightCorner = [styles.CornerBottomRight]
+      this.props.settlements.forEach((settlement) => {
+        switch (settlement.player) {
+          case 0:
+            playerHouseStyle = styles.Player1HouseTile
+            break;
+          case 1:
+            playerHouseStyle = styles.Player2HouseTile
+            break;
+          case 2:
+            playerHouseStyle = styles.Player3HouseTile
+            break;
+          case 3:
+            playerHouseStyle = styles.Player4HouseTile
+            break;
+          default:
+            break;
+        }
+
+        switch (settlement.location) {
+          case this.props.TopMiddleCornerId:
+            this.topMiddleCorner.push(playerHouseStyle)
+            break;
+          case this.props.TopLeftCornerId:
+            this.topLeftCorner.push(playerHouseStyle)
+            break;
+          case this.props.TopRightCornerId:
+            this.topRightCorner.push(playerHouseStyle)
+            break;
+          case this.props.BottomLeftCornerId:
+            this.bottomLeftCorner.push(playerHouseStyle)
+            break;
+          case this.props.BottomRightCornerId:
+            this.bottomRightCorner.push(playerHouseStyle)
+            break;
+          case this.props.BottomMiddleCornerId:
+            this.bottomMiddleCorner.push(playerHouseStyle)
+            break;
+          default:
+            break;
+        }
+      })
+
+      this.props.cities.forEach((city) => {
+        switch (city.player) {
+          case 0:
+            playerCityStyle = styles.CityTile
+            break;
+          case 1:
+            playerCityStyle = styles.CityTile
+            break;
+          case 2:
+            playerCityStyle = styles.CityTile
+            break;
+          case 3:
+            playerCityStyle = styles.CityTile
+            break;
+          default:
+            break;
+        }
+
+        switch (city.location) {
+          case this.props.TopMiddleCornerId:
+            this.topMiddleCorner.push(playerCityStyle)
+            break;
+          case this.props.TopLeftCornerId:
+            this.topLeftCorner.push(playerCityStyle)
+            break;
+          case this.props.TopRightCornerId:
+            this.topRightCorner.push(playerCityStyle)
+            break;
+          case this.props.BottomLeftCornerId:
+            this.bottomLeftCorner.push(playerCityStyle)
+            break;
+          case this.props.BottomRightCornerId:
+            this.bottomRightCorner.push(playerCityStyle)
+            break;
+          case this.props.BottomMiddleCornerId:
+            this.bottomMiddleCorner.push(playerCityStyle)
+            break;
+          default:
+            break;
+        }
+    })
     }
 
     this.determineHexCircle = () => {
@@ -40,15 +148,16 @@ class Tile extends Component {
 
   render() {
     this.determineHexCircle()
+    this.determineCornerStyles()
     let corners = <>
-      <div className={this.state.topMiddleCorner.join(' ')} onClick={() => {
+      <div className={this.topMiddleCorner.join(' ')} onClick={() => {
         this.props.CornerTopMiddleAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.TopMiddleCornerId)
         this.props.selectCorner(this.props.TopMiddleCornerId)
       }}></div>
 
-      <div className={this.state.topRightCorner.join(' ')} onClick={() => {
+      <div className={this.topRightCorner.join(' ')} onClick={() => {
         this.props.CornerTopRightAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.TopRightCornerId)
@@ -56,28 +165,28 @@ class Tile extends Component {
 
       }}></div>
 
-      <div className={this.state.topLeftCornerStyle.join(' ')} onClick={() => {
+      <div className={this.topLeftCorner.join(' ')} onClick={() => {
         this.props.CornerTopLeftAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.TopLeftCornerId)
         this.props.selectCorner(this.props.TopLeftCornerId)
       }}></div>
 
-      <div className={this.state.bottomLeftCorner.join(' ')} onClick={() => {
+      <div className={this.bottomLeftCorner.join(' ')} onClick={() => {
         this.props.CornerBottomLeftAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.BottomLeftCornerId)
         this.props.selectCorner(this.props.BottomLeftCornerId)
       }}></div>
 
-      <div className={this.state.bottomRightCorner.join(' ')} onClick={() => {
+      <div className={this.bottomRightCorner.join(' ')} onClick={() => {
         this.props.CornerBottomRightAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.BottomRightCornerId)
         this.props.selectCorner(this.props.BottomRightCornerId)
       }}></div>
 
-      <div className={this.state.bottomMiddleCorner.join(' ')} onClick={() => {
+      <div className={this.bottomMiddleCorner.join(' ')} onClick={() => {
         this.props.CornerBottomMiddleAction()
         this.props.displayCornerBuildOptions()
         console.log(this.props.BottomMiddleCornerId)
@@ -87,7 +196,7 @@ class Tile extends Component {
 
     let edgesTop =
       <>
-        <div className={this.state.topLeftCorner.join(' ')} onClick={() => {
+        <div className={this.topLeftEdge.join(' ')} onClick={() => {
           this.props.EdgeTopLeftAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.TopLeftEdgeId)
@@ -95,7 +204,7 @@ class Tile extends Component {
           this.props.selectEdge([this.props.TopMiddleCornerId, this.props.TopLeftCornerId])
         }}>
         </div>
-        <div className={this.state.topRightEdge.join(' ')} onClick={() => {
+        <div className={this.topRightEdge.join(' ')} onClick={() => {
           this.props.EdgeTopRightAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.TopRightEdgeId)
@@ -103,7 +212,7 @@ class Tile extends Component {
           this.props.selectEdge([this.props.TopMiddleCornerId, this.props.TopRightCornerId])
 
         }}></div>
-        <div className={this.state.middleLeftEdge.join(' ')} onClick={() => {
+        <div className={this.middleLeftEdge.join(' ')} onClick={() => {
           this.props.EdgeMiddleLeftAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.MiddleLeftEdgeId)
@@ -112,7 +221,7 @@ class Tile extends Component {
 
         }}></div>
 
-        <div className={this.state.middleRightEdge.join(' ')} onClick={() => {
+        <div className={this.middleRightEdge.join(' ')} onClick={() => {
           this.props.EdgeMiddleRightAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.MiddleRightEdgeId)
@@ -123,7 +232,7 @@ class Tile extends Component {
 
     let edgesBottom =
       <>
-        <div className={this.state.bottomLeftEdge.join(' ')} onClick={() => {
+        <div className={this.bottomLeftEdge.join(' ')} onClick={() => {
           this.props.EdgeBottomLeftAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.BottomLeftEdgeId)
@@ -132,7 +241,7 @@ class Tile extends Component {
 
         }}></div>
 
-        <div className={this.state.bottomRightEdge.join(' ')} onClick={() => {
+        <div className={this.bottomRightEdge.join(' ')} onClick={() => {
           this.props.EdgeBottomRightAction()
           this.props.displayEdgeBuildOptions()
           console.log(this.props.BottomRightEdgeId)
