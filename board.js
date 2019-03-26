@@ -54,7 +54,7 @@ function setupHexes() {
     let desertSet = false;
     for (i; i < 19; i++) {
         if (i == desertPosition) {
-            hex = new Hex({position: i, resourceType:'Desert', diceNumer: null});
+            hex = new Hex({position: i+1, resourceType:'Desert', diceNumer: null});
             hex.robber = true;
             desertSet = true;
         } else {
@@ -82,6 +82,7 @@ function addResource(resource, currentPlayer) {
 
 function addSettlementToHex(settlement, gameState) {
     let hexesToUpdate = getHexesAtLocation(settlement.location, gameState);
+    console.log(hexesToUpdate)
     hexesToUpdate.forEach(hex => {
         hex.settlements.push(settlement);
     });
@@ -89,9 +90,9 @@ function addSettlementToHex(settlement, gameState) {
 
 function addCityToHex(city, gameState) {
     let hexesToUpdate = getHexesAtLocation(city.location, gameState);
-    for (let hex in hexesToUpdate) {
+    hexesToUpdate.forEach(hex => {
         hex.cities.push(city);
-    }
+    })
 }
 
 function getHexesAtLocation(location, gameState) {
@@ -234,16 +235,19 @@ function getHexesAtLocation(location, gameState) {
 
 // check if it is a valid city spot
 function checkValidCity(location, gameState, currentPlayer) {
-    for (let settlement in gameState.settlements) {
+    let isValid = false;
+    gameState.settlements.forEach(settlement => {
         // check that the target location has a settlement owned by the player
         if (settlement.location == location) {
-            if (settlement.player.username == currentPlayer.username) {
-                return true;
+            if (settlement.player == currentPlayer._id) {
+                isValid = true;
+            } else {
+                isValid = false;
             }
-            return false;
         }
-    }
-    return false;
+    })
+    console.log("valid city: ", isValid)
+    return isValid;
 }
 
 // check longest road
@@ -435,11 +439,25 @@ function getAdjacentSettlementPositions(location) {
     return adjacentLocations;
 }
 
+function deleteSettlementAtLocation(location, gameState) {
+    let settlements = gameState.settlements;
+    gameState.settlements = settlements.filter(settlement => settlement.location !== location);
+
+    let hexesToUpdate = getHexesAtLocation(location, gameState);
+    hexesToUpdate.forEach(hex => {
+        hex.settlements = hex.settlements.filter(settlement => settlement.location !== location);
+    })
+}
+
 module.exports = {
     setupHexes: setupHexes,
     generateRandomOrderResources,
     isValidRoad,
     isValidSettlement,
     addSettlementToHex,
-    addResource
+    addResource,
+    checkValidCity,
+    deleteSettlementAtLocation,
+    addCityToHex,
+    checkWinCondition
 }
