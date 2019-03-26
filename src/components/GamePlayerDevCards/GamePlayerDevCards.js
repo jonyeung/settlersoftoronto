@@ -5,6 +5,7 @@ import DevCard from './DevCard/DevCard';
 
 class GamePlayerToolBar extends Component {
   render() {
+
     return (
       <div className={styles.Content}>
         <DevCard cardType={'KNIGHT'}></DevCard>
