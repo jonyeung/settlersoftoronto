@@ -114,6 +114,15 @@ class Game extends Component {
       })
     }
 
+    this.testUpgradeCity = () => {
+      console.log('this.props.gameStateId', this.props.gameStateId)
+      this.socket.emit('PLAYER_CONNECT', {
+        string: 'build_city',
+        location: 9,
+        gameState: this.props.gameState
+      })
+    }
+
     this.testBuildSetupSettlement2 = () => {
       console.log('this.props.gameStateId', this.props.gameStateId)
       this.socket.emit('PLAYER_CONNECT', {
@@ -318,6 +327,7 @@ class Game extends Component {
         <button className={styles.Test4} onClick={this.testBuildSetupRoad1}>build start road (5 9)</button>
         <button className={styles.Test4b} onClick={this.testBuildSetupRoad2}>build start road (24 30)</button>
         <button className={styles.Test5} onClick={this.testBuildSetupSettlement1}>build start settlement (9)</button>
+        <button className={styles.Test5a} onClick={this.testUpgradeCity}>build city (9)</button>
         <button className={styles.Test5b} onClick={this.testBuildSetupSettlement2}>build start settlement (30)</button>
         <button className={styles.Test6} onClick={this.testRegularRoll}>regular roll</button>
 
