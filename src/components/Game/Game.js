@@ -46,6 +46,7 @@ class Game extends Component {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'player_join',
         username: 'david',
+        gameID: this.props.gameStateId,
         gameState: this.props.gameState
       })
     }
