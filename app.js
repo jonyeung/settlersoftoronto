@@ -1,18 +1,22 @@
 /*jshint esversion: 6*/
 const express = require('express');
+const firebase = require('firebase');
 const app = express();
 const socket = require('socket.io');
 const boardFunctions = require('./board.js');
-
-const totalHexes = 19;
-const totalWoodWheatSheepHexes = 4;
-const totalOreBrickHexes = 3;
+const serviceAccount = require('./c09-project-firebase-adminsdk-xuxa7-da3b397950.json');
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(express.static('public'));
+
+firebase.initializeApp({
+    serviceAccount: "./c09-project-firebase-adminsdk-xuxa7-da3b397950.json",
+    databaseURL: 'https://c09-project.firebaseio.com'
+})
+  
 
 app.use(function (req, res, next) {
     console.log("HTTP request", req.method, req.url, req.body);
@@ -100,21 +104,10 @@ function getPlayerByID(playerID, gameState) {
     return gameState.players[playerID]
 }
 
-// get gameState from DB
-function findGameState(gameName) {
-    gameStatesDB.findOne({ "_id": gameName }, function (err, state) {
-        if (err) return err;
-        return state;
-    })
-}
 
 // store gameState into DB
-function storeGameState(gameState) {
-    let gameName = gameState.gameName;
-    gameStatesDB.update({ 'gameName': gameName }, { $set: gameState }, function (err, gameState) {
-        if (err) return err;
-        return gameState;
-    });
+function storeGameState(gameID, gameState) {
+    firebase.database().ref('/gameState/' + gameID).set(gameState);
 }
 
 const http = require('http');
@@ -125,12 +118,16 @@ let server = app.listen(PORT, function (err) {
     else console.log("HTTP server on http://localhost:%s", PORT);
 });
 
+
+
 let io = socket(server);
 
 io.on('connection', function (socket) {
     console.log('socket connection successful');
 
     socket.on('PLAYER_CONNECT', (req) => {
+
+
 
         // create game room
         if (req.string == 'room_setup') {
@@ -145,16 +142,19 @@ io.on('connection', function (socket) {
             let hexes = boardFunctions.setupHexes();
 
             let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
-            gameStatesDB.insert(gameState, function (err, state) {
-                if (err) io.sockets.emit('PLAYER_CONNECT', err);
-                io.sockets.emit('PLAYER_CONNECT', state);
-            });
+            // firebase.database().ref('/gameState/gameState').set(gameState).then(function(err, state) {
+            //     if (err) io.sockets.emit('PLAYER_CONNECT', err);
+            //     io.sockets.emit('PLAYER_CONNECT', state);
+            // });
         }
 
         // new player joins
         if (req.string == 'player_join') {
             let newPlayer = new Player(req.username);
-            let gameState = req.gameState;
+            // let gameState = req.gameState;
+            // let gameState = firebase.database().ref('/gameState/_id').once("123456").then(function(state) {
+            //     console.log(state);
+            // })
             gameState.players.push(newPlayer);
             gameState.maxPlayerNum++;
             io.sockets.emit('PLAYER_CONNECT', gameState);
@@ -261,7 +261,7 @@ io.on('connection', function (socket) {
             // bandaid fix:
             gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
             let currentPlayer = gameState.currentTurn;
-            
+
             if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                 let road = new Road({ player: currentPlayer._id, start: req.start, end: req.end });
                 gameState.roads.push(road);
