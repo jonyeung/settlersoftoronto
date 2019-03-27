@@ -9,21 +9,6 @@ class Tile extends Component {
   constructor(props) {
     super(props)
 
-    // this.state = {
-    //   topLeftCornerStyle: [styles.CornerTopLeft],
-    //   topMiddleCorner: [styles.CornerTopMiddle],
-    //   topRightCorner: [styles.CornerTopRight],
-    //   bottomLeftCorner: [styles.CornerBottomLeft],
-    //   bottomMiddleCorner: [styles.CornerBottomMiddle],
-    //   bottomRightCorner: [styles.CornerBottomRight],
-    //   topLeftCorner: [styles.EdgeTopLeft],
-    //   topRightEdge: [styles.EdgeTopRight],
-    //   middleLeftEdge: [styles.EdgeMiddleLeft],
-    //   middleRightEdge: [styles.EdgeMiddleRight],
-    //   bottomLeftEdge: [styles.EdgeBottomLeft],
-    //   bottomRightEdge: [styles.EdgeBottomRight],
-    // }
-
     this.topLeftCorner = [styles.CornerTopLeft]
     this.topMiddleCorner = [styles.CornerTopMiddle]
     this.topRightCorner = [styles.CornerTopRight]
@@ -98,16 +83,16 @@ class Tile extends Component {
       this.props.cities.forEach((city) => {
         switch (city.player) {
           case 0:
-            playerCityStyle = styles.CityTile
+            playerCityStyle = styles.Player1CityTile
             break;
           case 1:
-            playerCityStyle = styles.CityTile
+            playerCityStyle = styles.Player2CityTile
             break;
           case 2:
-            playerCityStyle = styles.CityTile
+            playerCityStyle = styles.Player3CityTile
             break;
           case 3:
-            playerCityStyle = styles.CityTile
+            playerCityStyle = styles.Player4CityTile
             break;
           default:
             break;

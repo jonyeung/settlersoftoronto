@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styles from './GameBuildOptions.module.css';
-
+import * as gameActions from '../../store/actions/game';
 
 class GameBuildOptions extends Component {
 
@@ -14,7 +14,14 @@ class GameBuildOptions extends Component {
   render() {
     let cornerBuild =
       <>
-        <div className={[styles.Settlement, styles.Option].join(' ')}>
+        <div className={[styles.Settlement, styles.Option].join(' ')}
+          onClick={() => {
+            this.props.buildSettlement(
+              this.props.socket,
+              this.props.selectedCornerId,
+              this.props.gameState
+            )
+          }}>
           <div className={styles.Icon}>
           </div>
           <div className={styles.ResourceTitleCol}>
@@ -29,7 +36,14 @@ class GameBuildOptions extends Component {
           </div>
         </div>
 
-        <div className={[styles.City, styles.Option].join(' ')}>
+        <div className={[styles.City, styles.Option].join(' ')}
+          onClick={() => {
+            this.props.buildCity(
+              this.props.socket,
+              this.props.selectedCornerId,
+              this.props.gameState
+            )
+          }}>
           <div className={styles.Icon}>
           </div>
           <div className={styles.ResourceTitleCol}>
@@ -48,7 +62,14 @@ class GameBuildOptions extends Component {
 
     let edgeBuild =
       <>
-        <div className={[styles.Road, styles.Option].join(' ')}>
+        <div className={[styles.Road, styles.Option].join(' ')}
+          onClick={() => {
+            this.props.buildRoad(
+              this.props.socket,
+              this.props.selectedEdgeId,
+              this.props.gameState
+            )
+          }}>
           <div className={styles.Icon}>
           </div>
           <div className={styles.ResourceTitleCol}>
@@ -82,9 +103,19 @@ class GameBuildOptions extends Component {
 
 const mapStateToProps = state => {
   return {
-    rooms: state.lobbyReducer.rooms,
+    selectedCornerId: state.gameReducer.selectedCornerId,
+    selectedEdgeId: state.gameReducer.selectedEdgeId,
+    gameState: state.gameReducer,
     error: state.lobbyReducer.error
   };
 };
 
-export default connect(mapStateToProps)(GameBuildOptions);
+const mapDispatchToProps = dispatch => {
+  return {
+    buildSettlement: (socket, selectedCornerId, gameState) => gameActions.buildSettlement(socket, selectedCornerId, gameState),
+    buildCity: (socket, selectedCornerId, gameState) => gameActions.buildCity(socket, selectedCornerId, gameState),
+    buildRoad: (socket, selectedEdgeId, gameState) => gameActions.buildRoad(socket, selectedEdgeId, gameState),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GameBuildOptions);

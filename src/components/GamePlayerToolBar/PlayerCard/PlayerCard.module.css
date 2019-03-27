@@ -5,11 +5,55 @@
   background-color: lightsalmon;
 }
 
-.Content .Profile .Phase {
+.Content .Profile .WaitPhase {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: none; 
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 30px;
+  z-index: 210;
+}
+
+.Content .Profile .SetupPlacementPhase {
   position: relative;
   width: 30px;
   height: 30px;
   background-image: url("../../../media/setup_phase.png"); 
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 30px;
+  z-index: 210;
+}
+
+.Content .Profile .RollPhase {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../../media/roll_dice_phase.png"); 
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 30px;
+  z-index: 210;
+}
+
+.Content .Profile .MoveRobberPhase {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../../media/build_phase.png"); 
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 30px;
+  z-index: 210;
+}
+
+.Content .Profile .BuildTradeDevCardPhase {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url("../../../media/build_phase.png"); 
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 30px;

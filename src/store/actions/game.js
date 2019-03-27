@@ -29,6 +29,53 @@ export const unselectCorner = () => {
   })
 }
 
+export const buildSettlement = (socket, selectedCornerId, gameState) => {
+  socket.emit('PLAYER_CONNECT', {
+    string: 'build_starting_settlement',
+    gameState: gameState,
+    location: selectedCornerId
+  })
+}
+
+export const buildCity = (socket, selectedCornerId, gameState) => {
+  socket.emit('PLAYER_CONNECT', {
+    string: 'build_city',
+    gameState: gameState,
+    location: selectedCornerId
+  })
+}
+
+export const buildRoad = (socket, selectedEdgeId, gameState) => {
+  socket.emit('PLAYER_CONNECT', {
+    string: 'build_starting_road',
+    start: selectedEdgeId[0],
+    end: selectedEdgeId[1],
+    gameState: gameState,
+  })
+}
+
+export const startGame = (socket, gameState) => {
+  socket.emit('PLAYER_CONNECT', {
+    string: 'start_game',
+    gameState: gameState,
+  })
+}
+
+export const rollDice = (socket, roll, gameState) => {
+  socket.emit('PLAYER_CONNECT', {
+    string: 'regular_roll',
+    roll: roll,
+    gameState: gameState,
+  })
+}
+
+export const endTurn = (socket, gameState) => {
+  socket.emit('PLAYER_CONNECT', {
+    string: 'end_turn',
+    gameState: gameState,
+  })
+}
+
 export const updateGameState = (newGameState) => {
   return (dispatch) => dispatch({
     type: actionTypes.UPDATE_GAME_STATE,

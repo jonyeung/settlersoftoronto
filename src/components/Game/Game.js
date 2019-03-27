@@ -22,12 +22,18 @@ class Game extends Component {
     this.state = {
       tradeModalOpen: false,
       showDice: false,
-
       //'EDGE' 'CORNER' or null
       buildType: null
     }
 
+    this.diceInit = false;
+
     this.socket = io.connect('http://localhost:3000')
+
+    this.socket.on('PLAYER_CONNECT', (res) => {
+      console.log('response socket', res)
+      this.props.updateGameState(res);
+    })
 
     this.socket.emit('PLAYER_CONNECT', {
       string: 'room_setup',
@@ -141,7 +147,6 @@ class Game extends Component {
       })
     }
 
-
     this.testBuildRoad = () => {
       console.log('this.props.gameStateId', this.props.gameStateId)
       this.socket.emit('PLAYER_CONNECT', {
@@ -152,72 +157,13 @@ class Game extends Component {
       })
     }
 
-    this.socket.on('PLAYER_CONNECT', (res) => {
-      console.log('response socket', res)
-      this.props.updateGameState(res);
-    })
-
-
-    // this.socket.emit('PLAYER_CONNECT', {
-    //   string: 'player_join',
-    //   gameName: 'game1',
-    //   username: 'henry'
-    // })
-
-
-    // this.socket.emit('PLAYER_CONNECT', {
-    //   string: 'player_join',
-    //   gameName: 'game1',
-    //   username: 'mike'
-    // })
-
-    // this.socket.on('room_setup', (res) => {
-    //   console.log('room_setup socket', res)
-    //   this.props.updateGameState(res);
-    // })
-
-    // this.socket.on('player_join', (res) => {
-    //   console.log('player_join socket', res)
-    //   this.props.updateGameState(res);
-    // })
-
-    // this.socket.on('start_game', (res) => {
-    // })
-
-    // this.socket.on('begin_main_game', (res) => {
-    // })
-
-    // this.socket.on('seven_roll', (res) => {
-    // })
-
-    // this.socket.on('move_robber', (res) => {
-    // })
-
-    // this.socket.on('regular_roll', (res) => {
-    // })
-
-    // this.socket.on('build_starting_road', (res) => {
-    // })
-
-    // this.socket.on('build_road', (res) => {
-    // })
-
-    // this.socket.on('build_starting_settlement', (res) => {
-    // })
-
-    // this.socket.on('build_settlement', (res) => {
-    // })
-
-    // this.socket.on('build_city', (res) => {
-    // })
-
     this.renderTile = (Tile) => {
       let resourceType = null;
       let newTile = null;
       let diceNumber = 0;
       let robber = false;
       let roads = {
-        
+
       }
       let settlements = []
       let cities = []
@@ -227,12 +173,13 @@ class Game extends Component {
           Tile,
         )
       } else {
-        if(this.props.hexes[Tile.props.HexId - 1]) {
+        if (this.props.hexes[Tile.props.HexId - 1]) {
           let currentHex = this.props.hexes[Tile.props.HexId - 1];
           resourceType = currentHex.resourceType
           diceNumber = currentHex.diceNumber
           currentHex.robber === true ? robber = true : robber = false
           settlements = currentHex.settlements
+          cities = currentHex.cities
         } else {
           resourceType = null
         }
@@ -284,6 +231,16 @@ class Game extends Component {
         tradeModalOpen: false
       })
     }
+
+    this.rollDoneCallback = (num) => {
+      console.log(`You rolledd a ${num}`)
+      //roll here
+      if (this.diceInit) {
+        this.props.rollDice(this.socket, num, this.props.gameState)
+      }
+      //dice rolling on render for some reason
+      this.diceInit = true
+    }
   }
   //dice
   rollAll() {
@@ -303,9 +260,7 @@ class Game extends Component {
     })
   }
 
-  rollDoneCallback(num) {
-    console.log(`You rolled a ${num}`)
-  }
+
 
   componentDidMount() {
     //run room setup
@@ -316,6 +271,7 @@ class Game extends Component {
     if (this.state.showDice) {
       diceStyle.pop();
     }
+
     diceStyle = diceStyle.join(' ')
 
     return (
@@ -331,9 +287,7 @@ class Game extends Component {
         <button className={styles.Test5b} onClick={this.testBuildSetupSettlement2}>build start settlement (30)</button>
         <button className={styles.Test6} onClick={this.testRegularRoll}>regular roll</button>
 
-
-
-        <div className={diceStyle} onClick={() => { this.rollAll() }}>
+        <div className={diceStyle}>
           <ReactDice
             numDice={2}
             rollDone={this.rollDoneCallback}
@@ -353,12 +307,14 @@ class Game extends Component {
             this.state.buildType === null ?
               null
               :
-              <GameBuildOptions buildType={this.state.buildType} close={this.closeBuildModal} />
+              <GameBuildOptions buildType={this.state.buildType} close={this.closeBuildModal} socket={this.socket} />
           }
 
         </div>
         <GameButtons openTradeModal={this.openTradeModal}
-          rollDice={() => { this.rollAll() }} />
+          rollDice={() => { this.rollAll() }}
+          rolling={this.state.showDice}
+          socket={this.socket} />
         <div className={styles.Board}>
           <div className={styles.Row0}>
             {Board.Row0}
@@ -433,7 +389,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     updateGameState: (newGameState) => dispatch(gameActions.updateGameState(newGameState)),
-
+    rollDice: (socket, roll, gameState) => gameActions.rollDice(socket, roll, gameState),
   }
 }
 

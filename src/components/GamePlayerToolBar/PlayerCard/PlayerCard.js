@@ -10,6 +10,7 @@ class PlayerCard extends Component {
     this.numResources = 0
     this.numDevCards = 0
     this.profilePicStyles = [styles.Profile]
+    this.phasePic = styles.WaitPhase
 
     this.calculateNumResources = () => {
       this.numResources = 0;
@@ -44,17 +45,40 @@ class PlayerCard extends Component {
           break;
       }
     }
+
+    this.renderPhasePic = () => {
+      this.phasePic = styles.WaitPhase
+      if (this.props.currentPlayerNum === this.props.playerNum - 1) {
+        switch (this.props.currentPhase) {
+          case ('setup_placement'):
+            this.phasePic = styles.SetupPlacementPhase
+            break;
+          case ('roll_phase'):
+            this.phasePic = styles.RollPhase
+            break;
+          case ('move_robber'):
+            this.phasePic = styles.MoveRobberPhase
+            break;
+          case ('build/trade/devcard_phase'):
+            this.phasePic = styles.BuildTradeDevCardPhase
+            break;
+          default:
+            break;
+        }
+      }
+    }
   }
   render() {
     if (!this.props.notLoaded) {
       this.calculateNumResources()
       this.calculateNumDevCards()
       this.renderProfilePic()
+      this.renderPhasePic()
     }
     return (
       <div className={styles.Content}>
         <div className={this.profilePicStyles.join(' ')}>
-          <div className={styles.Phase}></div>
+          <div className={this.phasePic}></div>
         </div>
 
         <div className={styles.Info}>
@@ -87,6 +111,8 @@ class PlayerCard extends Component {
 
 const mapStateToProps = state => {
   return {
+    currentPhase: state.gameReducer.turnPhase,
+    currentPlayerNum: state.gameReducer.currentPlayerNum
   };
 };
 
