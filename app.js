@@ -261,7 +261,7 @@ io.on('connection', function (socket) {
             // bandaid fix:
             gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
             let currentPlayer = gameState.currentTurn;
-            
+
             if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                 let road = new Road({ player: currentPlayer._id, start: req.start, end: req.end });
                 gameState.roads.push(road);
@@ -326,6 +326,8 @@ io.on('connection', function (socket) {
                 boardFunctions.addSettlementToHex(settlement, gameState);
                 getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
                 // gameState = storeGameState(gameState);
+                // console.log('build_starting_settlement', gameState)
+
                 io.sockets.emit('PLAYER_CONNECT', gameState);
             } else {
                 io.sockets.emit('PLAYER_CONNECT', new Error('Invalid settlement position'));
@@ -366,6 +368,10 @@ io.on('connection', function (socket) {
             let gameState = req.gameState;
             let currentPlayer = gameState.currentTurn;
 
+            // REMOVE THIS FOR PRODUCTION
+            currentPlayer.resources.Ore = currentPlayer.resources.Ore + 3;
+            currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 2;
+
             if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
                 if (currentPlayer.resources.Ore > 2 && currentPlayer.resources.Wheat > 1) {
                     boardFunctions.deleteSettlementAtLocation(req.location, gameState);
@@ -374,7 +380,7 @@ io.on('connection', function (socket) {
                     boardFunctions.addCityToHex(city, gameState);
                     currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
                     currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
-                    currentPlayer.VictoryPoints++;
+                    getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
                     boardFunctions.checkWinCondition(currentPlayer, gameState);
                     // gameState = storeGameState(gameState);
                     io.sockets.emit('PLAYER_CONNECT', gameState);
