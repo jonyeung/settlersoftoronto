@@ -1,0 +1,44 @@
+.Content {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    margin-left: -450px;
+    margin-top: -150px;
+    width: 900px;
+    height: 200px;
+    border-radius: 15px;
+    border: 20px solid black;
+    background-color: white;
+}
+
+.Content .Status {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 100px;
+    top:50%;
+    left:50%;
+    margin-left:-300px;
+    margin-top:-50px;
+    
+}
+
+.Content .Status .Victory {
+    width:100%;
+    height:100%;
+    background-image: url("../../media/victory_icon.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display:flex;
+}
+
+.Loss {
+    width:100%;
+    height:100%;
+    background-image: url("../../media/loss_icon.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    display:flex;
+}
