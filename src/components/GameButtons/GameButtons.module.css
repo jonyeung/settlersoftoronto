@@ -1,13 +1,41 @@
-.Content {
+.Container{
+  height: 100%;
+  right:10px;
+  position:absolute;
+  display:flex;
+  flex-direction:row;
+}
+
+.LowerContent {
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  bottom: 30px;
-  right: 280px;
+  bottom: 15px;
+  right: 300px;
   width: 100px;
-  height: 200px;
+  height: 220px;
   z-index: 400;
+}
+
+.UpperContent {
+  position: absolute;
+  display: flex;
+  flex-direction:column;
+  right: 300px;
+  top:15px;
+  width: 100px;
+  height: 220px;
+}
+
+.ExitButton{
+  width: 100%;
+  height: 45%;
+  background-image: url("../../media/back_icon.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  background-size:100px;
 }
 
 .TradeButton {
