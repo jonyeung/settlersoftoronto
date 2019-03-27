@@ -1,9 +1,12 @@
 .Content {
   margin-top: 120px;
   margin-left: 30px;
+  margin-bottom: 30px;
 }
 
 .Content .GameRoomsList {
   height: 62vh;
   overflow-y: scroll;
+  border-top: 3px solid black;
+  border-bottom: 3px solid black;
 }

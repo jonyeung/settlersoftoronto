@@ -69,14 +69,14 @@ class Login extends Component {
       errorMessage = <span className={styles.errorMessage}>{this.props.signInErrorMessage}</span>;
     }
 
-    let header = 'Choose name';
+    let header = 'Sign In';
     let span = <span>Not a member? Sign Up!</span>;
     let form = <LoginForm onInitSignIn={this.props.onInitSignIn} />;
 
     if (this.state.view === views.LOGIN) {
       form = <LoginForm onInitSignIn={this.props.onInitSignIn} loading={this.props.signInLoading} />;
       span = <span onClick={() => this.changeView(views.SIGN_UP)}>Not a member? Sign Up!</span>;
-      header = 'Choose name'
+      header = 'Sign In'
 
     } else if (this.state.view === views.SIGN_UP) {
       form = <SignUpForm onInitSignUp={this.props.onInitSignUp} loading={this.props.signUpLoading} />

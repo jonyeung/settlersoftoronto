@@ -13,7 +13,7 @@ class NavBar extends Component {
           <div className={styles.NavItemsGroup}>
 
             <a onClick={this.props.toggleLoginModal}>
-              <div className={styles.NavItem}>Choose Name</div>
+              <div className={styles.NavItem}>Sign In</div>
             </a>
           </div>
 

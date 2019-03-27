@@ -2,10 +2,10 @@
   background-color: rgba(255, 255, 255, 1);
   height: 80px;
   width: 100%;
-  box-shadow: 0 5px 10px grey;
+  box-shadow: 0 0px 2px grey;
   position: fixed;
   top: 0px;
-  left: 0pxs;
+  left: 0px;
   z-index: 100;
 }
 

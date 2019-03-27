@@ -303,8 +303,8 @@
   background-image: url('../../media/sheep.jpg')
 }
 
-.HouseTile :hover{
-  background-image: url('../../media/house_icon.png');
+.Player1HouseTile{
+  background-image: url('../../media/purple_house.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -312,7 +312,34 @@
   transition-delay: 2s;
 }
 
-.CityTile :hover{
+.Player2HouseTile{
+  background-image: url('../../media/blue_house.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: cubic-bezier(0.47, 0, 0.745, 0.715);
+  transition-delay: 2s;
+}
+
+.Player3HouseTile{
+  background-image: url('../../media/green_house.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: cubic-bezier(0.47, 0, 0.745, 0.715);
+  transition-delay: 2s;
+}
+
+.Player4HouseTile{
+  background-image: url('../../media/yellow_house.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: cubic-bezier(0.47, 0, 0.745, 0.715);
+  transition-delay: 2s;
+}
+
+.CityTile{
   background-image: url('../../media/city_icon.jpg');
   background-repeat: no-repeat;
   background-position: center;

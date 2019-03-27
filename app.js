@@ -243,7 +243,8 @@ io.on('connection', function (socket) {
 
                     // give resources to all the players that own a city on this hex
                     hex.cities.forEach(city => {
-                        boardFunctions.addResource(hex.resourceType, city.player);
+                        boardFunctions.addResource(hex.resourceType, getPlayerByID(city.player, gameState));
+                        boardFunctions.addResource(hex.resourceType, getPlayerByID(city.player, gameState));
                     });
                 }
             });
@@ -341,7 +342,7 @@ io.on('connection', function (socket) {
                 let currentPlayer = gameState.currentTurn;
 
                 if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
-                    let settlement = new Settlement({ player: currentPlayer, location: req.location });
+                    let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
                     gameState.settlements.push(settlement);
                     addSettlementToHex(settlement, gameState);
                     currentPlayer.resources.Wood--;
@@ -349,7 +350,7 @@ io.on('connection', function (socket) {
                     currentPlayer.resources.Wheat--;
                     currentPlayer.resources.Sheep--;
                     currentPlayer.VictoryPoints++;
-                    checkWinCondition(currentPlayer, gameState);
+                    boardFunctions.checkWinCondition(currentPlayer, gameState);
                     gameState = storeGameState(gameState);
                     io.sockets.emit('PLAYER_CONNECT', gameState);
                 } else {
@@ -360,19 +361,22 @@ io.on('connection', function (socket) {
             }
         }
 
-
+        // upgrade settlement to city
         if (req.string == 'build_city') {
-            let gameState = findGameState(req.gameName);
+            let gameState = req.gameState;
             let currentPlayer = gameState.currentTurn;
-            if (checkValidCity(req.location, gameState, currentPlayer)) {
-                if (currentPlayer.resources.Ore > 2 && currentPlayer.resource.Wheat > 1) {
-                    let city = new City({ player: currentPlayer, location: req.location });
-                    addCityToHex(city, gameState);
+
+            if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
+                if (currentPlayer.resources.Ore > 2 && currentPlayer.resources.Wheat > 1) {
+                    boardFunctions.deleteSettlementAtLocation(req.location, gameState);
+                    let city = new City({ player: currentPlayer._id, location: req.location });
+                    gameState.cities.push(city);
+                    boardFunctions.addCityToHex(city, gameState);
                     currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
                     currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
                     currentPlayer.VictoryPoints++;
-                    checkWinCondition(currentPlayer, gameState);
-                    gameState = storeGameState(gameState);
+                    boardFunctions.checkWinCondition(currentPlayer, gameState);
+                    // gameState = storeGameState(gameState);
                     io.sockets.emit('PLAYER_CONNECT', gameState);
                 } else {
                     io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));

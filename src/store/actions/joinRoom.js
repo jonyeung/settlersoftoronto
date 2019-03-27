@@ -20,16 +20,17 @@ export const roomActionFailed = () => {
   }
 }
 
-export const initJoinRoom = (room) => {
+export const initJoinRoom = (room, routerHistory) => {
   return (dispatch) => {
 
-    axios.get('joinRoom/' + room + '.json')
-      .then(res => {
-        dispatch(joinRoom(res.data));
-      })
-      .catch(error => {
-        dispatch(roomActionFailed());
-      });
+    // axios.get('joinRoom/' + room + '.json')
+    //   .then(res => {
+    //     dispatch(joinRoom(res.data));
+    //   })
+    //   .catch(error => {
+    //     dispatch(roomActionFailed());
+    //   });
+    routerHistory.push('/Game')
   }
 }
 

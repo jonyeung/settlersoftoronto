@@ -9,6 +9,7 @@ import Layout from './components/Layout/Layout';
 import RouteError from './components/RouteError/RouteError';
 import Console from './components/Console/Console';
 import Game from './components/Game/Game';
+import GameLobby from './components/GameLobby/GameLobby';
 
 library.add(faLaptopCode, faDollarSign, faFire, faHeart);
 
@@ -16,12 +17,9 @@ class App extends Component {
   render() {
     let routes = (
       <Switch>
-        {/* <Route path="/ViewProjects" component={ViewProjects} />
-        <Route path="/ProjectFullDetail" component={ProjectFullDetail} />
-        <Route path="/About" component={About} />
-        <Route path="/ContactUs" component={ContactUs} /> */}
         <Route path="/Console" component={Console} />
-        <Route path="/" exact component={Game} />
+        <Route path="/" exact component={GameLobby} />
+        <Route path="/Game" exact component={Game} />
         <Route path="/RouteError" component={RouteError} />
         <Redirect to="/RouteError" />
       </Switch>
