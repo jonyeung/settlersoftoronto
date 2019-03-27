@@ -104,11 +104,6 @@ function getPlayerByID(playerID, gameState) {
     return gameState.players[playerID]
 }
 
-// get gameState from DB
-function findGameState(gameID) {
-    
-    return gameState;
-}
 
 // store gameState into DB
 function storeGameState(gameID, gameState) {
