@@ -16,15 +16,13 @@ firebase.initializeApp({
     serviceAccount: "./c09-project-firebase-adminsdk-xuxa7-da3b397950.json",
     databaseURL: 'https://c09-project.firebaseio.com'
 })
-  
+let ref = firebase.database().ref().child('c09-project');
+let gameStateRef = ref.child('gameState');
 
 app.use(function (req, res, next) {
     console.log("HTTP request", req.method, req.url, req.body);
     next();
 });
-
-let Datastore = require('nedb'),
-    gameStatesDB = new Datastore({ filename: 'db/gameStates.db', autoload: true, timestampData: true });
 
 let GameState = (function (state) {
     return {
@@ -142,10 +140,13 @@ io.on('connection', function (socket) {
             let hexes = boardFunctions.setupHexes();
 
             let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
-            // firebase.database().ref('/gameState/gameState').set(gameState).then(function(err, state) {
-            //     if (err) io.sockets.emit('PLAYER_CONNECT', err);
-            //     io.sockets.emit('PLAYER_CONNECT', state);
-            // });
+            let id = gameStateRef.push(JSON.stringify(gameState)).key;
+            console.log("id:", id)
+            gameStateRef.child(id).once('value').then(function(snapshot) {
+                console.log("snapshot: ", snapshot.val())
+                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+            })
+
         }
 
         // new player joins
