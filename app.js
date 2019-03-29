@@ -24,6 +24,35 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.post('/signIn', function (req, res) {
+    let error = false
+    if (error) {
+        res.status(500);
+        res.json({
+            error: 'SIGN_IN_FAILED'
+        });
+    }
+    res.json({
+        error: null,
+        idToken: 'idtoken123',
+        idTokenExpiryDate: 'datehere',
+        username: 'david'
+    })
+});
+
+app.post('/signUp', function (req, res) {
+    let error = true
+    if (error) {
+        res.status(500);
+        res.json({
+            error: 'SIGN_UP_FAILED'
+        });
+    }
+    res.send({
+        error: null
+    })
+});
+
 let GameState = (function (state) {
     return {
         gameName: state.gameName,
@@ -141,9 +170,7 @@ io.on('connection', function (socket) {
 
             let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
             let id = gameStateRef.push(JSON.stringify(gameState)).key;
-            console.log("id:", id)
-            gameStateRef.child(id).once('value').then(function(snapshot) {
-                console.log("snapshot: ", snapshot.val())
+            gameStateRef.child(id).once('value').then(function (snapshot) {
                 io.sockets.emit('PLAYER_CONNECT', snapshot.val());
             })
 
