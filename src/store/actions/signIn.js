@@ -1,10 +1,11 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-projects';
+import * as loginActions from '../actions/auth';
+
 
 export const signIn = (authData) => {
   return {
     type: actionTypes.SIGN_IN,
-    authData: authData
   }
 }
 
@@ -86,11 +87,13 @@ export const initSignIn = (email, password) => {
       .then((res) => {
         console.log('res', res.data)
         dispatch(signIn(res.data))
+        console.log('res.data.idToken', res.data.idToken)
+        console.log('res.data.idTokenExpiryDate', res.data.idTokenExpiryDate)
+        dispatch(loginActions.authCheckState(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
       })
       .catch((error) => {
-        console.log(error)
-        console.log(error.response)
-        dispatch(signInFailed(error.response));
+        console.log('error: ', error.response)
+        dispatch(signInFailed(error.response.data.error));
       });
   }
 }

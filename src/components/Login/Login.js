@@ -5,6 +5,7 @@ import LoginForm from '../LoginForm/LoginForm';
 import SignUpForm from '../SignUpForm/SignUpForm';
 import * as signUpActions from '../../store/actions/signUp';
 import * as signInActions from '../../store/actions/signIn';
+
 import history from '../../history';
 
 const views = {
@@ -127,7 +128,8 @@ const mapDispatchToProps = dispatch => {
     onInitSignUp: (email, password) => dispatch(signUpActions.initSignUp(email, password)),
     onInitSignIn: (email, password) => dispatch(signInActions.initSignIn(email, password)),
     resetSignUpReducer: () => dispatch(signUpActions.signUpReset()),
-    resetSignInReducer: () => dispatch(signInActions.signInReset())
+    resetSignInReducer: () => dispatch(signInActions.signInReset()),
+    // login: (idToken, idTokenExpiryDate) => dispatch(loginActions.authCheckState(idToken, idTokenExpiryDate))
   }
 }
 

@@ -30,27 +30,46 @@ export const loading = (loading) => {
   }
 }
 
+// export const initSignUp = (email, password) => {
+
+//   return (dispatch) => {
+//     dispatch(loading(true));
+//     axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDIuViSw1eLVB8zKgTdPHVmwm9O1xDFLFQ', {
+//       email: email,
+//       password: password,
+//       returnSecureToken: true
+//     })
+//       .then((res) => {
+//         //send email confirmation
+//         axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?key=AIzaSyDIuViSw1eLVB8zKgTdPHVmwm9O1xDFLFQ', {
+//           requestType: 'VERIFY_EMAIL',
+//           idToken: res.data.idToken
+//         })
+//           .then((res) => {
+//             dispatch(signUp());
+//           })
+//       })
+//       .catch((error) => {
+//         dispatch(signUpFailed(error.response.data.error.message));
+//       });
+//   }
+// }
+
 export const initSignUp = (email, password) => {
 
   return (dispatch) => {
     dispatch(loading(true));
-    axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDIuViSw1eLVB8zKgTdPHVmwm9O1xDFLFQ', {
+    axios.post('http://localhost:3000/signUp', {
       email: email,
       password: password,
-      returnSecureToken: true
     })
       .then((res) => {
-        //send email confirmation
-        axios.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?key=AIzaSyDIuViSw1eLVB8zKgTdPHVmwm9O1xDFLFQ', {
-          requestType: 'VERIFY_EMAIL',
-          idToken: res.data.idToken
-        })
-          .then((res) => {
-            dispatch(signUp());
-          })
+        // console.log('res', res.data)
+        dispatch(signUp())
       })
       .catch((error) => {
-        dispatch(signUpFailed(error.response.data.error.message));
+        // console.log('error: ', error.response)
+        dispatch(signUpFailed(error.response.data.error));
       });
   }
 }
