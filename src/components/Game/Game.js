@@ -32,7 +32,7 @@ class Game extends Component {
 
     this.socket.on('PLAYER_CONNECT', (res) => {
       console.log('response socket', res)
-      this.props.updateGameState(res);
+      this.props.updateGameState(JSON.parse(res));
     })
 
     this.socket.emit('PLAYER_CONNECT', {
@@ -280,13 +280,13 @@ class Game extends Component {
         <button className={styles.Test} onClick={this.davidJoins}>AddPlayer</button>
         <button className={styles.Test2} onClick={this.testStart}>StartGame</button>
         <button className={styles.Test3} onClick={this.testBeginMain}>BeginMainGame</button>
-        <button className={styles.Test4a} onClick={this.testEndTurn}>next turn</button>
+        {/* <button className={styles.Test4a} onClick={this.testEndTurn}>next turn</button>
         <button className={styles.Test4} onClick={this.testBuildSetupRoad1}>build start road (5 9)</button>
         <button className={styles.Test4b} onClick={this.testBuildSetupRoad2}>build start road (24 30)</button>
         <button className={styles.Test5} onClick={this.testBuildSetupSettlement1}>build start settlement (9)</button>
         <button className={styles.Test5a} onClick={this.testUpgradeCity}>build city (9)</button>
         <button className={styles.Test5b} onClick={this.testBuildSetupSettlement2}>build start settlement (30)</button>
-        <button className={styles.Test6} onClick={this.testRegularRoll}>regular roll</button>
+        <button className={styles.Test6} onClick={this.testRegularRoll}>regular roll</button> */}
 
         <div className={diceStyle}>
           <ReactDice

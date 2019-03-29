@@ -53,7 +53,7 @@ class Login extends Component {
     if (this.props.signInError === false && this.props.signInLoading === false) {
       this.props.closeLoginModal();
       this.props.resetSignInReducer();
-      history.push('/Console');
+      // history.push('/Console');
     } 
   }
 
@@ -118,6 +118,7 @@ const mapStateToProps = state => {
     signInErrorMessage: state.signInReducer.errorMessage,
     signInError: state.signInReducer.error,
     signInLoading: state.signInReducer.loading,
+
   };
 };
 
@@ -127,7 +128,6 @@ const mapDispatchToProps = dispatch => {
     onInitSignIn: (email, password) => dispatch(signInActions.initSignIn(email, password)),
     resetSignUpReducer: () => dispatch(signUpActions.signUpReset()),
     resetSignInReducer: () => dispatch(signInActions.signInReset())
-
   }
 }
 
