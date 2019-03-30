@@ -147,6 +147,7 @@ let server = app.listen(PORT, function (err) {
 });
 
 
+app.get('/gameState/:id')
 
 let io = socket(server);
 
@@ -177,21 +178,28 @@ io.on('connection', function (socket) {
 
         }
 
+        if (req.string == 'get_game_state') {
+            let id = req.gameStateId;
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+            })
+        }
+
         // new player joins
         if (req.string == 'player_join') {
             let newPlayer = new Player(req.username);
-            // let gameState = req.gameState;
-            // let gameState = firebase.database().ref('/gameState/_id').once("123456").then(function(state) {
-            //     console.log(state);
-            // })
-            gameState.players.push(newPlayer);
-            gameState.maxPlayerNum++;
-            io.sockets.emit('PLAYER_CONNECT', gameState);
-            // gameStatesDB.update({'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
-            //     if (err) io.sockets.emit('PLAYER_CONNECT', err);
-            //     console.log(state)
-            //     io.sockets.emit('PLAYER_CONNECT', state);
-            // });
+            let id = req.gameStateId;
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                gameState.players.push(newPlayer);
+                gameState.maxPlayerNum++;
+                io.sockets.emit('PLAYER_CONNECT', gameState);
+            })
+            .catch(function(err) {
+                console.log(err);
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            })
+            
         }
 
         // game starts
