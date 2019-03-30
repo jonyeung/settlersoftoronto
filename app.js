@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static('public'));
+app.use(express.static('build/static'));
 
 firebase.initializeApp({
     serviceAccount: "./c09-project-firebase-adminsdk-xuxa7-da3b397950.json",
