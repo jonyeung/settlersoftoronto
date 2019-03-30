@@ -54,7 +54,7 @@ function setupHexes() {
     let desertSet = false;
     for (i; i < 19; i++) {
         if (i == desertPosition) {
-            hex = new Hex({position: i+1, resourceType:'Desert', diceNumer: null});
+            hex = new Hex({position: i+1, resourceType:'Desert', diceNumber: null});
             hex.robber = true;
             desertSet = true;
         } else {
@@ -326,7 +326,14 @@ function isValidSettlement(location, currentPlayer, gameState) {
     roads.forEach(road => {
         console.log(road)
         let roadOwner = getPlayerByID(road.player, gameState);
-        if (road.startPoint == road.location || road.endPoint == location) {
+        console.log("startPoint = location", road.startPoint == location)
+        console.log("endPoint = location", road.endPoint == location)
+        console.log({
+            startPoint: road.startPoint,
+            endPoint: road.endPoint,
+            location
+        })
+        if (road.startPoint == location || road.endPoint == location) {
             if (roadOwner.username == currentPlayer.username) {
                 connectingRoad = true;
             }
