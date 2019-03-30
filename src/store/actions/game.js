@@ -31,7 +31,7 @@ export const unselectCorner = () => {
 
 export const buildSettlement = (socket, selectedCornerId, gameState) => {
   socket.emit('PLAYER_CONNECT', {
-    string: 'build_starting_settlement',
+    string: 'build_settlement',
     gameState: gameState,
     location: selectedCornerId
   })
@@ -47,7 +47,7 @@ export const buildCity = (socket, selectedCornerId, gameState) => {
 
 export const buildRoad = (socket, selectedEdgeId, gameState) => {
   socket.emit('PLAYER_CONNECT', {
-    string: 'build_starting_road',
+    string: 'build_road',
     start: selectedEdgeId[0],
     end: selectedEdgeId[1],
     gameState: gameState,

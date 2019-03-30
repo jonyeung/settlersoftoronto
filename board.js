@@ -82,9 +82,18 @@ function addResource(resource, currentPlayer) {
 
 function addSettlementToHex(settlement, gameState) {
     let hexesToUpdate = getHexesAtLocation(settlement.location, gameState);
-    console.log(hexesToUpdate)
     hexesToUpdate.forEach(hex => {
         hex.settlements.push(settlement);
+    });
+}
+
+// same as addSettlementToHex but the player gets the resources
+function addSettlementToHexWithResources(settlement, currentPlayerID, gameState) {
+    let currentPlayer = getPlayerByID(currentPlayerID, gameState);
+    let hexesToUpdate = getHexesAtLocation(settlement.location, gameState);
+    hexesToUpdate.forEach(hex => {
+        hex.settlements.push(settlement);
+        addResource(hex.resourceType, currentPlayer);
     });
 }
 
@@ -93,6 +102,16 @@ function addCityToHex(city, gameState) {
     hexesToUpdate.forEach(hex => {
         hex.cities.push(city);
     })
+}
+
+function checkSetupFinished(gameState) {
+    let setupDone = false;
+    if (gameState.settlements.length == (gameState.maxPlayerNum * 2)) {
+        if (gameState.roads.length == (gameState.maxPlayerNum * 2)) {
+            setupDone = true;
+        }
+    }
+    return setupDone;
 }
 
 function getHexesAtLocation(location, gameState) {
@@ -251,20 +270,19 @@ function checkValidCity(location, gameState, currentPlayer) {
 }
 
 // check longest road
-function hasLongestRoad(currentPlayer, gameState) {
-    let maxLength = 0;
-    for (let player in gameState.players) {
-        if (player !== currentPlayer) {
-            if (player.LongestRoadLength > maxLength) maxLength = player.LongestRoadLength;
-        }
-    }
-    if (currentPlayer.LongestRoadLength > maxLength && currentPlayer.LongestRoadLength >= 5) {
-        return true;
-    } else {
-        return false;
-    }
-
-}
+// function hasLongestRoad(currentPlayer, gameState) {
+//     let maxLength = 0;
+//     for (let player in gameState.players) {
+//         if (player !== currentPlayer) {
+//             if (player.LongestRoadLength > maxLength) maxLength = player.LongestRoadLength;
+//         }
+//     }
+//     if (currentPlayer.LongestRoadLength > maxLength && currentPlayer.LongestRoadLength >= 5) {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
 
 // check largest army
 
@@ -459,5 +477,7 @@ module.exports = {
     checkValidCity,
     deleteSettlementAtLocation,
     addCityToHex,
-    checkWinCondition
+    checkWinCondition,
+    addSettlementToHexWithResources,
+    checkSetupFinished
 }
