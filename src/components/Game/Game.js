@@ -5,6 +5,7 @@ import * as Board from './OriginalMap';
 import GamePlayerToolBar from '../GamePlayerToolBar/GamePlayerToolBar';
 import GamePlayerDevCards from '../GamePlayerDevCards/GamePlayerDevCards';
 import GameButtons from '../GameButtons/GameButtons';
+import GameQuitButton from '../GameQuitButton/GameQuitButton';
 import TradeModal from '../TradeModal/TradeModal';
 import ReactDice from 'react-dice-complete'
 import 'react-dice-complete/dist/react-dice-complete.css'
@@ -235,7 +236,7 @@ class Game extends Component {
       console.log(`You rolledd a ${num}`)
       //roll here
       if (this.diceInit) {
-        this.props.rollDice(this.socket, num, this.props.gameState)
+        this.props.rollDice(this.socket, num, this.props.gameStateId)
       }
       //dice rolling on render for some reason
       this.diceInit = true
@@ -286,6 +287,8 @@ class Game extends Component {
         <button className={styles.Test5b} onClick={this.testBuildSetupSettlement2}>build start settlement (30)</button>
         <button className={styles.Test6} onClick={this.testRegularRoll}>regular roll</button> */}
 
+
+        <GameQuitButton></GameQuitButton>
         <div className={diceStyle}>
           <ReactDice
             numDice={2}
@@ -388,7 +391,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     updateGameState: (newGameState) => dispatch(gameActions.updateGameState(newGameState)),
-    rollDice: (socket, roll, gameState) => gameActions.rollDice(socket, roll, gameState),
+    rollDice: (socket, roll, gameStateId) => gameActions.rollDice(socket, roll, gameStateId),
   }
 }
 

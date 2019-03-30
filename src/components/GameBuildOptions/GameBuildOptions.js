@@ -19,7 +19,7 @@ class GameBuildOptions extends Component {
             this.props.buildSettlement(
               this.props.socket,
               this.props.selectedCornerId,
-              this.props.gameState
+              this.props.gameStateId
             )
           }}>
           <div className={styles.Icon}>
@@ -41,7 +41,7 @@ class GameBuildOptions extends Component {
             this.props.buildCity(
               this.props.socket,
               this.props.selectedCornerId,
-              this.props.gameState
+              this.props.gameStateId
             )
           }}>
           <div className={styles.Icon}>
@@ -67,7 +67,7 @@ class GameBuildOptions extends Component {
             this.props.buildRoad(
               this.props.socket,
               this.props.selectedEdgeId,
-              this.props.gameState
+              this.props.gameStateId
             )
           }}>
           <div className={styles.Icon}>
@@ -105,16 +105,16 @@ const mapStateToProps = state => {
   return {
     selectedCornerId: state.gameReducer.selectedCornerId,
     selectedEdgeId: state.gameReducer.selectedEdgeId,
-    gameState: state.gameReducer,
+    gameStateId: state.gameReducer.gameStateId,
     error: state.lobbyReducer.error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    buildSettlement: (socket, selectedCornerId, gameState) => gameActions.buildSettlement(socket, selectedCornerId, gameState),
-    buildCity: (socket, selectedCornerId, gameState) => gameActions.buildCity(socket, selectedCornerId, gameState),
-    buildRoad: (socket, selectedEdgeId, gameState) => gameActions.buildRoad(socket, selectedEdgeId, gameState),
+    buildSettlement: (socket, selectedCornerId, gameStateId) => gameActions.buildSettlement(socket, selectedCornerId, gameStateId),
+    buildCity: (socket, selectedCornerId, gameStateId) => gameActions.buildCity(socket, selectedCornerId, gameStateId),
+    buildRoad: (socket, selectedEdgeId, gameStateId) => gameActions.buildRoad(socket, selectedEdgeId, gameStateId),
   }
 }
 

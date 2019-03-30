@@ -29,10 +29,10 @@ export const unselectCorner = () => {
   })
 }
 
-export const buildSettlement = (socket, selectedCornerId, gameState) => {
+export const buildSettlement = (socket, selectedCornerId, gameStateId) => {
   socket.emit('PLAYER_CONNECT', {
     string: 'build_settlement',
-    gameState: gameState,
+    gameStateId: gameStateId,
     location: selectedCornerId
   })
 }
@@ -40,7 +40,7 @@ export const buildSettlement = (socket, selectedCornerId, gameState) => {
 export const buildCity = (socket, selectedCornerId, gameState) => {
   socket.emit('PLAYER_CONNECT', {
     string: 'build_city',
-    gameState: gameState,
+    gameStateId: gameStateId,
     location: selectedCornerId
   })
 }
@@ -50,14 +50,14 @@ export const buildRoad = (socket, selectedEdgeId, gameState) => {
     string: 'build_road',
     start: selectedEdgeId[0],
     end: selectedEdgeId[1],
-    gameState: gameState,
+    gameStateId: gameStateId,
   })
 }
 
 export const startGame = (socket, gameState) => {
   socket.emit('PLAYER_CONNECT', {
     string: 'start_game',
-    gameState: gameState,
+    gameStateId: gameStateId,
   })
 }
 
@@ -65,14 +65,14 @@ export const rollDice = (socket, roll, gameState) => {
   socket.emit('PLAYER_CONNECT', {
     string: 'regular_roll',
     roll: roll,
-    gameState: gameState,
+    gameStateId: gameStateId,
   })
 }
 
 export const endTurn = (socket, gameState) => {
   socket.emit('PLAYER_CONNECT', {
     string: 'end_turn',
-    gameState: gameState,
+    gameStateId: gameStateId,
   })
 }
 

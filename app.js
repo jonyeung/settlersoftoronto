@@ -184,17 +184,12 @@ let server = app.listen(PORT, function (err) {
     else console.log("HTTP server on http://localhost:%s", PORT);
 });
 
-
-app.get('/gameState/:id')
-
 let io = socket(server);
 
 io.on('connection', function (socket) {
     console.log('socket connection successful');
 
     socket.on('PLAYER_CONNECT', (req) => {
-
-
 
         // create game room
         if (req.string == 'room_setup') {
@@ -234,6 +229,7 @@ io.on('connection', function (socket) {
                 // store game state
                 gameStateRef.child(id).set(gameState).then(function(snapshot) {
                     io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                    console.log('hello ')
                 })
                 .catch(function(err) {
                     console.log(err);

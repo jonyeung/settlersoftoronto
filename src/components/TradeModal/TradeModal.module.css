@@ -164,7 +164,7 @@
   height: 60px;
   width: 60px;
   background-image: url("../../media/checkmark.png");
-  background-position: center;
+  background-position: 73px 80px;
   background-size:85px;
   background-color: green;
   border-radius: 30px;
@@ -176,8 +176,8 @@
   height: 60px;
   width: 60px;
   background-image: url("../../media/crossmark.png");
-  background-position: center;
-  background-size:90px;
+  background-position: 74px 81px;
+  background-size: 88px;
   background-color: red;
   border-radius: 30px;
   border: 5px solid black;
