@@ -10,11 +10,15 @@ class GameRoomSlot extends Component {
   }
 
   render() {
+    let joinButton = <button className={styles.JoinRoomButton} onClick={this.props.joinRoomAction}>Join</button>
+    if (this.props.room.numPlayers === this.props.room.maxPlayers) {
+      joinButton = <button className={[styles.JoinRoomButton, styles.JoinRoomButtonDisabled].join(' ')}>Join</button>
+    }
     return (
       <div className={styles.Content}>
         <p className={styles.RoomName}>{this.props.room.name}</p>
         <p className={styles.RoomInfo}>{this.props.room.numPlayers}/{this.props.room.maxPlayers} Players</p>
-        <button className={styles.JoinRoomButton} onClick={this.props.joinRoomAction}>Join</button>
+        {joinButton}
       </div>
 
     )

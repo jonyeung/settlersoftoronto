@@ -6,8 +6,10 @@ import NavBar from '../NavBar/NavBar';
 import Login from '../Login/Login';
 import Drawer from '../Drawer/Drawer';
 import Footer from '../Footer/Footer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import * as joinRoomActions from '../../store/actions/joinRoom';
+import * as lobbyActions from '../../store/actions/lobby';
 
 class GameLobby extends Component {
 
@@ -63,17 +65,22 @@ class GameLobby extends Component {
       </div>
     if (this.props.authState.signedIn === true) {
       gameLobbyRoomsDisplay =
-        <div className={styles.GameRoomsList}>
-          <div>
+        <>
+          <div className={styles.Horizontal}>
             <h1>Games Rooms</h1>
-
+            <div className={styles.Refresh} onClick={this.props.initRefreshRoom}>
+              <FontAwesomeIcon icon="sync-alt" size="lg"/>
+            </div>
           </div>
-          {this.props.rooms.map((room) => {
-            return (
-              <GameRoomSlot key={room.name} room={room} joinRoomAction={() => { this.props.initJoinRoom(5, this.props.history) }}></GameRoomSlot>
-            )
-          })}
-        </div>
+          <div className={styles.GameRoomsList}>
+
+            {this.props.rooms.map((room) => {
+              return (
+                <GameRoomSlot key={room.name} room={room} joinRoomAction={() => { this.props.initJoinRoom(5, this.props.history) }}></GameRoomSlot>
+              )
+            })}
+          </div>
+        </>
     }
 
     return (
@@ -101,6 +108,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     initJoinRoom: (room, routerHistory) => dispatch(joinRoomActions.initJoinRoom(room, routerHistory)),
+    initRefreshRoom: () => dispatch(lobbyActions.initRefreshRoom())
   }
 }
 
