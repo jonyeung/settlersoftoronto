@@ -277,8 +277,8 @@ class Game extends Component {
     return (
       <>
         <button className={styles.Test} onClick={this.davidJoins}>AddPlayer</button>
-        <button className={styles.Test2} onClick={this.testStart}>StartGame</button>
-        <button className={styles.Test3} onClick={this.testBeginMain}>BeginMainGame</button>
+        {/* <button className={styles.Test2} onClick={this.testStart}>StartGame</button>
+        <button className={styles.Test3} onClick={this.testBeginMain}>BeginMainGame</button> */}
         {/* <button className={styles.Test4a} onClick={this.testEndTurn}>next turn</button>
         <button className={styles.Test4} onClick={this.testBuildSetupRoad1}>build start road (5 9)</button>
         <button className={styles.Test4b} onClick={this.testBuildSetupRoad2}>build start road (24 30)</button>

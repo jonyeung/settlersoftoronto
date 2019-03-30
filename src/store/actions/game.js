@@ -55,6 +55,7 @@ export const buildRoad = (socket, selectedEdgeId, gameStateId) => {
 }
 
 export const startGame = (socket, gameStateId) => {
+  console.log('gamestateid: ', gameStateId)
   socket.emit('PLAYER_CONNECT', {
     string: 'start_game',
     gameStateId: gameStateId,

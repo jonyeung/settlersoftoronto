@@ -105,7 +105,7 @@ const mapStateToProps = state => {
   return {
     selectedCornerId: state.gameReducer.selectedCornerId,
     selectedEdgeId: state.gameReducer.selectedEdgeId,
-    gameStateId: state.gameReducer.gameStateId,
+    gameStateId: state.gameReducer._id,
     error: state.lobbyReducer.error
   };
 };

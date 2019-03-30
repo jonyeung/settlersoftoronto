@@ -38,7 +38,7 @@ const mapStateToProps = state => {
   return {
     currentPhase: state.gameReducer.turnPhase,
     currentPlayerNum: state.gameReducer.currentPlayerNum,
-    gameStateId: state.gameReducer.gameStateId,
+    gameStateId: state.gameReducer._id,
   };
 };
 
