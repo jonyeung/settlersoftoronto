@@ -4,6 +4,7 @@ let Hex = (function(hex) {
         robber : false,
         resourceType : hex.resourceType,
         diceNumber : hex.diceNumber,
+        roads : [],
         settlements : [],
         cities : [],
     }
@@ -80,6 +81,13 @@ function addResource(resource, currentPlayer) {
     console.log(currentPlayer.resources)
 }
 
+function addRoadToHex(road, gameState) {
+    let hexesToUpdate = getHexesAtRoad(road.startPoint, road.endPoint, gameState);
+    hexesToUpdate.forEach(hex => {
+        hex.roads.push(road);
+    })
+}
+
 function addSettlementToHex(settlement, gameState) {
     let hexesToUpdate = getHexesAtLocation(settlement.location, gameState);
     hexesToUpdate.forEach(hex => {
@@ -112,6 +120,222 @@ function checkSetupFinished(gameState) {
         }
     }
     return setupDone;
+}
+
+function getHexesAtRoad(start, end, gameState) {
+    let hexes = [];
+    if ((start == 1 && end == 4) || (start == 4 && end == 1)
+     || (start == 8 && end == 4) || (start == 4 && end == 8)
+     || (start == 1 && end == 5) || (start == 5 && end == 1)
+     || (start == 5 && end == 9) || (start == 9 && end == 5)
+     || (start == 9 && end == 13) || (start == 13 && end == 9)
+     || (start == 8 && end == 13) || (start == 13 && end == 8)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 1;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 5 && end == 2) || (start == 2 && end == 5)
+     || (start == 5 && end == 9) || (start == 9 && end == 5)
+     || (start == 9 && end == 14) || (start == 14 && end == 9)
+     || (start == 14 && end == 10) || (start == 10 && end == 14)
+     || (start == 10 && end == 6) || (start == 6 && end == 10)
+     || (start == 2 && end == 6) || (start == 6 && end == 2)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 12;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 6 && end == 3) || (start == 3 && end == 6)
+     || (start == 3 && end == 7) || (start == 7 && end == 3)
+     || (start == 7 && end == 11) || (start == 11 && end == 7)
+     || (start == 11 && end == 15) || (start == 15 && end == 11)
+     || (start == 10 && end == 6) || (start == 6 && end == 10)
+     || (start == 15 && end == 10) || (start == 10 && end == 15)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 11;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 8 && end == 13) || (start == 13 && end == 8)
+     || (start == 8 && end == 12) || (start == 12 && end == 8)
+     || (start == 12 && end == 17) || (start == 17 && end == 12)
+     || (start == 17 && end == 23) || (start == 23 && end == 17)
+     || (start == 23 && end == 18) || (start == 18 && end == 23)
+     || (start == 18 && end == 13) || (start == 13 && end == 18)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 2;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 9 && end == 13) || (start == 13 && end == 9)
+     || (start == 9 && end == 14) || (start == 14 && end == 9)
+     || (start == 14 && end == 19) || (start == 19 && end == 14)
+     || (start == 19 && end == 24) || (start == 24 && end == 19)
+     || (start == 24 && end == 18) || (start == 18 && end == 24)
+     || (start == 18 && end == 13) || (start == 13 && end == 18)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 13;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 10 && end == 14) || (start == 14 && end == 10)
+     || (start == 10 && end == 15) || (start == 15 && end == 10)
+     || (start == 15 && end == 20) || (start == 20 && end == 15)
+     || (start == 20 && end == 25) || (start == 25 && end == 20)
+     || (start == 25 && end == 19) || (start == 19 && end == 25)
+     || (start == 19 && end == 14) || (start == 14 && end == 19)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 18;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 11 && end == 15) || (start == 15 && end == 11)
+     || (start == 11 && end == 16) || (start == 16 && end == 11)
+     || (start == 16 && end == 21) || (start == 21 && end == 16)
+     || (start == 21 && end == 26) || (start == 26 && end == 21)
+     || (start == 26 && end == 20) || (start == 20 && end == 26)
+     || (start == 20 && end == 15) || (start == 15 && end == 20)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 10;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 17 && end == 23) || (start == 23 && end == 17)
+     || (start == 23 && end == 29) || (start == 29 && end == 23)
+     || (start == 29 && end == 34) || (start == 34 && end == 29)
+     || (start == 34 && end == 28) || (start == 28 && end == 34)
+     || (start == 28 && end == 22) || (start == 22 && end == 28)
+     || (start == 22 && end == 17) || (start == 17 && end == 22)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 3;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 23 && end == 18) || (start == 18 && end == 23)
+     || (start == 23 && end == 29) || (start == 29 && end == 23)
+     || (start == 29 && end == 35) || (start == 35 && end == 29)
+     || (start == 35 && end == 30) || (start == 30 && end == 35)
+     || (start == 30 && end == 24) || (start == 24 && end == 30)
+     || (start == 24 && end == 18) || (start == 18 && end == 24)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 14;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 24 && end == 19) || (start == 19 && end == 24)
+     || (start == 19 && end == 25) || (start == 25 && end == 19)
+     || (start == 25 && end == 31) || (start == 31 && end == 25)
+     || (start == 31 && end == 36) || (start == 36 && end == 31)
+     || (start == 30 && end == 24) || (start == 24 && end == 30)
+     || (start == 30 && end == 36) || (start == 36 && end == 30)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 19;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 25 && end == 20) || (start == 20 && end == 25)
+     || (start == 20 && end == 26) || (start == 26 && end == 20)
+     || (start == 25 && end == 31) || (start == 31 && end == 25)
+     || (start == 26 && end == 32) || (start == 32 && end == 26)
+     || (start == 32 && end == 37) || (start == 37 && end == 32)
+     || (start == 31 && end == 37) || (start == 37 && end == 31)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 17;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 26 && end == 21) || (start == 21 && end == 26)
+     || (start == 21 && end == 27) || (start == 27 && end == 21)
+     || (start == 27 && end == 33) || (start == 33 && end == 27)
+     || (start == 26 && end == 32) || (start == 32 && end == 26)
+     || (start == 33 && end == 38) || (start == 38 && end == 33)
+     || (start == 38 && end == 32) || (start == 32 && end == 38)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 9;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 34 && end == 29) || (start == 29 && end == 34)
+     || (start == 29 && end == 35) || (start == 35 && end == 29)
+     || (start == 35 && end == 40) || (start == 40 && end == 35)
+     || (start == 40 && end == 44) || (start == 44 && end == 40)
+     || (start == 44 && end == 39) || (start == 39 && end == 44)
+     || (start == 39 && end == 34) || (start == 34 && end == 39)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 4;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 35 && end == 30) || (start == 30 && end == 35)
+     || (start == 30 && end == 36) || (start == 36 && end == 30)
+     || (start == 35 && end == 40) || (start == 40 && end == 35)
+     || (start == 36 && end == 41) || (start == 41 && end == 36)
+     || (start == 41 && end == 45) || (start == 45 && end == 41)
+     || (start == 40 && end == 45) || (start == 45 && end == 40)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 15;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 36 && end == 31) || (start == 31 && end == 36)
+     || (start == 31 && end == 37) || (start == 37 && end == 31)
+     || (start == 37 && end == 42) || (start == 42 && end == 37)
+     || (start == 36 && end == 41) || (start == 41 && end == 36)
+     || (start == 42 && end == 46) || (start == 46 && end == 42)
+     || (start == 41 && end == 46) || (start == 46 && end == 41)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 16;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 43 && end == 47) || (start == 47 && end == 43)
+     || (start == 42 && end == 47) || (start == 47 && end == 42)
+     || (start == 37 && end == 42) || (start == 42 && end == 37)
+     || (start == 37 && end == 32) || (start == 32 && end == 37)
+     || (start == 32 && end == 38) || (start == 38 && end == 32)
+     || (start == 38 && end == 43) || (start == 43 && end == 38)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 8;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 44 && end == 40) || (start == 40 && end == 44)
+     || (start == 40 && end == 45) || (start == 45 && end == 40)
+     || (start == 45 && end == 49) || (start == 49 && end == 45) 
+     || (start == 49 && end == 52) || (start == 52 && end == 49)
+     || (start == 52 && end == 48) || (start == 48 && end == 52)
+     || (start == 48 && end == 44) || (start == 44 && end == 48)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 5;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 53 && end == 50) || (start == 50 && end == 53)
+     || (start == 49 && end == 53) || (start == 53 && end == 49)
+     || (start == 45 && end == 49) || (start == 49 && end == 45) 
+     || (start == 45 && end == 41) || (start == 41 && end == 45)
+     || (start == 41 && end == 46) || (start == 46 && end == 41)
+     || (start == 46 && end == 50) || (start == 50 && end == 46)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 6;
+        });
+        hexes.push(targetHex);
+    }
+    if ((start == 46 && end == 42) || (start == 42 && end == 46)
+     || (start == 42 && end == 47) || (start == 47 && end == 42)
+     || (start == 47 && end == 51) || (start == 51 && end == 47) 
+     || (start == 51 && end == 54) || (start == 54 && end == 51)
+     || (start == 54 && end == 50) || (start == 50 && end == 54)
+     || (start == 46 && end == 50) || (start == 50 && end == 46)) {
+        let targetHex = gameState.hexes.find(hex => {
+            return hex.hexPosition == 7;
+        });
+        hexes.push(targetHex);
+    }
+
+
+    return hexes;
 }
 
 function getHexesAtLocation(location, gameState) {
@@ -479,6 +703,7 @@ module.exports = {
     generateRandomOrderResources,
     isValidRoad,
     isValidSettlement,
+    addRoadToHex,
     addSettlementToHex,
     addResource,
     checkValidCity,

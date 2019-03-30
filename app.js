@@ -367,6 +367,7 @@ io.on('connection', function (socket) {
                         if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
                             let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
                             gameState.roads.push(road);
+                            boardFunctions.addRoadToHex(road, gameState);
                             currentPlayer.resources.Wood--;
                             currentPlayer.resources.Brick--;
 
@@ -499,9 +500,7 @@ io.on('connection', function (socket) {
             })
             .catch(function(err) {
                 io.sockets.emit('PLAYER_CONNECT', {error: err});
-            })
-
-            
+            })   
         }
 
     })
