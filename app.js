@@ -210,7 +210,6 @@ io.on('connection', function (socket) {
             let id = gameStateRef.push(JSON.stringify(gameState)).key;
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
-                console.log(gameState)
                 gameState._id = id;
                 io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
             })
@@ -384,14 +383,14 @@ io.on('connection', function (socket) {
         // build road 
         if (req.string == 'build_road') {
             let id = req.gameStateId;
-            console.log("front req: ", req)
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
+                gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
+                let currentPlayer = gameState.currentTurn;
                 if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
-                
                     if (gameState.turnPhase !== 'setup_placement') {
                         if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
-                            let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
+                            let road = new Road({ player: currentPlayer._id, start: req.start, end: req.end });
                             gameState.roads.push(road);
                             boardFunctions.addRoadToHex(road, gameState);
                             currentPlayer.resources.Wood--;
@@ -407,8 +406,9 @@ io.on('connection', function (socket) {
                         }
                     // if during setup, don't check for resources
                     } else {
-                        let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
+                        let road = new Road({ player: currentPlayer._id, start: req.start, end: req.end });
                         gameState.roads.push(road);
+                        boardFunctions.addRoadToHex(road, gameState);
                         // store game state
                         gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
                             if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
@@ -429,10 +429,11 @@ io.on('connection', function (socket) {
         // build settlement
         if (req.string == 'build_settlement') {
             let id = req.gameStateId;
-
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
-                if (boardFunctions.isValidSettlement(req.location, gameState.currentTurn, gameState)) {
+                gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
+                let currentPlayer = gameState.currentTurn;
+                if (boardFunctions.isValidSettlement(req.location, currentPlayer, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
                         if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
                             let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
@@ -443,7 +444,7 @@ io.on('connection', function (socket) {
                             currentPlayer.resources.Wheat--;
                             currentPlayer.resources.Sheep--;
                             getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
-                            boardFunctions.checkWinCondition(currentPlayer, gameState);
+                            boardFunctions.checkWinCondition(boardFunctions.getPlayerByID(currentPlayer, gameState), gameState);
                             // store game state
                             gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
                                 if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
@@ -491,6 +492,7 @@ io.on('connection', function (socket) {
 
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
+                gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
                 if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
                     if (currentPlayer.resources.Ore > 2 && currentPlayer.resources.Wheat > 1) {
@@ -501,7 +503,7 @@ io.on('connection', function (socket) {
                         currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
                         currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
                         getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
-                        boardFunctions.checkWinCondition(currentPlayer, gameState);
+                        boardFunctions.checkWinCondition(boardFunctions.getPlayerByID(currentPlayer, gameState), gameState);
                         // store game state
                         gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
                             if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
