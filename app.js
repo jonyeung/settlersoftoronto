@@ -211,7 +211,7 @@ io.on('connection', function (socket) {
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
                 console.log(gameState)
-                gameState.id = id;
+                gameState._id = id;
                 io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
             })
 
