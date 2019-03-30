@@ -85,11 +85,10 @@ export const initSignIn = (email, password) => {
       password: password,
     })
       .then((res) => {
-        console.log('res', res.data)
         dispatch(signIn(res.data))
         console.log('res.data.idToken', res.data.idToken)
         console.log('res.data.idTokenExpiryDate', res.data.idTokenExpiryDate)
-        dispatch(loginActions.authCheckState(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
+        dispatch(loginActions.authSignIn(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
       })
       .catch((error) => {
         console.log('error: ', error.response)

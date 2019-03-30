@@ -129,7 +129,6 @@ const mapDispatchToProps = dispatch => {
     onInitSignIn: (email, password) => dispatch(signInActions.initSignIn(email, password)),
     resetSignUpReducer: () => dispatch(signUpActions.signUpReset()),
     resetSignInReducer: () => dispatch(signInActions.signInReset()),
-    // login: (idToken, idTokenExpiryDate) => dispatch(loginActions.authCheckState(idToken, idTokenExpiryDate))
   }
 }
 

@@ -57,22 +57,32 @@ class GameLobby extends Component {
   }
 
   render() {
+    let gameLobbyRoomsDisplay =
+      <div className={styles.GameRoomsList}>
+        <p className={styles.SignInToPlayMessage}>Welcome to the Settlers of Toronto. Sign in to play!</p>
+      </div>
+    if (this.props.authState.signedIn === true) {
+      gameLobbyRoomsDisplay =
+        <div className={styles.GameRoomsList}>
+          <div>
+            <h1>Games Rooms</h1>
+
+          </div>
+          {this.props.rooms.map((room) => {
+            return (
+              <GameRoomSlot key={room.name} room={room} joinRoomAction={() => { this.props.initJoinRoom(5, this.props.history) }}></GameRoomSlot>
+            )
+          })}
+        </div>
+    }
+
     return (
       <>
         <div className={styles.Content}>
           <NavBar toggleLoginModal={this.toggleLoginModal} toggleDrawer={this.toggleDrawer} />
           <Drawer isOpen={this.state.showDrawer} closeDrawer={this.closeDrawer} toggleLoginModal={this.toggleLoginModal}></Drawer>
           <Login isOpen={this.state.showLoginModal} closeLoginModal={this.closeModal}></Login>
-          <h1>Games Rooms</h1>
-          <div className={styles.GameRoomsList}>
-            {this.props.rooms.map((room) => {
-              return (
-                <>
-                  <GameRoomSlot room={room} joinRoomAction={()=>{this.props.initJoinRoom(5, this.props.history)}}></GameRoomSlot>
-                </>
-              )
-            })}
-          </div>
+          {gameLobbyRoomsDisplay}
         </div>
         <Footer></Footer>
       </>
@@ -82,6 +92,7 @@ class GameLobby extends Component {
 
 const mapStateToProps = state => {
   return {
+    authState: state.authReducer,
     rooms: state.lobbyReducer.rooms,
     error: state.lobbyReducer.error
   };

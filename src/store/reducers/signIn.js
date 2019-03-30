@@ -7,8 +7,6 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-  // console.log('sign in reducer')
-  // console.log(action)
   switch (action.type) {
     case actionTypes.SIGN_IN:
       return {

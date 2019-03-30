@@ -3,7 +3,7 @@ import axios from '../../axios-projects';
 
 export const setRooms = (rooms) => {
   return {
-    type: actionTypes.JOIN_ROOM,
+    type: actionTypes.SET_ROOMS,
     rooms: rooms
   }
 }
@@ -17,9 +17,10 @@ export const setRoomsFailed = () => {
 export const initRefreshRoom = () => {
   return (dispatch) => {
 
-    axios.get('getRooms/' + '.json')
+    axios.get('http://localhost:3000/getRooms')
       .then(res => {
-        dispatch(setRooms(res.data));
+        console.log('res.data.rooms', res.data.rooms)
+        dispatch(setRooms(res.data.rooms));
       })
       .catch(error => {
         dispatch(setRoomsFailed());

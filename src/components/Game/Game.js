@@ -46,8 +46,7 @@ class Game extends Component {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'player_join',
         username: 'david',
-        gameID: this.props.gameStateId,
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -55,7 +54,7 @@ class Game extends Component {
       console.log('this.props.gameStateId', this.props.gameStateId)
       this.socket.emit('PLAYER_CONNECT', {
         string: 'start_game',
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -63,7 +62,7 @@ class Game extends Component {
       console.log('this.props.gameStateId', this.props.gameStateId)
       this.socket.emit('PLAYER_CONNECT', {
         string: 'begin_main_game',
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -71,7 +70,7 @@ class Game extends Component {
       console.log('this.props.gameStateId', this.props.gameStateId)
       this.socket.emit('PLAYER_CONNECT', {
         string: 'end_turn',
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -79,7 +78,7 @@ class Game extends Component {
       console.log('this.props.gameStateId', this.props.gameStateId)
       this.socket.emit('PLAYER_CONNECT', {
         string: 'seven_roll',
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -88,7 +87,7 @@ class Game extends Component {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'move_robber',
         robberPosition: '4',
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -98,7 +97,7 @@ class Game extends Component {
         string: 'build_starting_road',
         start: 5,
         end: 9,
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -108,7 +107,7 @@ class Game extends Component {
         string: 'build_starting_road',
         start: 24,
         end: 30,
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -117,7 +116,7 @@ class Game extends Component {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'build_starting_settlement',
         location: 9,
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -126,7 +125,7 @@ class Game extends Component {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'build_city',
         location: 9,
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -135,7 +134,7 @@ class Game extends Component {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'build_starting_settlement',
         location: 30,
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -144,7 +143,7 @@ class Game extends Component {
       this.socket.emit('PLAYER_CONNECT', {
         string: 'regular_roll',
         roll: 5,
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 
@@ -154,7 +153,7 @@ class Game extends Component {
         string: 'build_road',
         start: 5,
         end: 9,
-        gameState: this.props.gameState
+        gameStateId: this.props.gameStateId,
       })
     }
 

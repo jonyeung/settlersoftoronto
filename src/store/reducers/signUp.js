@@ -23,8 +23,6 @@ const reducer = (state = initialState, action) => {
         loading: false
       }
     case actionTypes.SIGN_UP_RESET:
-    console.log('inside sign up reset')
-    console.log(state)
       return {
         ...initialState
       }

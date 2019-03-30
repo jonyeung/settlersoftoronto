@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-
+import * as authActions from '../../store/actions/auth';
 import styles from './NavBar.module.css';
 
 class NavBar extends Component {
@@ -15,7 +15,7 @@ class NavBar extends Component {
       rightDisplay =
         <>
           <p className={styles.LoggedInAs}>Logged in as: {this.props.authState.username}</p>
-          <a onClick={()=>{}}>
+          <a onClick={this.props.authReset}>
             <div className={styles.NavItem}>Sign Out</div>
           </a>
         </>
@@ -42,8 +42,14 @@ class NavBar extends Component {
 
 const mapStateToProps = state => {
   return {
-    authState: state.authReducer
+    authState: state.authReducer,
   };
 };
 
-export default connect(mapStateToProps, null, null, { pure: false })(NavBar);
+const mapDispatchToProps = dispatch => {
+  return {
+    authReset: () => dispatch(authActions.authReset()),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(NavBar);
