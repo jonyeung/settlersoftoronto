@@ -2,6 +2,7 @@
 const express = require('express');
 const firebase = require('firebase');
 const app = express();
+const cors = require('cors');
 const socket = require('socket.io');
 const boardFunctions = require('./board.js');
 const serviceAccount = require('./c09-project-firebase-adminsdk-xuxa7-da3b397950.json');
@@ -10,7 +11,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static('public'));
+app.use(express.static('build/static'));
 
 firebase.initializeApp({
     serviceAccount: "./c09-project-firebase-adminsdk-xuxa7-da3b397950.json",
@@ -18,6 +19,8 @@ firebase.initializeApp({
 })
 let ref = firebase.database().ref().child('c09-project');
 let gameStateRef = ref.child('gameState');
+
+app.use(cors());
 
 app.use(function (req, res, next) {
     console.log("HTTP request", req.method, req.url, req.body);
@@ -206,7 +209,10 @@ io.on('connection', function (socket) {
             let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
             let id = gameStateRef.push(JSON.stringify(gameState)).key;
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                let gameState = JSON.parse(snapshot.val());
+                console.log(gameState)
+                gameState._id = id;
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
             })
 
         }
@@ -214,7 +220,7 @@ io.on('connection', function (socket) {
         if (req.string == 'get_game_state') {
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify(snapshot.val()));
             })
         }
 
@@ -223,22 +229,18 @@ io.on('connection', function (socket) {
             let newPlayer = new Player(req.username);
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 gameState.players.push(newPlayer);
                 gameState.maxPlayerNum++;
                 // store game state
-                gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                    console.log('hello ')
-                })
-                .catch(function(err) {
-                    console.log(err);
-                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
             .catch(function(err) {
                 console.log(err);
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
             })
             
         }
@@ -247,18 +249,16 @@ io.on('connection', function (socket) {
         if (req.string == 'start_game') {
             let id = req.gameStateId
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 gameState.turnPhase = 'setup_placement';
-                gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                })
-                .catch(function(err) {
-                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
             .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
             })
 
             
@@ -268,7 +268,7 @@ io.on('connection', function (socket) {
         if (req.string == 'end_turn') {
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 gameState.currentPlayerNum++;
                 if (gameState.currentPlayerNum == gameState.maxPlayerNum) {
                     // go to player 1
@@ -282,15 +282,13 @@ io.on('connection', function (socket) {
                 }
                 
                 // store game state
-                gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                })
-                .catch(function(err) {
-                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
             .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
             })
 
             
@@ -300,18 +298,16 @@ io.on('connection', function (socket) {
         if (req.string == 'seven_roll') {
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 gameState.turnPhase = 'move_robber';
                 // store game state
-                gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                })
-                .catch(function(err) {
-                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
             .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
             })   
         }
 
@@ -319,7 +315,7 @@ io.on('connection', function (socket) {
         if (req.string == 'move_robber') {
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 let newRobberHex = req.robberPosition;
                 // remove robber from previous location
                 let previousHex = gameState.hexes.find(hex => {
@@ -338,15 +334,13 @@ io.on('connection', function (socket) {
                 gameState.turnPhase = 'build/trade/devcard_phase';
 
                 // store game state
-                gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                })
-                .catch(function(err) {
-                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
             .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
             }) 
 
             
@@ -358,7 +352,7 @@ io.on('connection', function (socket) {
             let id = req.gameStateId;
 
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 gameState.hexes.forEach(hex => {
                     if (hex.diceNumber == roll && hex.robber == false) {
                         // give resources to all the players that own a settlement on this hex
@@ -374,16 +368,14 @@ io.on('connection', function (socket) {
                     }
                 });
                 gameState.turnPhase = 'build/trade/devcard_phase';
-                // gameState = storeGameState(gameState);
-                gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                })
-                .catch(function(err) {
-                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                // store game state
+                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
             .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
             }) 
 
             
@@ -392,46 +384,43 @@ io.on('connection', function (socket) {
         // build road 
         if (req.string == 'build_road') {
             let id = req.gameStateId;
-
+            console.log("front req: ", req)
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                 
                     if (gameState.turnPhase !== 'setup_placement') {
                         if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
                             let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
                             gameState.roads.push(road);
+                            boardFunctions.addRoadToHex(road, gameState);
                             currentPlayer.resources.Wood--;
                             currentPlayer.resources.Brick--;
 
                             // store game state
-                            gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                            })
-                            .catch(function(err) {
-                                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                            gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                                if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                                io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                             })
                         } else {
-                            io.sockets.emit('PLAYER_CONNECT', {error: 'Insufficient resources'});
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Insufficient resources'}));
                         }
                     // if during setup, don't check for resources
                     } else {
                         let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
                         gameState.roads.push(road);
                         // store game state
-                        gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                            io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                        })
-                        .catch(function(err) {
-                            io.sockets.emit('PLAYER_CONNECT', {error: err});
+                        gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                         })
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', {error: 'Invalid road position'});
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Invalid road position'}));
                 }
             })
             .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
             })
 
             
@@ -442,7 +431,7 @@ io.on('connection', function (socket) {
             let id = req.gameStateId;
 
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 if (boardFunctions.isValidSettlement(req.location, gameState.currentTurn, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
                         if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
@@ -456,14 +445,12 @@ io.on('connection', function (socket) {
                             getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
                             boardFunctions.checkWinCondition(currentPlayer, gameState);
                             // store game state
-                            gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                            })
-                            .catch(function(err) {
-                                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                            gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                                if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                                io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                             })
                         } else {
-                            io.sockets.emit('PLAYER_CONNECT', {error: 'Insufficient resources'});
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Insufficient resources'}));
                         }
                     // if during setup, don't check for resources
                     } else {
@@ -478,19 +465,17 @@ io.on('connection', function (socket) {
                         }
                         getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
                         // store game state
-                        gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                            io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                        })
-                        .catch(function(err) {
-                            io.sockets.emit('PLAYER_CONNECT', {error: err});
+                        gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                         })
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', {error: 'Invalid settlement position'});
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Invalid settlement position'}));
                 }
             })
             .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
             })
 
             
@@ -505,7 +490,7 @@ io.on('connection', function (socket) {
             let id = req.gameStateId;
 
             gameStateRef.child(id).once('value').then(function (snapshot) {
-                let gameState = snapshot.val();
+                let gameState = JSON.parse(snapshot.val());
                 let currentPlayer = gameState.currentTurn;
                 if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
                     if (currentPlayer.resources.Ore > 2 && currentPlayer.resources.Wheat > 1) {
@@ -518,24 +503,20 @@ io.on('connection', function (socket) {
                         getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
                         boardFunctions.checkWinCondition(currentPlayer, gameState);
                         // store game state
-                        gameStateRef.child(id).set(gameState).then(function(snapshot) {
-                            io.sockets.emit('PLAYER_CONNECT', snapshot.val());
-                        })
-                        .catch(function(err) {
-                            io.sockets.emit('PLAYER_CONNECT', {error: err});
+                        gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
+                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                         })
                     } else {
-                        io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
+                        io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Insufficient Resources'}));
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', new Error('Invalid city position'))
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Invalid city position'}));
                 }
             })
             .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', {error: err});
-            })
-
-            
+                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+            })   
         }
 
     })

@@ -24,7 +24,7 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-  console.log('reducer', state)
+  // console.log('reducer', state)
   switch (action.type) {
     case actionTypes.SELECT_EDGE:
       return {
