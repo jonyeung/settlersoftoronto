@@ -80,7 +80,7 @@ export const initSignIn = (email, password) => {
 
   return (dispatch) => {
     dispatch(loading(true));
-    axios.post('https://localhost:3000/signIn', {
+    axios.post('http://localhost:3000/signIn', {
       email: email,
       password: password,
     })
