@@ -22,7 +22,7 @@ class LandingPage extends Component {
   render() {
     return (
       <>
-        <GameLobby></GameLobby>        
+        <GameLobby></GameLobby>
       </>
     )
   }

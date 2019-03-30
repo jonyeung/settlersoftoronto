@@ -15,3 +15,21 @@
   font-weight: bold;
   font-size: 25px;
 }
+
+.Content .Refresh {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 25px;
+}
+
+.Content .Refresh:hover {
+  cursor: pointer;
+  color: rgb(247, 103, 36);
+}
+
+.Horizontal {
+  display: flex;
+  height: 60px;
+  margin-top: auto;
+  margin-bottom: auto;
+}

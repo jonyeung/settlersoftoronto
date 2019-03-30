@@ -10,7 +10,7 @@ export const joinRoom = (room) => {
 
 export const leaveRoom = () => {
   return {
-    type: actionTypes.JOIN_ROOM,
+    type: actionTypes.LEAVE_ROOM,
   }
 }
 
