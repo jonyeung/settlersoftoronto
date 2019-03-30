@@ -184,9 +184,6 @@ let server = app.listen(PORT, function (err) {
     else console.log("HTTP server on http://localhost:%s", PORT);
 });
 
-
-app.get('/gameState/:id')
-
 let io = socket(server);
 
 io.on('connection', function (socket) {
