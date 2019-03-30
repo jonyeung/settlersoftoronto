@@ -185,6 +185,7 @@ let server = app.listen(PORT, function (err) {
 });
 
 
+app.get('/gameState/:id')
 
 let io = socket(server);
 
@@ -215,208 +216,330 @@ io.on('connection', function (socket) {
 
         }
 
+        if (req.string == 'get_game_state') {
+            let id = req.gameStateId;
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+            })
+        }
+
         // new player joins
         if (req.string == 'player_join') {
             let newPlayer = new Player(req.username);
-            // let gameState = req.gameState;
-            // let gameState = firebase.database().ref('/gameState/_id').once("123456").then(function(state) {
-            //     console.log(state);
-            // })
-            gameState.players.push(newPlayer);
-            gameState.maxPlayerNum++;
-            io.sockets.emit('PLAYER_CONNECT', gameState);
-            // gameStatesDB.update({'gameName': gameName }, [{ $push: { 'players': newPlayer } }, { $inc: { 'maxPlayerNum': 1 } }], function (err, state) {
-            //     if (err) io.sockets.emit('PLAYER_CONNECT', err);
-            //     console.log(state)
-            //     io.sockets.emit('PLAYER_CONNECT', state);
-            // });
+            let id = req.gameStateId;
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                gameState.players.push(newPlayer);
+                gameState.maxPlayerNum++;
+                // store game state
+                gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                })
+                .catch(function(err) {
+                    console.log(err);
+                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                })
+            })
+            .catch(function(err) {
+                console.log(err);
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            })
+            
         }
 
         // game starts
         if (req.string == 'start_game') {
-            let gameState = req.gameState;
-            gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
-            gameState.turnPhase = 'setup_placement';
-            // gameState = storeGameState(gameState);
-            io.sockets.emit('PLAYER_CONNECT', gameState);
-        }
+            let id = req.gameStateId
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
+                gameState.turnPhase = 'setup_placement';
+                gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                })
+                .catch(function(err) {
+                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                })
+            })
+            .catch(function(err) {
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            })
 
-        // begin main phase (after all setup done)
-        if (req.string == 'begin_main_game') {
-            let gameState = req.gameState;
-            gameState.currentPlayerNum = 0;
-            gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
-            gameState.turnPhase = 'roll_phase';
-            // gameState = storeGameState(gameState);
-            io.sockets.emit('PLAYER_CONNECT', gameState)
+            
         }
 
         // ends current player's turn and goes to the next player
         if (req.string == 'end_turn') {
-            let gameState = req.gameState;
-            gameState.currentPlayerNum++;
-            if (gameState.currentPlayerNum == gameState.maxPlayerNum) {
-                // go to player 1
-                gameState.currentPlayerNum = 0;
-            }
-            gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
-            if (boardFunctions.checkSetupFinished(gameState)) {
-                gameState.turnPhase = 'roll_phase';
-            }
-            // gameState = storeGameState(gameState);
-            io.sockets.emit('PLAYER_CONNECT', gameState);
+            let id = req.gameStateId;
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                gameState.currentPlayerNum++;
+                if (gameState.currentPlayerNum == gameState.maxPlayerNum) {
+                    // go to player 1
+                    gameState.currentPlayerNum = 0;
+                }
+                gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
+                
+                // if setup is all done, change the game phase to roll phase (main game begins)
+                if (boardFunctions.checkSetupFinished(gameState)) {
+                    gameState.turnPhase = 'roll_phase';
+                }
+                
+                // store game state
+                gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                })
+                .catch(function(err) {
+                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                })
+            })
+            .catch(function(err) {
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            })
+
+            
         }
 
         // Dice roll (7)
         if (req.string == 'seven_roll') {
-            let gameState = req.gameState;
-            gameState.turnPhase = 'move_robber';
-            // gameState = storeGameState(gameState);
-            io.sockets.emit('PLAYER_CONNECT', gameState);
+            let id = req.gameStateId;
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                gameState.turnPhase = 'move_robber';
+                // store game state
+                gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                })
+                .catch(function(err) {
+                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                })
+            })
+            .catch(function(err) {
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            })   
         }
 
         // move the robber to the new hex
         if (req.string == 'move_robber') {
-            let gameState = req.gameState
-            let newRobberHex = req.robberPosition;
-            // remove robber from previous location
-            let previousHex = gameState.hexes.find(hex => {
-                return hex.robber === true;
-            });
-            previousHex.robber = false;
-            // set the new robber hex
-            let newHex = {
-                robber: false
-            };
-            newHex = gameState.hexes.find(hex => {
-                return hex.hexPosition == newRobberHex;
-            })
-            newHex.robber = true;
+            let id = req.gameStateId;
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                let newRobberHex = req.robberPosition;
+                // remove robber from previous location
+                let previousHex = gameState.hexes.find(hex => {
+                    return hex.robber === true;
+                });
+                previousHex.robber = false;
+                // set the new robber hex
+                let newHex = {
+                    robber: false
+                };
+                newHex = gameState.hexes.find(hex => {
+                    return hex.hexPosition == newRobberHex;
+                })
+                newHex.robber = true;
+    
+                gameState.turnPhase = 'build/trade/devcard_phase';
 
-            gameState.turnPhase = 'build/trade/devcard_phase';
-            // gameState = storeGameState(gameState);
-            io.sockets.emit('PLAYER_CONNECT', gameState);
+                // store game state
+                gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                })
+                .catch(function(err) {
+                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                })
+            })
+            .catch(function(err) {
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            }) 
+
+            
         }
 
         // Dice roll (2-6, 8-12): give out resources to players
         if (req.string == 'regular_roll') {
-            let gameState = req.gameState
             let roll = req.roll;
+            let id = req.gameStateId;
 
-            gameState.hexes.forEach(hex => {
-                if (hex.diceNumber == roll && hex.robber == false) {
-                    // give resources to all the players that own a settlement on this hex
-                    hex.settlements.forEach(settlement => {
-                        boardFunctions.addResource(hex.resourceType, getPlayerByID(settlement.player, gameState));
-                    });
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                gameState.hexes.forEach(hex => {
+                    if (hex.diceNumber == roll && hex.robber == false) {
+                        // give resources to all the players that own a settlement on this hex
+                        hex.settlements.forEach(settlement => {
+                            boardFunctions.addResource(hex.resourceType, getPlayerByID(settlement.player, gameState));
+                        });
+    
+                        // give resources to all the players that own a city on this hex
+                        hex.cities.forEach(city => {
+                            boardFunctions.addResource(hex.resourceType, getPlayerByID(city.player, gameState));
+                            boardFunctions.addResource(hex.resourceType, getPlayerByID(city.player, gameState));
+                        });
+                    }
+                });
+                gameState.turnPhase = 'build/trade/devcard_phase';
+                // gameState = storeGameState(gameState);
+                gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                    io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                })
+                .catch(function(err) {
+                    io.sockets.emit('PLAYER_CONNECT', {error: err});
+                })
+            })
+            .catch(function(err) {
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            }) 
 
-                    // give resources to all the players that own a city on this hex
-                    hex.cities.forEach(city => {
-                        boardFunctions.addResource(hex.resourceType, getPlayerByID(city.player, gameState));
-                        boardFunctions.addResource(hex.resourceType, getPlayerByID(city.player, gameState));
-                    });
-                }
-            });
-            gameState.turnPhase = 'build/trade/devcard_phase';
-            // gameState = storeGameState(gameState);
-            io.sockets.emit('PLAYER_CONNECT', gameState);
+            
         }
 
         // build road 
         if (req.string == 'build_road') {
-            let gameState = req.gameState;
+            let id = req.gameStateId;
 
-            if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                 
-                if (gameState.turnPhase !== 'setup_placement') {
-                    if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
+                    if (gameState.turnPhase !== 'setup_placement') {
+                        if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
+                            let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
+                            gameState.roads.push(road);
+                            currentPlayer.resources.Wood--;
+                            currentPlayer.resources.Brick--;
+
+                            // store game state
+                            gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                            })
+                            .catch(function(err) {
+                                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                            })
+                        } else {
+                            io.sockets.emit('PLAYER_CONNECT', {error: 'Insufficient resources'});
+                        }
+                    // if during setup, don't check for resources
+                    } else {
                         let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
                         gameState.roads.push(road);
-                        currentPlayer.resources.Wood--;
-                        currentPlayer.resources.Brick--;
-                        io.sockets.emit('PLAYER_CONNECT', gameState);
-                    } else {
-                        io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
+                        // store game state
+                        gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                            io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                        })
+                        .catch(function(err) {
+                            io.sockets.emit('PLAYER_CONNECT', {error: err});
+                        })
                     }
-                // if during setup, don't check for resources
                 } else {
-                    let road = new Road({ player: currentPlayer, start: req.start, end: req.end });
-                    gameState.roads.push(road);
-                    io.sockets.emit('PLAYER_CONNECT', gameState);
+                    io.sockets.emit('PLAYER_CONNECT', {error: 'Invalid road position'});
                 }
-            } else {
-                io.sockets.emit('PLAYER_CONNECT', new Error('Invalid road position'));
-            }
+            })
+            .catch(function(err) {
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            })
+
+            
         }
 
         // build settlement
         if (req.string == 'build_settlement') {
-            let gameState = req.gameState;
+            let id = req.gameStateId;
 
-            if (boardFunctions.isValidSettlement(req.location, gameState.currentTurn, gameState)) {
-                if (gameState.turnPhase !== 'setup_placement') {
-                    if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                if (boardFunctions.isValidSettlement(req.location, gameState.currentTurn, gameState)) {
+                    if (gameState.turnPhase !== 'setup_placement') {
+                        if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
+                            let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
+                            gameState.settlements.push(settlement);
+                            boardFunctions.addSettlementToHex(settlement, gameState);
+                            currentPlayer.resources.Wood--;
+                            currentPlayer.resources.Brick--;
+                            currentPlayer.resources.Wheat--;
+                            currentPlayer.resources.Sheep--;
+                            getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
+                            boardFunctions.checkWinCondition(currentPlayer, gameState);
+                            // store game state
+                            gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                                io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                            })
+                            .catch(function(err) {
+                                io.sockets.emit('PLAYER_CONNECT', {error: err});
+                            })
+                        } else {
+                            io.sockets.emit('PLAYER_CONNECT', {error: 'Insufficient resources'});
+                        }
+                    // if during setup, don't check for resources
+                    } else {
                         let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
                         gameState.settlements.push(settlement);
-                        boardFunctions.addSettlementToHex(settlement, gameState);
-                        currentPlayer.resources.Wood--;
-                        currentPlayer.resources.Brick--;
-                        currentPlayer.resources.Wheat--;
-                        currentPlayer.resources.Sheep--;
+                        getPlayerByID(currentPlayer._id, gameState).settlementCount++;
+                        // if the settlement is the second setup settlement, give the player the connecting resources
+                        if (getPlayerByID(currentPlayer._id, gameState).settlementCount == 2) {
+                            boardFunctions.addSettlementToHexWithResources(settlement, currentPlayer._id, gameState);
+                        } else {
+                            boardFunctions.addSettlementToHex(settlement, gameState);
+                        }
                         getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
-                        boardFunctions.checkWinCondition(currentPlayer, gameState);
-                        // gameState = storeGameState(gameState);
-                        io.sockets.emit('PLAYER_CONNECT', gameState);
-                    } else {
-                        io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
+                        // store game state
+                        gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                            io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                        })
+                        .catch(function(err) {
+                            io.sockets.emit('PLAYER_CONNECT', {error: err});
+                        })
                     }
-                // if during setup, don't check for resources
                 } else {
-                    let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
-                    gameState.settlements.push(settlement);
-                    getPlayerByID(currentPlayer._id, gameState).settlementCount++;
-                    // if the settlement is the second setup settlement, give the player the connecting resources
-                    if (getPlayerByID(currentPlayer._id, gameState).settlementCount == 2) {
-                        boardFunctions.addSettlementToHexWithResources(settlement, currentPlayer._id, gameState);
-                    } else {
-                        boardFunctions.addSettlementToHex(settlement, gameState);
-                    }
-                    getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
-                    // gameState = storeGameState(gameState);
-                    io.sockets.emit('PLAYER_CONNECT', gameState);
+                    io.sockets.emit('PLAYER_CONNECT', {error: 'Invalid settlement position'});
                 }
-            } else {
-                io.sockets.emit('PLAYER_CONNECT', new Error('Invalid settlement position'));
-            }
+            })
+            .catch(function(err) {
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            })
+
+            
         }
 
         // upgrade settlement to city
         if (req.string == 'build_city') {
-            let gameState = req.gameState;
-            let currentPlayer = gameState.currentTurn;
-
             // REMOVE THIS FOR PRODUCTION
-            currentPlayer.resources.Ore = currentPlayer.resources.Ore + 3;
-            currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 2;
+            // currentPlayer.resources.Ore = currentPlayer.resources.Ore + 3;
+            // currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 2;
 
-            if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
-                if (currentPlayer.resources.Ore > 2 && currentPlayer.resources.Wheat > 1) {
-                    boardFunctions.deleteSettlementAtLocation(req.location, gameState);
-                    let city = new City({ player: currentPlayer._id, location: req.location });
-                    gameState.cities.push(city);
-                    boardFunctions.addCityToHex(city, gameState);
-                    currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
-                    currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
-                    getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
-                    boardFunctions.checkWinCondition(currentPlayer, gameState);
-                    // gameState = storeGameState(gameState);
-                    io.sockets.emit('PLAYER_CONNECT', gameState);
+            let id = req.gameStateId;
+
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+                let currentPlayer = gameState.currentTurn;
+                if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
+                    if (currentPlayer.resources.Ore > 2 && currentPlayer.resources.Wheat > 1) {
+                        boardFunctions.deleteSettlementAtLocation(req.location, gameState);
+                        let city = new City({ player: currentPlayer._id, location: req.location });
+                        gameState.cities.push(city);
+                        boardFunctions.addCityToHex(city, gameState);
+                        currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
+                        currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
+                        getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
+                        boardFunctions.checkWinCondition(currentPlayer, gameState);
+                        // store game state
+                        gameStateRef.child(id).set(gameState).then(function(snapshot) {
+                            io.sockets.emit('PLAYER_CONNECT', snapshot.val());
+                        })
+                        .catch(function(err) {
+                            io.sockets.emit('PLAYER_CONNECT', {error: err});
+                        })
+                    } else {
+                        io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
+                    }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', new Error('Insufficient resources'));
+                    io.sockets.emit('PLAYER_CONNECT', new Error('Invalid city position'))
                 }
-            } else {
-                io.sockets.emit('PLAYER_CONNECT', new Error('Invalid city position'))
-            }
+            })
+            .catch(function(err) {
+                io.sockets.emit('PLAYER_CONNECT', {error: err});
+            })
+
+            
         }
 
     })
