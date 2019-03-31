@@ -39,12 +39,12 @@ export let Row1 = [
 
     HexId={1}
 
-    TopLeftEdgeId={1}
-    TopRightEdgeId={2}
-    MiddleLeftEdgeId={7}
-    MiddleRightEdgeId={8}
-    BottomLeftEdgeId={12}
-    BottomRightEdgeId={13}
+    TopLeftEdgeId={[4, 1]}
+    TopRightEdgeId={[1, 5]}
+    MiddleLeftEdgeId={[4, 8]}
+    MiddleRightEdgeId={[5, 9]}
+    BottomLeftEdgeId={[8, 13]}
+    BottomRightEdgeId={[13, 9]}
 
     TopMiddleCornerId={1}
     TopLeftCornerId={4}
@@ -52,6 +52,7 @@ export let Row1 = [
     BottomLeftCornerId={8}
     BottomRightCornerId={9}
     BottomMiddleCornerId={13}
+
   ></Tile>,
 
   <Tile
@@ -71,12 +72,12 @@ export let Row1 = [
 
     HexId={12}
 
-    TopLeftEdgeId={3}
-    TopRightEdgeId={4}
-    MiddleLeftEdgeId={8}
-    MiddleRightEdgeId={9}
-    BottomLeftEdgeId={14}
-    BottomRightEdgeId={15}
+    TopLeftEdgeId={[5, 2]}
+    TopRightEdgeId={[2, 6]}
+    MiddleLeftEdgeId={[5, 9]}
+    MiddleRightEdgeId={[6, 10]}
+    BottomLeftEdgeId={[9, 14]}
+    BottomRightEdgeId={[14, 10]}
 
     TopMiddleCornerId={2}
     TopLeftCornerId={5}
@@ -100,15 +101,15 @@ export let Row1 = [
     CornerBottomRightAction={() => { console.log('CornerBottomRightAction') }}
     CornerBottomMiddleAction={() => { console.log('CornerBottomMiddleAction') }}
     HexCircleAction={() => { console.log('HexCircleAction') }}
-    
+
     HexId={11}
 
-    TopLeftEdgeId={5}
-    TopRightEdgeId={6}
-    MiddleLeftEdgeId={9}
-    MiddleRightEdgeId={10}
-    BottomLeftEdgeId={16}
-    BottomRightEdgeId={17}
+    TopLeftEdgeId={[6, 3]}
+    TopRightEdgeId={[3, 7]}
+    MiddleLeftEdgeId={[6, 10]}
+    MiddleRightEdgeId={[7, 11]}
+    BottomLeftEdgeId={[10, 15]}
+    BottomRightEdgeId={[15, 11]}
 
     TopMiddleCornerId={3}
     TopLeftCornerId={6}
@@ -142,12 +143,12 @@ export let Row2 = [
 
     HexId={2}
 
-    TopLeftEdgeId={11}
-    TopRightEdgeId={12}
-    MiddleLeftEdgeId={19}
-    MiddleRightEdgeId={20}
-    BottomLeftEdgeId={25}
-    BottomRightEdgeId={26}
+    TopLeftEdgeId={[12, 8]}
+    TopRightEdgeId={[8, 13]}
+    MiddleLeftEdgeId={[12, 17]}
+    MiddleRightEdgeId={[13, 18]}
+    BottomLeftEdgeId={[17, 23]}
+    BottomRightEdgeId={[23, 18]}
 
     TopMiddleCornerId={8}
     TopLeftCornerId={12}
@@ -172,12 +173,12 @@ export let Row2 = [
 
     HexId={13}
 
-    TopLeftEdgeId={13}
-    TopRightEdgeId={14}
-    MiddleLeftEdgeId={20}
-    MiddleRightEdgeId={21}
-    BottomLeftEdgeId={27}
-    BottomRightEdgeId={28}
+    TopLeftEdgeId={[13, 9]}
+    TopRightEdgeId={[9, 14]}
+    MiddleLeftEdgeId={[13, 18]}
+    MiddleRightEdgeId={[14, 19]}
+    BottomLeftEdgeId={[18, 24]}
+    BottomRightEdgeId={[24, 19]}
 
     TopMiddleCornerId={9}
     TopLeftCornerId={13}
@@ -202,12 +203,12 @@ export let Row2 = [
 
     HexId={18}
 
-    TopLeftEdgeId={15}
-    TopRightEdgeId={16}
-    MiddleLeftEdgeId={21}
-    MiddleRightEdgeId={22}
-    BottomLeftEdgeId={29}
-    BottomRightEdgeId={30}
+    TopLeftEdgeId={[14, 10]}
+    TopRightEdgeId={[10, 15]}
+    MiddleLeftEdgeId={[14, 19]}
+    MiddleRightEdgeId={[15, 20]}
+    BottomLeftEdgeId={[19, 25]}
+    BottomRightEdgeId={[25, 20]}
 
     TopMiddleCornerId={10}
     TopLeftCornerId={14}
@@ -232,12 +233,12 @@ export let Row2 = [
 
     HexId={10}
 
-    TopLeftEdgeId={17}
-    TopRightEdgeId={18}
-    MiddleLeftEdgeId={22}
-    MiddleRightEdgeId={23}
-    BottomLeftEdgeId={31}
-    BottomRightEdgeId={32}
+    TopLeftEdgeId={[15, 11]}
+    TopRightEdgeId={[11, 16]}
+    MiddleLeftEdgeId={[15, 20]}
+    MiddleRightEdgeId={[16, 21]}
+    BottomLeftEdgeId={[20, 26]}
+    BottomRightEdgeId={[26, 21]}
 
     TopMiddleCornerId={11}
     TopLeftCornerId={15}
@@ -272,12 +273,12 @@ export let Row3 = [
 
     HexId={3}
 
-    TopLeftEdgeId={24}
-    TopRightEdgeId={25}
-    MiddleLeftEdgeId={34}
-    MiddleRightEdgeId={35}
-    BottomLeftEdgeId={40}
-    BottomRightEdgeId={41}
+    TopLeftEdgeId={[22, 17]}
+    TopRightEdgeId={[17, 23]}
+    MiddleLeftEdgeId={[22, 28]}
+    MiddleRightEdgeId={[23, 29]}
+    BottomLeftEdgeId={[28, 34]}
+    BottomRightEdgeId={[34, 29]}
 
     TopMiddleCornerId={17}
     TopLeftCornerId={22}
@@ -303,12 +304,12 @@ export let Row3 = [
 
     HexId={14}
 
-    TopLeftEdgeId={26}
-    TopRightEdgeId={27}
-    MiddleLeftEdgeId={35}
-    MiddleRightEdgeId={36}
-    BottomLeftEdgeId={42}
-    BottomRightEdgeId={43}
+    TopLeftEdgeId={[23, 18]}
+    TopRightEdgeId={[18, 24]}
+    MiddleLeftEdgeId={[23, 29]}
+    MiddleRightEdgeId={[24, 30]}
+    BottomLeftEdgeId={[29, 35]}
+    BottomRightEdgeId={[35, 30]}
 
     TopMiddleCornerId={18}
     TopLeftCornerId={23}
@@ -334,12 +335,12 @@ export let Row3 = [
 
     HexId={19}
 
-    TopLeftEdgeId={28}
-    TopRightEdgeId={29}
-    MiddleLeftEdgeId={36}
-    MiddleRightEdgeId={37}
-    BottomLeftEdgeId={44}
-    BottomRightEdgeId={45}
+    TopLeftEdgeId={[24, 19]}
+    TopRightEdgeId={[19, 25]}
+    MiddleLeftEdgeId={[24, 30]}
+    MiddleRightEdgeId={[25, 31]}
+    BottomLeftEdgeId={[30, 36]}
+    BottomRightEdgeId={[36, 31]}
 
     TopMiddleCornerId={19}
     TopLeftCornerId={24}
@@ -365,12 +366,12 @@ export let Row3 = [
 
     HexId={17}
 
-    TopLeftEdgeId={30}
-    TopRightEdgeId={31}
-    MiddleLeftEdgeId={37}
-    MiddleRightEdgeId={38}
-    BottomLeftEdgeId={46}
-    BottomRightEdgeId={47}
+    TopLeftEdgeId={[25, 20]}
+    TopRightEdgeId={[20, 26]}
+    MiddleLeftEdgeId={[25, 31]}
+    MiddleRightEdgeId={[26, 32]}
+    BottomLeftEdgeId={[31, 37]}
+    BottomRightEdgeId={[37, 32]}
 
     TopMiddleCornerId={20}
     TopLeftCornerId={25}
@@ -396,12 +397,12 @@ export let Row3 = [
 
     HexId={9}
 
-    TopLeftEdgeId={32}
-    TopRightEdgeId={33}
-    MiddleLeftEdgeId={38}
-    MiddleRightEdgeId={39}
-    BottomLeftEdgeId={48}
-    BottomRightEdgeId={49}
+    TopLeftEdgeId={[26, 21]}
+    TopRightEdgeId={[21, 27]}
+    MiddleLeftEdgeId={[26, 32]}
+    MiddleRightEdgeId={[27, 33]}
+    BottomLeftEdgeId={[32, 38]}
+    BottomRightEdgeId={[38, 33]}
 
     TopMiddleCornerId={21}
     TopLeftCornerId={26}
@@ -436,12 +437,12 @@ export let Row4 = [
 
     HexId={4}
 
-    TopLeftEdgeId={41}
-    TopRightEdgeId={42}
-    MiddleLeftEdgeId={50}
-    MiddleRightEdgeId={51}
-    BottomLeftEdgeId={55}
-    BottomRightEdgeId={56}
+    TopLeftEdgeId={[34, 29]}
+    TopRightEdgeId={[29, 35]}
+    MiddleLeftEdgeId={[34, 39]}
+    MiddleRightEdgeId={[33, 40]}
+    BottomLeftEdgeId={[39, 44]}
+    BottomRightEdgeId={[44, 40]}
 
     TopMiddleCornerId={29}
     TopLeftCornerId={34}
@@ -466,12 +467,12 @@ export let Row4 = [
 
     HexId={15}
 
-    TopLeftEdgeId={43}
-    TopRightEdgeId={44}
-    MiddleLeftEdgeId={51}
-    MiddleRightEdgeId={52}
-    BottomLeftEdgeId={57}
-    BottomRightEdgeId={58}
+    TopLeftEdgeId={[33, 30]}
+    TopRightEdgeId={[30, 36]}
+    MiddleLeftEdgeId={[35, 40]}
+    MiddleRightEdgeId={[36, 41]}
+    BottomLeftEdgeId={[40, 45]}
+    BottomRightEdgeId={[45, 41]}
 
     TopMiddleCornerId={30}
     TopLeftCornerId={35}
@@ -496,12 +497,12 @@ export let Row4 = [
 
     HexId={16}
 
-    TopLeftEdgeId={45}
-    TopRightEdgeId={46}
-    MiddleLeftEdgeId={52}
-    MiddleRightEdgeId={53}
-    BottomLeftEdgeId={59}
-    BottomRightEdgeId={60}
+    TopLeftEdgeId={[36, 31]}
+    TopRightEdgeId={[31, 37]}
+    MiddleLeftEdgeId={[36, 41]}
+    MiddleRightEdgeId={[37, 42]}
+    BottomLeftEdgeId={[41, 46]}
+    BottomRightEdgeId={[46, 42]}
 
     TopMiddleCornerId={31}
     TopLeftCornerId={36}
@@ -526,12 +527,12 @@ export let Row4 = [
 
     HexId={8}
 
-    TopLeftEdgeId={47}
-    TopRightEdgeId={48}
-    MiddleLeftEdgeId={53}
-    MiddleRightEdgeId={54}
-    BottomLeftEdgeId={61}
-    BottomRightEdgeId={62}
+    TopLeftEdgeId={[37, 32]}
+    TopRightEdgeId={[32, 38]}
+    MiddleLeftEdgeId={[37, 42]}
+    MiddleRightEdgeId={[38, 43]}
+    BottomLeftEdgeId={[42, 47]}
+    BottomRightEdgeId={[47, 43]}
 
     TopMiddleCornerId={32}
     TopLeftCornerId={37}
@@ -566,12 +567,12 @@ export let Row5 = [
 
     HexId={5}
 
-    TopLeftEdgeId={56}
-    TopRightEdgeId={57}
-    MiddleLeftEdgeId={63}
-    MiddleRightEdgeId={64}
-    BottomLeftEdgeId={67}
-    BottomRightEdgeId={68}
+    TopLeftEdgeId={[44, 40]}
+    TopRightEdgeId={[40, 45]}
+    MiddleLeftEdgeId={[44, 48]}
+    MiddleRightEdgeId={[45, 49]}
+    BottomLeftEdgeId={[48, 52]}
+    BottomRightEdgeId={[52, 49]}
 
     TopMiddleCornerId={40}
     TopLeftCornerId={44}
@@ -597,12 +598,12 @@ export let Row5 = [
 
     HexId={6}
 
-    TopLeftEdgeId={58}
-    TopRightEdgeId={59}
-    MiddleLeftEdgeId={64}
-    MiddleRightEdgeId={65}
-    BottomLeftEdgeId={69}
-    BottomRightEdgeId={70}
+    TopLeftEdgeId={[45, 41]}
+    TopRightEdgeId={[41, 46]}
+    MiddleLeftEdgeId={[45, 49]}
+    MiddleRightEdgeId={[46, 50]}
+    BottomLeftEdgeId={[49, 53]}
+    BottomRightEdgeId={[53, 50]}
 
     TopMiddleCornerId={41}
     TopLeftCornerId={45}
@@ -628,12 +629,12 @@ export let Row5 = [
 
     HexId={7}
 
-    TopLeftEdgeId={60}
-    TopRightEdgeId={61}
-    MiddleLeftEdgeId={65}
-    MiddleRightEdgeId={66}
-    BottomLeftEdgeId={71}
-    BottomRightEdgeId={72}
+    TopLeftEdgeId={[46, 42]}
+    TopRightEdgeId={[42, 47]}
+    MiddleLeftEdgeId={[46, 50]}
+    MiddleRightEdgeId={[47, 51]}
+    BottomLeftEdgeId={[50, 54]}
+    BottomRightEdgeId={[54, 51]}
 
     TopMiddleCornerId={42}
     TopLeftCornerId={46}
