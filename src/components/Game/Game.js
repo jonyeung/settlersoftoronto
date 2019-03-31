@@ -14,6 +14,7 @@ import Tile from '../Tile/Tile';
 import MyDashboard from '../MyDashboard/MyDashboard';
 import io from 'socket.io-client';
 import * as gameActions from '../../store/actions/game';
+import * as joinRoomActions from '../../store/actions/joinRoom';
 
 class Game extends Component {
 
@@ -28,7 +29,7 @@ class Game extends Component {
     }
 
     this.diceInit = false;
-    this.socket = io.connect('https://localhost:3000')
+    this.socket = io.connect('http://localhost:3000')
 
     this.socket.on('PLAYER_CONNECT', (res) => {
       console.log('response socket', res)
@@ -288,7 +289,7 @@ class Game extends Component {
         <button className={styles.Test6} onClick={this.testRegularRoll}>regular roll</button> */}
 
 
-        <GameQuitButton></GameQuitButton>
+        <GameQuitButton quit={()=>{this.props.leaveRoom(this.props.history)}}></GameQuitButton>
         <div className={diceStyle}>
           <ReactDice
             numDice={2}
@@ -392,6 +393,7 @@ const mapDispatchToProps = dispatch => {
   return {
     updateGameState: (newGameState) => dispatch(gameActions.updateGameState(newGameState)),
     rollDice: (socket, roll, gameStateId) => gameActions.rollDice(socket, roll, gameStateId),
+    leaveRoom: (routerHistory) => dispatch(joinRoomActions.initLeaveRoom(routerHistory)),
   }
 }
 
