@@ -15,6 +15,7 @@ import MyDashboard from '../MyDashboard/MyDashboard';
 import io from 'socket.io-client';
 import * as gameActions from '../../store/actions/game';
 import * as joinRoomActions from '../../store/actions/joinRoom';
+import VictoryModal from '../VictoryModal/VictoryModal';
 
 class Game extends Component {
 
@@ -25,7 +26,8 @@ class Game extends Component {
       tradeModalOpen: false,
       showDice: false,
       //'EDGE' 'CORNER' or null
-      buildType: null
+      buildType: null,
+      victory: false
     }
 
     this.diceInit = false;
@@ -51,38 +53,6 @@ class Game extends Component {
       })
     }
 
-    this.testStart = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'start_game',
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testBeginMain = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'begin_main_game',
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testEndTurn = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'end_turn',
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testSevenRoll = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'seven_roll',
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
     this.testMoveRobber = () => {
       console.log('this.props.gameStateId', this.props.gameStateId)
       this.socket.emit('PLAYER_CONNECT', {
@@ -91,73 +61,7 @@ class Game extends Component {
         gameStateId: this.props.gameStateId,
       })
     }
-
-    this.testBuildSetupRoad1 = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'build_starting_road',
-        start: 5,
-        end: 9,
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testBuildSetupRoad2 = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'build_starting_road',
-        start: 24,
-        end: 30,
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testBuildSetupSettlement1 = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'build_starting_settlement',
-        location: 9,
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testUpgradeCity = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'build_city',
-        location: 9,
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testBuildSetupSettlement2 = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'build_starting_settlement',
-        location: 30,
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testRegularRoll = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'regular_roll',
-        roll: 5,
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
-    this.testBuildRoad = () => {
-      console.log('this.props.gameStateId', this.props.gameStateId)
-      this.socket.emit('PLAYER_CONNECT', {
-        string: 'build_road',
-        start: 5,
-        end: 9,
-        gameStateId: this.props.gameStateId,
-      })
-    }
-
+    
     this.renderTile = (Tile) => {
       let resourceType = null;
       let newTile = null;
@@ -233,6 +137,13 @@ class Game extends Component {
       })
     }
 
+    this.setVictoryTrue = () => {
+      this.setState({
+        ...this.state,
+        victory: true
+      })
+    }
+
     this.rollDoneCallback = (num) => {
       console.log(`You rolledd a ${num}`)
       //roll here
@@ -261,8 +172,6 @@ class Game extends Component {
     })
   }
 
-
-
   componentDidMount() {
     //run room setup
   }
@@ -275,20 +184,13 @@ class Game extends Component {
 
     diceStyle = diceStyle.join(' ')
 
+    
+
     return (
       <>
         <button className={styles.Test} onClick={this.davidJoins}>AddPlayer</button>
-        {/* <button className={styles.Test2} onClick={this.testStart}>StartGame</button>
-        <button className={styles.Test3} onClick={this.testBeginMain}>BeginMainGame</button> */}
-        {/* <button className={styles.Test4a} onClick={this.testEndTurn}>next turn</button>
-        <button className={styles.Test4} onClick={this.testBuildSetupRoad1}>build start road (5 9)</button>
-        <button className={styles.Test4b} onClick={this.testBuildSetupRoad2}>build start road (24 30)</button>
-        <button className={styles.Test5} onClick={this.testBuildSetupSettlement1}>build start settlement (9)</button>
-        <button className={styles.Test5a} onClick={this.testUpgradeCity}>build city (9)</button>
-        <button className={styles.Test5b} onClick={this.testBuildSetupSettlement2}>build start settlement (30)</button>
-        <button className={styles.Test6} onClick={this.testRegularRoll}>regular roll</button> */}
 
-
+        <VictoryModal show={this.state.victory} quit={()=>{this.props.leaveRoom(this.props.history)}}></VictoryModal>
         <GameQuitButton quit={()=>{this.props.leaveRoom(this.props.history)}}></GameQuitButton>
         <div className={diceStyle}>
           <ReactDice
