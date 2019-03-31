@@ -34,15 +34,17 @@ export const initJoinRoom = (room, routerHistory) => {
   }
 }
 
-export const initLeaveRoom = (room) => {
+export const initLeaveRoom = (routerHistory) => {
   return (dispatch) => {
 
-    axios.get('leaveRoom/' + room + '.json')
-      .then(res => {
-        dispatch(leaveRoom(res.data));
-      })
-      .catch(error => {
-        dispatch(roomActionFailed());
-      });
+    console.log('routerHistory', routerHistory)
+    routerHistory.push('/')
+    // axios.get('leaveRoom/' + room + '.json')
+    //   .then(res => {
+    //     dispatch(leaveRoom(res.data));
+    //   })
+    //   .catch(error => {
+    //     dispatch(roomActionFailed());
+    //   });
   }
 }

@@ -76,7 +76,7 @@
   background-image: url('../../media/city.jpg');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 20px;
+  background-size: 85px;
 }
 
 .Road .Icon {
@@ -115,7 +115,7 @@
 }
 
 .Ore {
-  background-image: url('../../media/rocks.png');
+  background-image: url('../../media/rocks.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px;

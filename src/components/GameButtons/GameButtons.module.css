@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: space-between;
   bottom: 30px;
-  right: 280px;
+  right: 287px;
   width: 100px;
   height: 200px;
   z-index: 400;
@@ -43,10 +43,10 @@
 .StartGameButton {
   width: 100%;
   height: 45%;
-  background-image: url("../../media/checkmark.png");
+  background-image: url("../../media/start.png");
   background-repeat: no-repeat;
   background-position: center center;
-  background-size:100px;
+  background-size:80px;
   border: 3px solid black;
 }
 

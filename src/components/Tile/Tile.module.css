@@ -136,7 +136,7 @@
   position: relative;
   width: 20px;
   height: 20px;
-  background-color: green;
+  background-color: red;
   border-radius: 10px;
   margin-top: -171px;
   margin-left: 74px;
@@ -147,7 +147,7 @@
   position: relative;
   width: 20px;
   height: 20px;
-  background-color: green;
+  background-color: red;
   border-radius: 10px;
   margin-top: 25px;
   margin-left: 153px;
@@ -158,7 +158,7 @@
   position: relative;
   width: 20px;
   height: 20px;
-  background-color: green;
+  background-color: red;
   border-radius: 10px;
   margin-top: -20px;
   margin-left: -3px;
@@ -169,7 +169,7 @@
   position: relative;
   width: 20px;
   height: 20px;
-  background-color: green;
+  background-color: red;
   border-radius: 10px;
   margin-top: 70px;
   margin-left: -4px;
@@ -180,7 +180,7 @@
   position: relative;
   width: 20px;
   height: 20px;
-  background-color: green;
+  background-color: red;
   border-radius: 10px;
   margin-top: -20px;
   margin-left: 152px;
@@ -191,7 +191,7 @@
   position: relative;
   width: 20px;
   height: 20px;
-  background-color: green;
+  background-color: red;
   border-radius: 10px;
   margin-top: 25px;
   margin-left: 75px;
@@ -290,7 +290,7 @@
 }
 
 .RockTile {
-  background-image: url('../../media/rocks.png')
+  background-image: url('../../media/rocks.jpg')
 }
 
 .SheepTile {

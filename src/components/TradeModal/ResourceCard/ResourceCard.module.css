@@ -25,10 +25,10 @@
 }
 
 .Rock {
-  background-image:url("../../../media/rocks.png");
+  background-image:url("../../../media/rocks.jpg");
   background-repeat: no-repeat;
   background-position: center center;
-  background-color: black;
+  background-color: black; 
 }
 
 .Wheat{

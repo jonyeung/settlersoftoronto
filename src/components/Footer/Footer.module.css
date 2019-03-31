@@ -1,6 +1,10 @@
 .Background {
+  position: absolute;
+  left: 0;
+  bottom: 0;
   background-color: #242424;
   height: 160px;
+  width: 100%;
 }
 
 .Content {

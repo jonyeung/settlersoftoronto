@@ -8,7 +8,9 @@ class GameQuitButton extends Component {
   render() {
 
     return (
-      <FontAwesomeIcon icon="sign-out-alt" className={styles.Content} size="2x"/>
+      <div onClick={this.props.quit}>
+        <FontAwesomeIcon icon="sign-out-alt" className={styles.Content} size="2x" />
+      </div>
     )
   }
 }
