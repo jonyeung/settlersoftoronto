@@ -162,9 +162,7 @@ class Game extends Component {
       let newTile = null;
       let diceNumber = 0;
       let robber = false;
-      let roads = {
-
-      }
+      let roads = []
       let settlements = []
       let cities = []
 
@@ -180,6 +178,7 @@ class Game extends Component {
           currentHex.robber === true ? robber = true : robber = false
           settlements = currentHex.settlements
           cities = currentHex.cities
+          roads = currentHex.roads
         } else {
           resourceType = null
         }
@@ -197,7 +196,8 @@ class Game extends Component {
             diceNumber: diceNumber,
             hasRobber: robber,
             settlements: settlements,
-            cities: cities
+            cities: cities,
+            roads: roads
           }
         )
       }

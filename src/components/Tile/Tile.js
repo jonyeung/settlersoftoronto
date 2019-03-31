@@ -16,18 +16,27 @@ class Tile extends Component {
     this.bottomMiddleCorner = [styles.CornerBottomMiddle]
     this.bottomRightCorner = [styles.CornerBottomRight]
 
-    this.topLeftEdge = [styles.EdgeTopLeft]
-    this.topRightEdge = [styles.EdgeTopRight]
-    this.middleLeftEdge = [styles.EdgeMiddleLeft]
-    this.middleRightEdge = [styles.EdgeMiddleRight]
-    this.bottomLeftEdge = [styles.EdgeBottomLeft]
-    this.bottomRightEdge = [styles.EdgeBottomRight]
+    this.topLeftEdge = [styles.EdgeTopLeft, styles.RoadNotBuilt]
+    this.topRightEdge = [styles.EdgeTopRight, styles.RoadNotBuilt]
+    this.middleLeftEdge = [styles.EdgeMiddleLeft, styles.RoadNotBuilt]
+    this.middleRightEdge = [styles.EdgeMiddleRight, styles.RoadNotBuilt]
+    this.bottomLeftEdge = [styles.EdgeBottomLeft, styles.RoadNotBuilt]
+    this.bottomRightEdge = [styles.EdgeBottomRight, styles.RoadNotBuilt]
 
     this.hexCircleStyle = [styles.HexCircle]
+
+    this.roadIsSame = (edge, roadStartPoint, roadEndPoint) => {
+      return (edge[0] === roadStartPoint
+        && edge[1] === roadEndPoint)
+        ||
+        (edge[1] === roadStartPoint
+          && edge[0] === roadEndPoint)
+    }
 
     this.determineCornerStyles = () => {
       let playerHouseStyle = null;
       let playerCityStyle = null;
+      let playerRoadStyle = null;
 
       if (this.props.ResourceType === 'Water') {
         return
@@ -120,7 +129,79 @@ class Tile extends Component {
           default:
             break;
         }
-    })
+      })
+
+      this.props.roads.forEach((road) => {
+        switch (road.player) {
+          case 0:
+            playerRoadStyle = styles.Player1Road
+            break;
+          case 1:
+            playerRoadStyle = styles.Player2Road
+            break;
+          case 2:
+            playerRoadStyle = styles.Player3Road
+            break;
+          case 3:
+            playerRoadStyle = styles.Player4Road
+            break;
+          default:
+            break;
+        }
+
+        // switch (city.location) {
+        //   case this.props.TopMiddleCornerId:
+        //     this.topMiddleCorner.push(playerCityStyle)
+        //     break;
+        //   case this.props.TopLeftCornerId:
+        //     this.topLeftCorner.push(playerCityStyle)
+        //     break;
+        //   case this.props.TopRightCornerId:
+        //     this.topRightCorner.push(playerCityStyle)
+        //     break;
+        //   case this.props.BottomLeftCornerId:
+        //     this.bottomLeftCorner.push(playerCityStyle)
+        //     break;
+        //   case this.props.BottomRightCornerId:
+        //     this.bottomRightCorner.push(playerCityStyle)
+        //     break;
+        //   case this.props.BottomMiddleCornerId:
+        //     this.bottomMiddleCorner.push(playerCityStyle)
+        //     break;
+        //   default:
+        //     break;
+        // }
+
+
+        // if (this.props.TopLeftEdgeId !== undefined) {
+        console.log('HexId: ', this.props.HexId)
+        console.log('this.props.TopLeftEdgeId: ', this.props.MiddleLeftEdgeId)
+        console.log('road: ', road)
+        console.log(this.roadIsSame(this.props.MiddleLeftEdgeId, road.startPoint, road.endPoint))
+        
+        if (this.roadIsSame(this.props.TopLeftEdgeId, road.startPoint, road.endPoint)) {
+          this.topLeftEdge[1] = (playerRoadStyle)
+
+        } else if (this.roadIsSame(this.props.TopRightEdgeId, road.startPoint, road.endPoint)) {
+          this.topRightEdge[1] = (playerRoadStyle)
+
+        } else if (this.roadIsSame(this.props.MiddleLeftEdgeId, road.startPoint, road.endPoint)) {
+          this.middleLeftEdge[1] = (playerRoadStyle)
+          console.log('this.middleLeftEdge[1]: ', this.middleLeftEdge[1])
+
+        } else if (this.roadIsSame(this.props.MiddleRightEdgeId, road.startPoint, road.endPoint)) {
+          this.middleRightEdge[1] = (playerRoadStyle)
+
+        } else if (this.roadIsSame(this.props.BottomLeftEdgeId, road.startPoint, road.endPoint)) {
+          this.bottomLeftEdge[1] = (playerRoadStyle)
+
+        } else if (this.roadIsSame(this.props.BottomRightEdgeId, road.startPoint, road.endPoint)) {
+          this.bottomRightEdge[1] = (playerRoadStyle)
+        }
+        // }
+        // this.topLeftEdge[1] = (playerRoadStyle)
+        // console.log('this.topLeftEdge: ', this.topLeftEdge)
+      })
     }
 
     this.determineHexCircle = () => {
