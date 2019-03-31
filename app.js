@@ -4,6 +4,7 @@ const firebase = require('firebase');
 const app = express();
 const cors = require('cors');
 const socket = require('socket.io');
+const fs = require('fs');
 const boardFunctions = require('./board.js');
 const serviceAccount = require('./c09-project-firebase-adminsdk-xuxa7-da3b397950.json');
 
@@ -11,7 +12,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static('build/static'));
+app.use(express.static('build'));
 
 firebase.initializeApp({
     serviceAccount: "./c09-project-firebase-adminsdk-xuxa7-da3b397950.json",
@@ -179,13 +180,23 @@ function storeGameState(gameID, gameState) {
     firebase.database().ref('/gameState/' + gameID).set(gameState);
 }
 
-const http = require('http');
+const https = require('https');
 const PORT = 3000;
 
-let server = app.listen(PORT, function (err) {
-    if (err) console.log(err);
-    else console.log("HTTP server on http://localhost:%s", PORT);
-});
+const httpsOptions = {
+    key: fs.readFileSync('./security/cert.key'),
+    cert: fs.readFileSync('./security/cert.pem')
+}
+
+const server = https.createServer(httpsOptions, app)
+    .listen(PORT, () => {
+        console.log('server running at ' + PORT)
+    })
+
+// let server = app.listen(PORT, function (err) {
+//     if (err) console.log(err);
+//     else console.log("HTTP server on http://localhost:%s", PORT);
+// });
 
 let io = socket(server);
 
