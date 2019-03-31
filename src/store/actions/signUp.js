@@ -59,7 +59,7 @@ export const initSignUp = (email, password) => {
 
   return (dispatch) => {
     dispatch(loading(true));
-    axios.post('https://c09-project.herokuapp.com:3000/signUp', {
+    axios.post('https://c09-project.herokuapp.com/signUp', {
       email: email,
       password: password,
     })

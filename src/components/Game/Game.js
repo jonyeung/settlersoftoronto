@@ -28,7 +28,7 @@ class Game extends Component {
     }
 
     this.diceInit = false;
-    this.socket = io.connect('https://c09-project.herokuapp.com:3000')
+    this.socket = io.connect('https://c09-project.herokuapp.com/Game')
 
     this.socket.on('PLAYER_CONNECT', (res) => {
       console.log('response socket', res)
