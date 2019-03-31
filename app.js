@@ -184,8 +184,8 @@ const https = require('https');
 const PORT = 3000;
 
 const httpsOptions = {
-    key: fs.readFileSync('./security/cert.key'),
-    cert: fs.readFileSync('./security/cert.pem')
+    key: fs.readFileSync('./securityDev/cert.key'),
+    cert: fs.readFileSync('./securityDev/cert.pem')
 }
 
 const server = https.createServer(httpsOptions, app)
