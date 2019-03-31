@@ -55,6 +55,7 @@ app.post('/signIn', function (req, res) {
     
     let resObj = {
         error: null,
+        uid: null,
         idToken: null,
         idTokenExpiryDate: null,
         username: null
@@ -65,13 +66,15 @@ app.post('/signIn', function (req, res) {
     //   console.log('Successfully fetched user data:', userRecord.toJSON());
       resObj.idTokenExpiryDate = userRecord.tokensValidAfterTime;
       resObj.username = userRecord.displayName;
+      resObj.uid = userRecord.uid;
       admin.auth().createCustomToken(userRecord.uid).then(function(token) {
         resObj.idToken = token;
         console.log(resObj);
-        res.setHeader('Set-Cookie', cookie.serialize('username', resObj.username, {
+        res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({uid: resObj.uid, username: resObj.username }), {
             path : '/', 
             maxAge: 60 * 60 * 24 * 7
         }));
+        req.session.uid = resObj.uid;
         req.session.user = resObj.username;
         res.json(resObj);
       })
@@ -107,7 +110,7 @@ app.post('/signUp', function (req, res) {
 
 app.post('/signOut', function(req, res) {
     req.session.user = null;
-    res.setHeader('Set-Cookie', cookie.serialize('username', '', {
+    res.setHeader('Set-Cookie', cookie.serialize('user', '', {
         path : '/', 
         maxAge: 60 * 60 * 24 * 7 // 1 week in number of seconds
     }));
@@ -232,11 +235,6 @@ function getPlayerByID(playerID, gameState) {
     return gameState.players[playerID]
 }
 
-
-// store gameState into DB
-function storeGameState(gameID, gameState) {
-    firebase.database().ref('/gameState/' + gameID).set(gameState);
-}
 
 const https = require('https');
 const PORT = 3000;
