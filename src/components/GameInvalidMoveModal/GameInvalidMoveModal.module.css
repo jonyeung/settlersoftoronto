@@ -35,7 +35,7 @@
     
 }
 
-.Victory {
+.Content .Status .Victory {
     width:100%;
     height:100%;
     background-image: url("../../media/victory_icon.png");
