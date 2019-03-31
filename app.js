@@ -445,8 +445,16 @@ io.on('connection', function (socket) {
                 let gameState = JSON.parse(snapshot.val());
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
+
                 if (boardFunctions.isValidSettlement(req.location, currentPlayer, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
+
+                        // REMOVE FOR PROD
+                        currentPlayer.resources.Brick = currentPlayer.resources.Brick + 1;
+                        currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 1;
+                        currentPlayer.resources.Wood = currentPlayer.resources.Wood + 1;
+                        currentPlayer.resources.Sheep = currentPlayer.resources.Sheep + 1;
+
                         if (currentPlayer.resources.Wood > 0 && currentPlayer.resources.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
                             let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
                             gameState.settlements.push(settlement);
@@ -456,7 +464,7 @@ io.on('connection', function (socket) {
                             currentPlayer.resources.Wheat--;
                             currentPlayer.resources.Sheep--;
                             getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
-                            boardFunctions.checkWinCondition(boardFunctions.getPlayerByID(currentPlayer, gameState), gameState);
+                            boardFunctions.checkWinCondition(getPlayerByID(currentPlayer._id, gameState), gameState);
                             // store game state
                             gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
                                 if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
@@ -504,9 +512,7 @@ io.on('connection', function (socket) {
 
         // upgrade settlement to city
         if (req.string == 'build_city') {
-            // REMOVE THIS FOR PRODUCTION
-            // currentPlayer.resources.Ore = currentPlayer.resources.Ore + 3;
-            // currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 2;
+            
 
             let id = req.gameStateId;
 
@@ -515,6 +521,11 @@ io.on('connection', function (socket) {
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
                 if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
+
+                    // REMOVE THIS FOR PRODUCTION
+                    currentPlayer.resources.Ore = currentPlayer.resources.Ore + 3;
+                    currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 2;
+
                     if (currentPlayer.resources.Ore > 2 && currentPlayer.resources.Wheat > 1) {
                         boardFunctions.deleteSettlementAtLocation(req.location, gameState);
                         let city = new City({ player: currentPlayer._id, location: req.location });
@@ -523,7 +534,7 @@ io.on('connection', function (socket) {
                         currentPlayer.resources.Wheat = currentPlayer.resources.Wheat - 2;
                         currentPlayer.resources.Ore = currentPlayer.resources.Ore - 3;
                         getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
-                        boardFunctions.checkWinCondition(boardFunctions.getPlayerByID(currentPlayer, gameState), gameState);
+                        boardFunctions.checkWinCondition(getPlayerByID(currentPlayer._id, gameState), gameState);
                         // store game state
                         gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
                             if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
