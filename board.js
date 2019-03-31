@@ -512,7 +512,7 @@ function checkValidCity(location, gameState, currentPlayer) {
 
 // check win condition
 function checkWinCondition(player, gameState) {
-    if (player.VictoryPoints + player.devCards.VictoryPointCard > 9) {
+    if (player.VictoryPoints > 4) {
         gameState.gameOver = true;
         gameState.winner = player;
     } 
@@ -531,6 +531,7 @@ function isValidRoad(startPoint, endPoint, gameState) {
             isValid = false;
         }
     });
+    console.log("valid road: ", isValid)
     return isValid;
 }
 
@@ -548,15 +549,7 @@ function isValidSettlement(location, currentPlayer, gameState) {
 
     // check there is a player owned road connecting to the location
     roads.forEach(road => {
-        console.log(road)
         let roadOwner = getPlayerByID(road.player, gameState);
-        console.log("startPoint = location", road.startPoint == location)
-        console.log("endPoint = location", road.endPoint == location)
-        console.log({
-            startPoint: road.startPoint,
-            endPoint: road.endPoint,
-            location
-        })
         if (road.startPoint == location || road.endPoint == location) {
             if (roadOwner.username == currentPlayer.username) {
                 connectingRoad = true;
@@ -704,6 +697,8 @@ module.exports = {
     isValidRoad,
     isValidSettlement,
     addRoadToHex,
+    getHexesAtLocation,
+    getHexesAtRoad,
     addSettlementToHex,
     addResource,
     checkValidCity,
