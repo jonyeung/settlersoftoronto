@@ -48,7 +48,7 @@ function setupHexes() {
     index= index.toString()
     let randomResources = generateRandomOrderResources();
     let hexes = [];
-    let desertPosition = Math.floor(Math.random() * 19) + 1;
+    let desertPosition = Math.floor(Math.random() * 18) + 1;
     let hex;
 
     let i=0;

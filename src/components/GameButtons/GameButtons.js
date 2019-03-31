@@ -11,7 +11,7 @@ class GameButtons extends Component {
     if (this.props.currentPhase === 'roll_phase') {
       EndButtonStyle = styles.RollButton
       endClickAction = this.props.rollDice
-    } else if (this.props.currentPhase === 'build/trade/devcard_phase' ||  this.props.currentPhase === 'setup_placement') {
+    } else if (this.props.currentPhase === 'build/trade/devcard_phase') {
       EndButtonStyle = styles.EndTurnButton
       endClickAction = () => {this.props.endTurn(this.props.socket, this.props.gameStateId)}
     } else if (this.props.currentPhase === 'game not started') {

@@ -467,7 +467,7 @@ export let Row4 = [
 
     HexId={15}
 
-    TopLeftEdgeId={[33, 30]}
+    TopLeftEdgeId={[35, 30]}
     TopRightEdgeId={[30, 36]}
     MiddleLeftEdgeId={[35, 40]}
     MiddleRightEdgeId={[36, 41]}
