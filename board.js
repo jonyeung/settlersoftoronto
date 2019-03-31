@@ -114,8 +114,8 @@ function addCityToHex(city, gameState) {
 
 function checkSetupFinished(gameState) {
     let setupDone = false;
-    if (gameState.settlements.length == (gameState.maxPlayerNum * 2)) {
-        if (gameState.roads.length == (gameState.maxPlayerNum * 2)) {
+    if (gameState.settlements.length >= (gameState.maxPlayerNum * 2)) {
+        if (gameState.roads.length >= (gameState.maxPlayerNum * 2)) {
             setupDone = true;
         }
     }
@@ -691,6 +691,22 @@ function deleteSettlementAtLocation(location, gameState) {
     })
 }
 
+function advanceToNextTurn(gameState) {
+    gameState.currentPlayerNum++;
+    if (gameState.currentPlayerNum == gameState.maxPlayerNum) {
+        // go to player 1
+        gameState.currentPlayerNum = 0;
+    }
+    gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
+    gameState.setupRoad = 0;
+    gameState.setupSettlement = 0;
+    // if setup is all done, change the game phase to roll phase (main game begins)
+    if (checkSetupFinished(gameState)) {
+        gameState.turnPhase = 'roll_phase';
+    }
+    return gameState;
+}
+
 module.exports = {
     setupHexes: setupHexes,
     generateRandomOrderResources,
@@ -706,5 +722,6 @@ module.exports = {
     addCityToHex,
     checkWinCondition,
     addSettlementToHexWithResources,
-    checkSetupFinished
+    checkSetupFinished,
+    advanceToNextTurn
 }

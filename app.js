@@ -103,6 +103,8 @@ let GameState = (function (state) {
         roads: [],
         settlements: [],
         cities: [],
+        setupRoad: 0,
+        setupSettlement: 0,
         currentLargestArmy: 0,
         currentLongestRoad: 0,
         currentPlayerNum: 0,
@@ -279,17 +281,10 @@ io.on('connection', function (socket) {
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
-                gameState.currentPlayerNum++;
-                if (gameState.currentPlayerNum == gameState.maxPlayerNum) {
-                    // go to player 1
-                    gameState.currentPlayerNum = 0;
-                }
-                gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 
-                // if setup is all done, change the game phase to roll phase (main game begins)
-                if (boardFunctions.checkSetupFinished(gameState)) {
-                    gameState.turnPhase = 'roll_phase';
-                }
+                if (gameState.turnPhase == 'setup_placement') io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
+                
+                gameState = boardFunctions.advanceToNextTurn(gameState);
                 
                 // store game state
                 gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
@@ -400,7 +395,7 @@ io.on('connection', function (socket) {
                 let currentPlayer = gameState.currentTurn;
                 if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
-                        if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0) {
+                        if (currentPlayer.resources.Wood > 0 && currentPlayer.resources.Brick > 0) {
                             let road = new Road({ player: currentPlayer._id, start: req.start, end: req.end });
                             gameState.roads.push(road);
                             boardFunctions.addRoadToHex(road, gameState);
@@ -416,10 +411,16 @@ io.on('connection', function (socket) {
                             io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Insufficient resources'}));
                         }
                     // if during setup, don't check for resources
-                    } else {
+                    } else if (gameState.setupRoad < 1) {
                         let road = new Road({ player: currentPlayer._id, start: req.start, end: req.end });
                         gameState.roads.push(road);
                         boardFunctions.addRoadToHex(road, gameState);
+                        gameState.setupRoad++;
+                        // if the player has placed both their setup road AND settlement then go to next player
+                        if (gameState.setupRoad > 0 && gameState.setupSettlement > 0) {
+                            gameState = boardFunctions.advanceToNextTurn(gameState);
+                        }
+
                         // store game state
                         gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
                             if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
@@ -446,7 +447,7 @@ io.on('connection', function (socket) {
                 let currentPlayer = gameState.currentTurn;
                 if (boardFunctions.isValidSettlement(req.location, currentPlayer, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
-                        if (currentPlayer.resources.Wood > 0 && currentPlayer.resource.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
+                        if (currentPlayer.resources.Wood > 0 && currentPlayer.resources.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
                             let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
                             gameState.settlements.push(settlement);
                             boardFunctions.addSettlementToHex(settlement, gameState);
@@ -465,7 +466,7 @@ io.on('connection', function (socket) {
                             io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Insufficient resources'}));
                         }
                     // if during setup, don't check for resources
-                    } else {
+                    } else if (gameState.setupSettlement < 1) {
                         let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
                         gameState.settlements.push(settlement);
                         getPlayerByID(currentPlayer._id, gameState).settlementCount++;
@@ -476,6 +477,14 @@ io.on('connection', function (socket) {
                             boardFunctions.addSettlementToHex(settlement, gameState);
                         }
                         getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
+
+                        gameState.setupSettlement++;
+                        // if the player has placed both their setup road AND settlement then go to next player
+                        if (gameState.setupRoad > 0 && gameState.setupSettlement > 0) {
+                            gameState = boardFunctions.advanceToNextTurn(gameState);
+                            console.log("player switched")
+                        }
+
                         // store game state
                         gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
                             if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));

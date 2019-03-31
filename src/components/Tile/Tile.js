@@ -173,12 +173,7 @@ class Tile extends Component {
         // }
 
 
-        // if (this.props.TopLeftEdgeId !== undefined) {
-        console.log('HexId: ', this.props.HexId)
-        console.log('this.props.TopLeftEdgeId: ', this.props.MiddleLeftEdgeId)
-        console.log('road: ', road)
-        console.log(this.roadIsSame(this.props.MiddleLeftEdgeId, road.startPoint, road.endPoint))
-        
+        // if (this.props.TopLeftEdgeId !== undefined) {        
         if (this.roadIsSame(this.props.TopLeftEdgeId, road.startPoint, road.endPoint)) {
           this.topLeftEdge[1] = (playerRoadStyle)
 
@@ -187,8 +182,7 @@ class Tile extends Component {
 
         } else if (this.roadIsSame(this.props.MiddleLeftEdgeId, road.startPoint, road.endPoint)) {
           this.middleLeftEdge[1] = (playerRoadStyle)
-          console.log('this.middleLeftEdge[1]: ', this.middleLeftEdge[1])
-
+          
         } else if (this.roadIsSame(this.props.MiddleRightEdgeId, road.startPoint, road.endPoint)) {
           this.middleRightEdge[1] = (playerRoadStyle)
 
