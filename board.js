@@ -566,8 +566,19 @@ function isValidSettlement(location, currentPlayer, gameState) {
         if (adjacentLocations.indexOf(settlement.location) >= 0) {
             validSettlement = false;
         }
-        
     })
+
+    gameState.cities.forEach(city => {
+        // check that the location is not occupied
+        if (city.location == location) {
+            validSettlement = false;
+        }
+        // check that there are no other settlements within 1 space
+        if (adjacentLocations.indexOf(city.location) >= 0) {
+            validSettlement = false;
+        }
+    })
+
     console.log("valid spot:", validSettlement)
     console.log("connecting road:", connectingRoad)
     return validSettlement && connectingRoad;
