@@ -189,7 +189,7 @@ const httpsOptions = {
 }
 
 const server = https.createServer(httpsOptions, app)
-    .listen(PORT, () => {
+    .listen(process.env.PORT || PORT, () => {
         console.log('server running at ' + PORT)
     })
 
