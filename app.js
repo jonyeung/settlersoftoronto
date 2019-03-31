@@ -5,6 +5,7 @@ const admin = require('firebase-admin');
 const app = express();
 const cors = require('cors');
 const socket = require('socket.io');
+const session = require('express-session');
 const fs = require('fs');
 const boardFunctions = require('./board.js');
 const serviceAccount = require('./c09-project-firebase-adminsdk-xuxa7-da3b397950.json');
@@ -30,10 +31,25 @@ let gameStateRef = ref.child('gameState');
 
 app.use(cors());
 
+app.use(session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: true
+}))
+
+const cookie = require('cookie');
+
 app.use(function (req, res, next) {
+    let cookies = cookie.parse(req.headers.cookie || '');
+    req.user = ('user' in req.session)? req.session.user : null;
     console.log("HTTP request", req.method, req.url, req.body);
     next();
 });
+
+let isAuthenticated = function(req, res, next) {
+    if (!req.session.user) return res.status(401).end("access denied");
+    next();
+}
 
 app.post('/signIn', function (req, res) {
     
@@ -50,12 +66,17 @@ app.post('/signIn', function (req, res) {
       resObj.idTokenExpiryDate = userRecord.tokensValidAfterTime;
       resObj.username = userRecord.displayName;
       admin.auth().createCustomToken(userRecord.uid).then(function(token) {
-          resObj.idToken = token;
-          console.log(resObj);
-          res.json(resObj);
+        resObj.idToken = token;
+        console.log(resObj);
+        res.setHeader('Set-Cookie', cookie.serialize('username', resObj.username, {
+            path : '/', 
+            maxAge: 60 * 60 * 24 * 7
+        }));
+        req.session.user = resObj.username;
+        res.json(resObj);
       })
       .catch(function(error) {
-          console.log(error)
+        console.log(error)
       })
     })
     .catch(function(error) {
@@ -85,11 +106,11 @@ app.post('/signUp', function (req, res) {
 });
 
 app.post('/signOut', function(req, res) {
-    // firebase.auth().signOut().then(function () {
-    //     // sign out success
-    // }).catch(function (err) {
-    //     // error handling
-    // })
+    req.session.user = null;
+    res.setHeader('Set-Cookie', cookie.serialize('username', '', {
+        path : '/', 
+        maxAge: 60 * 60 * 24 * 7 // 1 week in number of seconds
+    }));
 })
 
 app.get('/getRooms', function (req, res) {
