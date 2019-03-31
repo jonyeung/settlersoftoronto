@@ -1,6 +1,7 @@
 /*jshint esversion: 6*/
 const express = require('express');
 const firebase = require('firebase');
+const admin = require('firebase-admin');
 const app = express();
 const cors = require('cors');
 const socket = require('socket.io');
@@ -14,10 +15,16 @@ app.use(bodyParser.json());
 
 app.use(express.static('build'));
 
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://c09-project.firebaseio.com'
+})
+
 firebase.initializeApp({
     serviceAccount: "./c09-project-firebase-adminsdk-xuxa7-da3b397950.json",
     databaseURL: 'https://c09-project.firebaseio.com'
 })
+
 let ref = firebase.database().ref().child('c09-project');
 let gameStateRef = ref.child('gameState');
 
@@ -29,33 +36,61 @@ app.use(function (req, res, next) {
 });
 
 app.post('/signIn', function (req, res) {
-    let error = false
-    if (error) {
-        res.status(500);
-        res.json({
-            error: 'SIGN_IN_FAILED'
-        });
-    }
-    res.json({
+    
+    let resObj = {
         error: null,
-        idToken: 'idtoken123',
-        idTokenExpiryDate: 'datehere',
-        username: 'david'
+        idToken: null,
+        idTokenExpiryDate: null,
+        username: null
+    }
+    admin.auth().getUserByEmail(req.body.email)
+    .then(function(userRecord) {
+      // See the UserRecord reference doc for the contents of userRecord.
+    //   console.log('Successfully fetched user data:', userRecord.toJSON());
+      resObj.idTokenExpiryDate = userRecord.tokensValidAfterTime;
+      resObj.username = userRecord.displayName;
+      admin.auth().createCustomToken(userRecord.uid).then(function(token) {
+          resObj.idToken = token;
+          console.log(resObj);
+          res.json(resObj);
+      })
+      .catch(function(error) {
+          console.log(error)
+      })
     })
+    .catch(function(error) {
+     console.log('Error fetching user data:', error);
+    });
+  
 });
 
 app.post('/signUp', function (req, res) {
-    let error = true
-    if (error) {
-        res.status(500);
+    admin.auth().createUser({
+        email: req.body.email,
+        emailVerified: false,
+        password: req.body.password,
+        displayName: req.body.email.substring(0, req.body.email.indexOf("@"))
+    })
+    .then(function(userRecord) {
+        console.log('Successfully created new user: ', userRecord.uid);
+        res.send({error: null});
+    })
+    .catch(function(error) {
+        console.log('Error creating user: ', error)
         res.json({
             error: 'SIGN_UP_FAILED'
         });
-    }
-    res.send({
-        error: null
     })
+
 });
+
+app.post('/signOut', function(req, res) {
+    // firebase.auth().signOut().then(function () {
+    //     // sign out success
+    // }).catch(function (err) {
+    //     // error handling
+    // })
+})
 
 app.get('/getRooms', function (req, res) {
     let error = false
@@ -393,6 +428,9 @@ io.on('connection', function (socket) {
                 let gameState = JSON.parse(snapshot.val());
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
+
+                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Cannot build during roll phase'}));
+
                 if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
                         if (currentPlayer.resources.Wood > 0 && currentPlayer.resources.Brick > 0) {
@@ -408,7 +446,7 @@ io.on('connection', function (socket) {
                                 io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                             })
                         } else {
-                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Insufficient resources'}));
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Insufficient resources'}));
                         }
                     // if during setup, don't check for resources
                     } else if (gameState.setupRoad < 1) {
@@ -428,7 +466,7 @@ io.on('connection', function (socket) {
                         })
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Invalid road position'}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Invalid road position'}));
                 }
             })
             .catch(function(err) {
@@ -445,6 +483,8 @@ io.on('connection', function (socket) {
                 let gameState = JSON.parse(snapshot.val());
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
+
+                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Cannot build during roll phase'}));
 
                 if (boardFunctions.isValidSettlement(req.location, currentPlayer, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
@@ -471,7 +511,7 @@ io.on('connection', function (socket) {
                                 io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                             })
                         } else {
-                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Insufficient resources'}));
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Insufficient resources'}));
                         }
                     // if during setup, don't check for resources
                     } else if (gameState.setupSettlement < 1) {
@@ -500,7 +540,7 @@ io.on('connection', function (socket) {
                         })
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Invalid settlement position'}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Invalid settlement position'}));
                 }
             })
             .catch(function(err) {
@@ -512,14 +552,15 @@ io.on('connection', function (socket) {
 
         // upgrade settlement to city
         if (req.string == 'build_city') {
-            
-
             let id = req.gameStateId;
 
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
+
+                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Cannot build during roll phase'}));
+
                 if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
 
                     // REMOVE THIS FOR PRODUCTION
@@ -541,10 +582,10 @@ io.on('connection', function (socket) {
                             io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                         })
                     } else {
-                        io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Insufficient Resources'}));
+                        io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Insufficient Resources'}));
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Invalid city position'}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Invalid city position'}));
                 }
             })
             .catch(function(err) {
