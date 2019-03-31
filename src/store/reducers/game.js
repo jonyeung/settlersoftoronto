@@ -56,6 +56,10 @@ const reducer = (state = initialState, action) => {
         ...action.newGameState,
         error: null
       }
+    case actionTypes.RESET_GAME_STATE:
+      return {
+        ...initialState
+      }
     case actionTypes.FETCH_PROJECT_FAILED:
       return {
         ...state,

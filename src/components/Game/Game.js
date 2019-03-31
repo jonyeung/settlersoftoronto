@@ -23,7 +23,7 @@ class Game extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
+    this.initialState = {
       tradeModalOpen: false,
       showDice: false,
       //'EDGE' 'CORNER' or null
@@ -33,21 +33,29 @@ class Game extends Component {
       invalidMoveMessage: ''
     }
 
+    this.state = this.initialState
+
     this.diceInit = false;
     this.socket = io.connect('http://localhost:3000')
 
     this.socket.on('PLAYER_CONNECT', (res) => {
-      console.log('response socket', res)
+      let response = JSON.parse(res)
+      let invalidMoveMessage = response.invalidMove
+      console.log('response socket', response)
+      console.log('res.invalidMove', response.invalidMove)
       //invalid move
-      if (res.invalidMove) {
-        console.log('res.invalidMove', res.invalidMove)
+      if (response.invalidMove) {
+        console.log('response.invalidMove', response.invalidMove)
+        if (this.props.gameState.turnPhase === 'game not started') {
+          invalidMoveMessage = 'Game not Started. Please click the start button on the bottom right of the screen'
+        }
         this.setState({
           ...this.state,
           invalidMove: true,
-          invalidMoveMessage: res.invalidMove
+          invalidMoveMessage: invalidMoveMessage
         })
       } else {
-        this.props.updateGameState(JSON.parse(res));
+        this.props.updateGameState(response);
         this.setState({
           ...this.state,
           invalidMove: false,
@@ -226,8 +234,12 @@ class Game extends Component {
       <>
         <button className={styles.Test} onClick={this.davidJoins}>AddPlayer</button>
 
-        <GameInvalidMoveModal show={this.state.invalidMove} message="Invalid Move"></GameInvalidMoveModal>
-        <VictoryModal show={this.state.victory} quit={() => { this.props.leaveRoom(this.props.history) }}></VictoryModal>
+        <GameInvalidMoveModal close={this.toggleInvalidMove} show={this.state.invalidMove} message={this.state.invalidMoveMessage}></GameInvalidMoveModal>
+        <VictoryModal show={this.state.victory}
+          quit={() => {
+            this.props.leaveRoom(this.props.history)
+            this.setState(...this.initialState)
+          }}></VictoryModal>
         <GameQuitButton quit={() => { this.props.leaveRoom(this.props.history) }}></GameQuitButton>
         <div className={diceStyle}>
           <ReactDice

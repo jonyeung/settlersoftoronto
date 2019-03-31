@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import * as gameActions from '../actions/game';
 import axios from '../../axios-projects';
 
 export const joinRoom = (room) => {
@@ -36,8 +37,7 @@ export const initJoinRoom = (room, routerHistory) => {
 
 export const initLeaveRoom = (routerHistory) => {
   return (dispatch) => {
-
-    console.log('routerHistory', routerHistory)
+    dispatch(gameActions.resetGameState())
     routerHistory.push('/')
     // axios.get('leaveRoom/' + room + '.json')
     //   .then(res => {
