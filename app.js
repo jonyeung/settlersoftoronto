@@ -1,5 +1,6 @@
 /*jshint esversion: 6*/
 const express = require('express');
+const cookiesMiddleware = require('universal-cookie-express');
 const firebase = require('firebase');
 const admin = require('firebase-admin');
 const app = express();
@@ -9,27 +10,46 @@ const session = require('express-session');
 const fs = require('fs');
 const boardFunctions = require('./board.js');
 const serviceAccount = require('./c09-project-firebase-adminsdk-xuxa7-da3b397950.json');
+cookieParser = require('cookie-parser');
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(cors());
+
 app.use(express.static('build'));
+
+// app.use(cookiesMiddleware()).use(function (req, res) {
+//     req.universalCookies.set('user', "user123")
+//     console.log("cookie: ", req.universalCookies.get('user'))
+
+// })
+
+app.use(cookieParser());
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://c09-project.firebaseio.com'
 })
 
-firebase.initializeApp({
+let config = {
+    apiKey: "AIzaSyBjLtituCAs6A4xhtoiwMRZBAMnxVAT_Wg",
+    authDomain: "c09-project.firebaseapp.com",
     serviceAccount: "./c09-project-firebase-adminsdk-xuxa7-da3b397950.json",
-    databaseURL: 'https://c09-project.firebaseio.com'
-})
+    databaseURL: "https://c09-project.firebaseio.com",
+    projectId: "c09-project",
+    storageBucket: "c09-project.appspot.com",
+    messagingSenderId: "472213379563"
+};
+firebase.initializeApp(config);
+
+
 
 let ref = firebase.database().ref().child('c09-project');
 let gameStateRef = ref.child('gameState');
 
-app.use(cors());
+
 
 app.use(session({
     secret: 'my secret',
@@ -40,19 +60,22 @@ app.use(session({
 const cookie = require('cookie');
 
 app.use(function (req, res, next) {
-    let cookies = cookie.parse(req.headers.cookie || '');
-    req.user = ('user' in req.session)? req.session.user : null;
+    // let cookies = cookie.parse(req.headers.cookie || '');
+    req.user = ('user' in req.session) ? req.session.user : null;
+    req.uid = ('uid' in req.session) ? req.session.uid : null;
     console.log("HTTP request", req.method, req.url, req.body);
     next();
 });
 
-let isAuthenticated = function(req, res, next) {
+let isAuthenticated = function (req, res, next) {
     if (!req.session.user) return res.status(401).end("access denied");
     next();
 }
 
-app.post('/signIn', function (req, res) {
-    
+app.post('/signIn', function (req, res, next) {
+    // console.log("cookie: ", req.universalCookies.get('user'))
+
+
     let resObj = {
         error: null,
         uid: null,
@@ -60,58 +83,94 @@ app.post('/signIn', function (req, res) {
         idTokenExpiryDate: null,
         username: null
     }
-    admin.auth().getUserByEmail(req.body.email)
-    .then(function(userRecord) {
-      // See the UserRecord reference doc for the contents of userRecord.
-    //   console.log('Successfully fetched user data:', userRecord.toJSON());
-      resObj.idTokenExpiryDate = userRecord.tokensValidAfterTime;
-      resObj.username = userRecord.displayName;
-      resObj.uid = userRecord.uid;
-      admin.auth().createCustomToken(userRecord.uid).then(function(token) {
-        resObj.idToken = token;
-        console.log(resObj);
-        res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({uid: resObj.uid, username: resObj.username }), {
-            path : '/', 
-            maxAge: 60 * 60 * 24 * 7
-        }));
-        req.session.uid = resObj.uid;
-        req.session.user = resObj.username;
-        res.json(resObj);
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
+
+    firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then(user => {
+        admin.auth().getUserByEmail(req.body.email)
+            .then(function (userRecord) {
+                // See the UserRecord reference doc for the contents of userRecord.
+                console.log('Successfully fetched user data:', userRecord.toJSON());
+                resObj.idTokenExpiryDate = userRecord.tokensValidAfterTime;
+                resObj.username = userRecord.displayName;
+                resObj.uid = userRecord.uid;
+                admin.auth().createCustomToken(userRecord.uid).then(function (token) {
+                    resObj.idToken = token;
+                    // res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({ uid: resObj.uid, username: resObj.username }), {
+                    //     path: '/',
+                    //     maxAge: 60 * 60 * 24 * 7
+                    // }));
+                    // console.log('res: ', res.getHeaders()['set-cookie'])
+                    req.session.uid = resObj.uid;
+                    req.session.user = resObj.username;
+                    // console.log('resObj: ', resObj)
+                    return res.cookie('name', 'myName').json('cookie set');
+
+                    // return res.json(resObj);
+                })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            })
+            .catch(function (error) {
+                console.log('Error fetching user data:', error);
+            });
+    }).catch(function (err) {
+        console.log('Error signing in: ', err)
     })
-    .catch(function(error) {
-     console.log('Error fetching user data:', error);
-    });
-  
+
+
+    // admin.auth().getUserByEmail(req.body.email)
+    // .then(function(userRecord) {
+    //   // See the UserRecord reference doc for the contents of userRecord.
+    //   console.log('Successfully fetched user data:', userRecord.toJSON());
+    //   resObj.idTokenExpiryDate = userRecord.tokensValidAfterTime;
+    //   resObj.username = userRecord.displayName;
+    //   resObj.uid = userRecord.uid;
+    //   admin.auth().createCustomToken(userRecord.uid).then(function(token) {
+    //     resObj.idToken = token;
+    //     res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({uid: resObj.uid, username: resObj.username }), {
+    //         path : '/', 
+    //         maxAge: 60 * 60 * 24 * 7
+    //     }));
+    //     // console.log('res: ', res.getHeaders()['set-cookie'])
+    //     req.session.uid = resObj.uid;
+    //     req.session.user = resObj.username;
+    //     // console.log('resObj: ', resObj)
+    //     return res.json(resObj);
+    //   })
+    //   .catch(function(error) {
+    //     console.log(error)
+    //   })
+    // })
+    // .catch(function(error) {
+    //  console.log('Error fetching user data:', error);
+    // });
+
 });
 
-app.post('/signUp', function (req, res) {
+app.post('/signUp', function (req, res, next) {
     admin.auth().createUser({
         email: req.body.email,
         emailVerified: false,
         password: req.body.password,
         displayName: req.body.email.substring(0, req.body.email.indexOf("@"))
     })
-    .then(function(userRecord) {
-        console.log('Successfully created new user: ', userRecord.uid);
-        res.send({error: null});
-    })
-    .catch(function(error) {
-        console.log('Error creating user: ', error)
-        res.json({
-            error: 'SIGN_UP_FAILED'
-        });
-    })
+        .then(function (userRecord) {
+            console.log('Successfully created new user: ', userRecord.uid);
+            res.send({ error: null });
+        })
+        .catch(function (error) {
+            console.log('Error creating user: ', error)
+            res.json({
+                error: 'SIGN_UP_FAILED'
+            });
+        })
 
 });
 
-app.post('/signOut', function(req, res) {
+app.post('/signOut', function (req, res, next) {
     req.session.user = null;
     res.setHeader('Set-Cookie', cookie.serialize('user', '', {
-        path : '/', 
+        path: '/',
         maxAge: 60 * 60 * 24 * 7 // 1 week in number of seconds
     }));
 })
@@ -150,7 +209,7 @@ app.get('/getRooms', function (req, res) {
             { name: 'room2nameisawesome10', numPlayers: 1, maxPlayers: 4 },
             { name: 'room1435634', numPlayers: 3, maxPlayers: 4 },
             { name: 'room2nameisawesome11', numPlayers: 1, maxPlayers: 4 },
-          ]
+        ]
     })
 });
 
@@ -239,20 +298,20 @@ function getPlayerByID(playerID, gameState) {
 const https = require('https');
 const PORT = 3000;
 
-// const httpsOptions = {
-//     key: fs.readFileSync('./securityDev/cert.key'),
-//     cert: fs.readFileSync('./securityDev/cert.pem')
-// }
+const httpsOptions = {
+    key: fs.readFileSync('./securityDev/cert.key'),
+    cert: fs.readFileSync('./securityDev/cert.pem')
+}
 
-// const server = https.createServer(httpsOptions, app)
-//     .listen(PORT, () => {
-//         console.log('server running at ' + PORT)
-//     })
+const server = https.createServer(httpsOptions, app)
+    .listen(PORT, () => {
+        console.log('server running at ' + PORT)
+    })
 
-let server = app.listen(PORT, function (err) {
-    if (err) console.log(err);
-    else console.log("HTTP server on http://localhost:%s", PORT);
-});
+// let server = app.listen(PORT, function (err) {
+//     if (err) console.log(err);
+//     else console.log("HTTP server on http://localhost:%s", PORT);
+// });
 
 let io = socket(server);
 
@@ -293,22 +352,26 @@ io.on('connection', function (socket) {
         // new player joins
         if (req.string == 'player_join') {
             let newPlayer = new Player(req.username);
+
+            // FOR PROD:
+            // newPlayer._id = req.session.uid;
+
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
                 gameState.players.push(newPlayer);
                 gameState.maxPlayerNum++;
                 // store game state
-                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                     io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
-            .catch(function(err) {
-                console.log(err);
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            })
-            
+                .catch(function (err) {
+                    console.log(err);
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
+
         }
 
         // game starts
@@ -318,16 +381,16 @@ io.on('connection', function (socket) {
                 let gameState = JSON.parse(snapshot.val());
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 gameState.turnPhase = 'setup_placement';
-                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                     io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
-            .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            })
+                .catch(function (err) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
 
-            
+
         }
 
         // ends current player's turn and goes to the next player
@@ -335,22 +398,22 @@ io.on('connection', function (socket) {
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
-                
+
                 if (gameState.turnPhase == 'setup_placement') io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
-                
+
                 gameState = boardFunctions.advanceToNextTurn(gameState);
-                
+
                 // store game state
-                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                     io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
-            .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            })
+                .catch(function (err) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
 
-            
+
         }
 
         // Dice roll (7)
@@ -360,14 +423,14 @@ io.on('connection', function (socket) {
                 let gameState = JSON.parse(snapshot.val());
                 gameState.turnPhase = 'move_robber';
                 // store game state
-                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                     io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
-            .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            })   
+                .catch(function (err) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
         }
 
         // move the robber to the new hex
@@ -389,20 +452,20 @@ io.on('connection', function (socket) {
                     return hex.hexPosition == newRobberHex;
                 })
                 newHex.robber = true;
-    
+
                 gameState.turnPhase = 'build/trade/devcard_phase';
 
                 // store game state
-                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                     io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
-            .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            }) 
+                .catch(function (err) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
 
-            
+
         }
 
         // Dice roll (2-6, 8-12): give out resources to players
@@ -418,7 +481,7 @@ io.on('connection', function (socket) {
                         hex.settlements.forEach(settlement => {
                             boardFunctions.addResource(hex.resourceType, getPlayerByID(settlement.player, gameState));
                         });
-    
+
                         // give resources to all the players that own a city on this hex
                         hex.cities.forEach(city => {
                             boardFunctions.addResource(hex.resourceType, getPlayerByID(city.player, gameState));
@@ -428,16 +491,16 @@ io.on('connection', function (socket) {
                 });
                 gameState.turnPhase = 'build/trade/devcard_phase';
                 // store game state
-                gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                     io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                 })
             })
-            .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            }) 
+                .catch(function (err) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
 
-            
+
         }
 
         // build road 
@@ -448,7 +511,7 @@ io.on('connection', function (socket) {
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
 
-                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: 'Cannot build during roll phase'}));
+                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Cannot build during roll phase' }));
 
                 if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
@@ -460,14 +523,14 @@ io.on('connection', function (socket) {
                             currentPlayer.resources.Brick--;
 
                             // store game state
-                            gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                                if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                            gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                                if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                                 io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                             })
                         } else {
-                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Insufficient resources'}));
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Insufficient resources' }));
                         }
-                    // if during setup, don't check for resources
+                        // if during setup, don't check for resources
                     } else if (gameState.setupRoad < 1) {
                         let road = new Road({ player: currentPlayer._id, start: req.start, end: req.end });
                         gameState.roads.push(road);
@@ -479,20 +542,20 @@ io.on('connection', function (socket) {
                         }
 
                         // store game state
-                        gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                        gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                             io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                         })
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Invalid road position'}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Invalid road position' }));
                 }
             })
-            .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            })
+                .catch(function (err) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
 
-            
+
         }
 
         // build settlement
@@ -503,7 +566,7 @@ io.on('connection', function (socket) {
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
 
-                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Cannot build during roll phase'}));
+                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Cannot build during roll phase' }));
 
                 if (boardFunctions.isValidSettlement(req.location, currentPlayer, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
@@ -525,14 +588,14 @@ io.on('connection', function (socket) {
                             getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
                             boardFunctions.checkWinCondition(getPlayerByID(currentPlayer._id, gameState), gameState);
                             // store game state
-                            gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                                if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                            gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                                if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                                 io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                             })
                         } else {
-                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Insufficient resources'}));
+                            io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Insufficient resources' }));
                         }
-                    // if during setup, don't check for resources
+                        // if during setup, don't check for resources
                     } else if (gameState.setupSettlement < 1) {
                         let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
                         gameState.settlements.push(settlement);
@@ -553,20 +616,20 @@ io.on('connection', function (socket) {
                         }
 
                         // store game state
-                        gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                        gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                             io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                         })
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Invalid settlement position'}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Invalid settlement position' }));
                 }
             })
-            .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            })
+                .catch(function (err) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
 
-            
+
         }
 
         // upgrade settlement to city
@@ -578,7 +641,7 @@ io.on('connection', function (socket) {
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
 
-                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Cannot build during roll phase'}));
+                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Cannot build during roll phase' }));
 
                 if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
 
@@ -596,20 +659,20 @@ io.on('connection', function (socket) {
                         getPlayerByID(currentPlayer._id, gameState).VictoryPoints++;
                         boardFunctions.checkWinCondition(getPlayerByID(currentPlayer._id, gameState), gameState);
                         // store game state
-                        gameStateRef.child(id).set(JSON.stringify(gameState), function(err) {
-                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
+                        gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                            if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
                             io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
                         })
                     } else {
-                        io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Insufficient Resources'}));
+                        io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Insufficient Resources' }));
                     }
                 } else {
-                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({invalidMove: 'Invalid city position'}));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Invalid city position' }));
                 }
             })
-            .catch(function(err) {
-                io.sockets.emit('PLAYER_CONNECT', JSON.stringify({error: err}));
-            })   
+                .catch(function (err) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                })
         }
 
     })

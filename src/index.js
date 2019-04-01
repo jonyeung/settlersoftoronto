@@ -5,7 +5,7 @@ import history from './history';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { reducer as formReducer }from 'redux-form';
+import { reducer as formReducer } from 'redux-form';
 import projectsReducer from './store/reducers/projects';
 import projectReducer from './store/reducers/project';
 import featuredProjectsReducer from './store/reducers/featuredProjects';
@@ -15,6 +15,7 @@ import authReducer from './store/reducers/auth';
 import joinRoomReducer from './store/reducers/joinRoom';
 import lobbyReducer from './store/reducers/lobby';
 import gameReducer from './store/reducers/game';
+import { CookiesProvider } from 'react-cookie';
 
 import './index.css';
 import App from './App';
@@ -39,9 +40,11 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const app = (
   <Provider store={store}>
-      <Router history={history}>
-          <App />
-      </Router>
+    <Router history={history}>
+      <CookiesProvider>
+        <App />
+      </CookiesProvider>
+    </Router>
   </Provider>
 );
 

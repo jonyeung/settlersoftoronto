@@ -80,12 +80,14 @@ export const initSignIn = (email, password) => {
 
   return (dispatch) => {
     dispatch(loading(true));
-    axios.post('http://localhost:3000/signIn', {
+    axios.post('https://localhost:3000/signIn', {
+      withCredentials: true,
       email: email,
       password: password,
     })
       .then((res) => {
         dispatch(signIn(res.data))
+        console.log('res header', res.headers)
         console.log('res.data.idToken', res.data.idToken)
         console.log('res.data.idTokenExpiryDate', res.data.idTokenExpiryDate)
         dispatch(loginActions.authSignIn(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
