@@ -84,6 +84,12 @@ export const updateGameState = (newGameState) => {
   })
 }
 
+export const resetGameState = () => {
+  return (dispatch) => dispatch({
+    type: actionTypes.RESET_GAME_STATE,
+  })
+}
+
 // export const roomSetup = (socket) => {
 // 	return (dispatch) => {
 // 		socket.on('initialList',(res)=>{

@@ -16,26 +16,52 @@ import io from 'socket.io-client';
 import * as gameActions from '../../store/actions/game';
 import * as joinRoomActions from '../../store/actions/joinRoom';
 import VictoryModal from '../VictoryModal/VictoryModal';
+import GameInvalidMoveModal from '../GameInvalidMoveModal/GameInvalidMoveModal';
 
 class Game extends Component {
 
   constructor(props) {
     super(props)
 
-    this.state = {
+    this.initialState = {
       tradeModalOpen: false,
       showDice: false,
       //'EDGE' 'CORNER' or null
       buildType: null,
-      victory: false
+      victory: false,
+      invalidMove: false,
+      invalidMoveMessage: ''
     }
+
+    this.state = this.initialState
 
     this.diceInit = false;
     this.socket = io.connect('https://localhost:3000')
 
     this.socket.on('PLAYER_CONNECT', (res) => {
-      console.log('response socket', res)
-      this.props.updateGameState(JSON.parse(res));
+      let response = JSON.parse(res)
+      let invalidMoveMessage = response.invalidMove
+      console.log('response socket', response)
+      console.log('res.invalidMove', response.invalidMove)
+      //invalid move
+      if (response.invalidMove) {
+        console.log('response.invalidMove', response.invalidMove)
+        if (this.props.gameState.turnPhase === 'game not started') {
+          invalidMoveMessage = 'Game not Started. Please click the start button on the bottom right of the screen'
+        }
+        this.setState({
+          ...this.state,
+          invalidMove: true,
+          invalidMoveMessage: invalidMoveMessage
+        })
+      } else {
+        this.props.updateGameState(response);
+        this.setState({
+          ...this.state,
+          invalidMove: false,
+          invalidMoveMessage: ''
+        })
+      }
     })
 
     this.socket.emit('PLAYER_CONNECT', {
@@ -61,7 +87,7 @@ class Game extends Component {
         gameStateId: this.props.gameStateId,
       })
     }
-    
+
     this.renderTile = (Tile) => {
       let resourceType = null;
       let newTile = null;
@@ -144,6 +170,26 @@ class Game extends Component {
       })
     }
 
+    this.checkVictory = () => {
+      if ((this.props.gameState.gameOver === true && this.state.victory === false)) {
+        this.setVictoryTrue()
+      }
+    }
+
+    this.setInvalidMoveFalse = () => {
+      this.setState({
+        ...this.state,
+        invalidMove: true
+      })
+    }
+
+    this.toggleInvalidMove = () => {
+      this.setState({
+        ...this.state,
+        invalidMove: !this.state.invalidMove
+      })
+    }
+
     this.rollDoneCallback = (num) => {
       console.log(`You rolledd a ${num}`)
       //roll here
@@ -181,17 +227,20 @@ class Game extends Component {
     if (this.state.showDice) {
       diceStyle.pop();
     }
-
     diceStyle = diceStyle.join(' ')
 
-    
-
+    this.checkVictory()
     return (
       <>
         <button className={styles.Test} onClick={this.davidJoins}>AddPlayer</button>
 
-        <VictoryModal show={this.state.victory} quit={()=>{this.props.leaveRoom(this.props.history)}}></VictoryModal>
-        <GameQuitButton quit={()=>{this.props.leaveRoom(this.props.history)}}></GameQuitButton>
+        <GameInvalidMoveModal close={this.toggleInvalidMove} show={this.state.invalidMove} message={this.state.invalidMoveMessage}></GameInvalidMoveModal>
+        <VictoryModal show={this.state.victory}
+          quit={() => {
+            this.props.leaveRoom(this.props.history)
+            this.setState(...this.initialState)
+          }}></VictoryModal>
+        <GameQuitButton quit={() => { this.props.leaveRoom(this.props.history) }}></GameQuitButton>
         <div className={diceStyle}>
           <ReactDice
             numDice={2}
