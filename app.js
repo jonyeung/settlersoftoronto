@@ -107,6 +107,9 @@ app.post('/signIn', function (req, res, next) {
                 })
                     .catch(function (error) {
                         console.log(error)
+                        res.json({
+                            error: 'INVALID_PASSWORD'
+                        });
                     })
             })
             .catch(function (error) {
