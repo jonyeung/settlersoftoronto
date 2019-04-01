@@ -59,7 +59,7 @@ export const initSignUp = (email, password) => {
 
   return (dispatch) => {
     dispatch(loading(true));
-    axios.post('http://localhost:3000/signUp', {
+    axios.post('https://localhost:3000/signUp', {
       email: email,
       password: password,
     })

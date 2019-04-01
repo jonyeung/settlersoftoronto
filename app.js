@@ -303,20 +303,20 @@ function getPlayerByID(playerID, gameState) {
 const https = require('https');
 const PORT = 3000;
 
-// const httpsOptions = {
-//     key: fs.readFileSync('./securityDev/cert.key'),
-//     cert: fs.readFileSync('./securityDev/cert.pem')
-// }
+const httpsOptions = {
+    key: fs.readFileSync('./securityDev/cert.key'),
+    cert: fs.readFileSync('./securityDev/cert.pem')
+}
 
-// const server = https.createServer(httpsOptions, app)
-//     .listen(PORT, () => {
-//         console.log('server running at ' + PORT)
-//     })
+const server = https.createServer(httpsOptions, app)
+    .listen(process.env.PORT || PORT, () => {
+        console.log('server running at ' + PORT)
+    })
 
-let server = app.listen( process.env.PORT || PORT, function (err) {
-    if (err) console.log(err);
-    else console.log("HTTP server on http://localhost:%s", PORT);
-});
+// let server = app.listen( process.env.PORT || PORT, function (err) {
+//     if (err) console.log(err);
+//     else console.log("HTTP server on http://localhost:%s", PORT);
+// });
 
 let io = socket(server);
 

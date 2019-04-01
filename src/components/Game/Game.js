@@ -36,7 +36,7 @@ class Game extends Component {
     this.state = this.initialState
 
     this.diceInit = false;
-    this.socket = io.connect('http://localhost:3000')
+    this.socket = io.connect('https://localhost:3000')
 
     this.socket.on('PLAYER_CONNECT', (res) => {
       let response = JSON.parse(res)
