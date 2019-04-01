@@ -17,7 +17,7 @@ export const setRoomsFailed = () => {
 export const initRefreshRoom = () => {
   return (dispatch) => {
 
-    axios.get('http://localhost:3000/getRooms')
+    axios.get('https://c09-project-express-backend.herokuapp.com/getRooms')
       .then(res => {
         console.log('res.data.rooms', res.data.rooms)
         dispatch(setRooms(res.data.rooms));
