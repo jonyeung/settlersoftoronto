@@ -80,8 +80,7 @@ export const initSignIn = (email, password) => {
 
   return (dispatch) => {
     dispatch(loading(true));
-    axios.post('https://localhost:3000/signIn', {
-      withCredentials: true,
+    axios.post('http://localhost:3000/signIn', {
       email: email,
       password: password,
     })
@@ -93,8 +92,8 @@ export const initSignIn = (email, password) => {
         dispatch(loginActions.authSignIn(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
       })
       .catch((error) => {
-        console.log('error: ', error.response)
-        dispatch(signInFailed(error.response.data.error));
+        console.log('error: ', error)
+        dispatch(signInFailed(error));
       });
   }
 }
