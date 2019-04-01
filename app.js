@@ -102,9 +102,9 @@ app.post('/signIn', function (req, res, next) {
                     req.session.uid = resObj.uid;
                     req.session.user = resObj.username;
                     // console.log('resObj: ', resObj)
-                    return res.cookie('name', 'myName').json('cookie set');
+                    // return res.cookie('name', 'myName').json('cookie set');
 
-                    // return res.json(resObj);
+                    return res.json(resObj);
                 })
                     .catch(function (error) {
                         console.log(error)
