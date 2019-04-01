@@ -81,6 +81,10 @@ export const initSignIn = (email, password) => {
   return (dispatch) => {
     dispatch(loading(true));
     axios.post('http://localhost:3000/signIn', {
+<<<<<<< HEAD
+=======
+      withCredentials: true,
+>>>>>>> 410f3da2e5fe860670f1a15129aaeaf15e97846d
       email: email,
       password: password,
     })
