@@ -1,6 +1,6 @@
 /*jshint esversion: 6*/
 const express = require('express');
-const cookiesMiddleware = require('universal-cookie-express');
+// const cookiesMiddleware = require('universal-cookie-express');
 const firebase = require('firebase');
 const admin = require('firebase-admin');
 const app = express();
@@ -10,7 +10,7 @@ const session = require('express-session');
 const fs = require('fs');
 const boardFunctions = require('./board.js');
 const serviceAccount = require('./c09-project-firebase-adminsdk-xuxa7-da3b397950.json');
-cookieParser = require('cookie-parser');
+// cookieParser = require('cookie-parser');
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,7 +26,7 @@ app.use(express.static('build'));
 
 // })
 
-app.use(cookieParser());
+// app.use(cookieParser());
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -74,8 +74,7 @@ let isAuthenticated = function (req, res, next) {
 
 app.post('/signIn', function (req, res, next) {
     // console.log("cookie: ", req.universalCookies.get('user'))
-
-
+    console.log('hello')
     let resObj = {
         error: null,
         uid: null,
@@ -298,20 +297,20 @@ function getPlayerByID(playerID, gameState) {
 const https = require('https');
 const PORT = 3000;
 
-const httpsOptions = {
-    key: fs.readFileSync('./securityDev/cert.key'),
-    cert: fs.readFileSync('./securityDev/cert.pem')
-}
+// const httpsOptions = {
+//     key: fs.readFileSync('./securityDavid/cert.key'),
+//     cert: fs.readFileSync('./securityDavid/cert.pem')
+// }
 
-const server = https.createServer(httpsOptions, app)
-    .listen(PORT, () => {
-        console.log('server running at ' + PORT)
-    })
+// const server = https.createServer(httpsOptions, app)
+//     .listen(PORT, () => {
+//         console.log('server running at ' + PORT)
+//     })
 
-// let server = app.listen(PORT, function (err) {
-//     if (err) console.log(err);
-//     else console.log("HTTP server on http://localhost:%s", PORT);
-// });
+let server = app.listen(PORT, function (err) {
+    if (err) console.log(err);
+    else console.log("HTTP server on http://localhost:%s", PORT);
+});
 
 let io = socket(server);
 
