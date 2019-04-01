@@ -116,7 +116,10 @@ app.post('/signIn', function (req, res, next) {
                 console.log('Error fetching user data:', error);
             });
     }).catch(function (err) {
-        console.log('Error signing in: ', err)
+        console.log('INVALID_PASSWORD')
+        res.json({
+            error: 'INVALID_PASSWORD'
+        });
     })
 
 
