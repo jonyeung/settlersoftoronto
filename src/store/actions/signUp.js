@@ -64,12 +64,18 @@ export const initSignUp = (email, password) => {
       password: password,
     })
       .then((res) => {
-        // console.log('res', res.data)
-        dispatch(signUp())
+        if (!res.data.error) {
+          console.log('res', res.data)
+          dispatch(signUp())
+        } else {
+          console.log('sign up error: ', res.data.error)
+          dispatch(signUpFailed(res.data.error));
+        }
+
       })
       .catch((error) => {
-        // console.log('error: ', error.response)
-        dispatch(signUpFailed(error.response.data.error));
+        console.log('sign up error: ', error.data.error)
+        dispatch(signUpFailed(error.data.error));
       });
   }
 }

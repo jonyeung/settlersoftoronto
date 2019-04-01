@@ -36,6 +36,11 @@ let SignUpForm = props => {
       isError = true;
     }
 
+    if (values.password.length < 6) {
+      error.password = 'Password must be at least 6 characters';
+      isError = true;
+    }
+
     if (!('confirmPassword' in values)) {
       error.confirmPassword = 'Required';
       isError = true;

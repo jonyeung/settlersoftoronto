@@ -55,10 +55,15 @@ class Login extends Component {
       this.props.closeLoginModal();
       this.props.resetSignInReducer();
       // history.push('/Console');
-    } 
+    } else if (this.props.signInError === true && this.props.isOpen !== true) {
+      this.props.openLoginModal();
+    }
   }
 
   render() {
+    console.log('this.props.signInError: ', this.props.signInError)
+    console.log('this.props.signInLoading: ', this.props.signInLoading)
+
     let attachedClasses = styles.Close;
     if (this.props.isOpen) {
       attachedClasses = styles.Open;

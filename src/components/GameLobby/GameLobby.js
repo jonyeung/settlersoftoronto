@@ -35,6 +35,13 @@ class GameLobby extends Component {
       })
     }
 
+    this.openModal = () => {
+      this.setState({
+        ...this.state,
+        showLoginModal: true
+      })
+    }
+
     this.toggleDrawer = () => {
       this.setState({
         ...this.state,
@@ -88,7 +95,7 @@ class GameLobby extends Component {
         <div className={styles.Content}>
           <NavBar toggleLoginModal={this.toggleLoginModal} toggleDrawer={this.toggleDrawer} />
           <Drawer isOpen={this.state.showDrawer} closeDrawer={this.closeDrawer} toggleLoginModal={this.toggleLoginModal}></Drawer>
-          <Login isOpen={this.state.showLoginModal} closeLoginModal={this.closeModal}></Login>
+          <Login isOpen={this.state.showLoginModal} closeLoginModal={this.closeModal} openLoginModal={this.openModal}></Login>
           {gameLobbyRoomsDisplay}
         </div>
         <Footer></Footer>

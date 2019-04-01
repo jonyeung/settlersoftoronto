@@ -85,11 +85,14 @@ export const initSignIn = (email, password) => {
       password: password,
     })
       .then((res) => {
-        dispatch(signIn(res.data))
-        console.log('res header', res.headers)
-        console.log('res.data.idToken', res.data.idToken)
-        console.log('res.data.idTokenExpiryDate', res.data.idTokenExpiryDate)
-        dispatch(loginActions.authSignIn(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
+        if (!res.data.error) {
+          dispatch(signIn(res.data))
+          dispatch(loginActions.authSignIn(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
+        } else {
+          dispatch(signInFailed(res.data.error));
+        }
+
+
       })
       .catch((error) => {
         console.log('error: ', error)
