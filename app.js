@@ -313,7 +313,7 @@ const PORT = 3000;
 //         console.log('server running at ' + PORT)
 //     })
 
-let server = app.listen(PORT, function (err) {
+let server = app.listen( process.env.PORT || PORT, function (err) {
     if (err) console.log(err);
     else console.log("HTTP server on http://localhost:%s", PORT);
 });
