@@ -68,7 +68,6 @@ app.get('/test', function (req, res, next) {
 
 app.post('/signIn', function (req, res, next) {
     // console.log("cookie: ", req.universalCookies.get('user'))
-    console.log('hello')
     let resObj = {
         error: null,
         uid: null,
@@ -81,7 +80,7 @@ app.post('/signIn', function (req, res, next) {
         admin.auth().getUserByEmail(req.body.email)
             .then(function (userRecord) {
                 // See the UserRecord reference doc for the contents of userRecord.
-                console.log('Successfully fetched user data:', userRecord.toJSON());
+                // console.log('Successfully fetched user data:', userRecord.toJSON());
                 resObj.idTokenExpiryDate = userRecord.tokensValidAfterTime;
                 resObj.username = userRecord.displayName;
                 resObj.uid = userRecord.uid;
