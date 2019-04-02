@@ -33,7 +33,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   console.log('lobby reducer')
-  console.log('action: ', action.rooms)
+  console.log('action rooms: ', action.rooms)
   switch (action.type) {
     case actionTypes.SET_ROOMS:
       return {

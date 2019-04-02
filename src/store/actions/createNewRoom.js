@@ -1,33 +1,34 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-projects';
-import * as loginActions from '../actions/auth';
+import * as lobbyActions from '../actions/lobby';
 
 
-export const signIn = (authData) => {
+export const createNewRoom = (roomName) => {
   return {
-    type: actionTypes.SIGN_IN,
+    type: actionTypes.CREATE_NEW_ROOM,
+    roomName: roomName
   }
 }
 
-export const signInFailed = (errorMessage) => {
+export const createNewRoomFailed = (errorMessage) => {
   return {
-    type: actionTypes.SIGN_IN_FAILED,
+    type: actionTypes.CREATE_NEW_ROOM_FAILED,
     errorMessage: errorMessage
   }
 }
 
-export const signInReset = () => {
-  console.log('inside sign in action')
+export const createNewRoomReset = () => {
+  console.log('inside createNewRoomReset action')
   return (dispatch) => {
     dispatch({
-      type: actionTypes.SIGN_IN_RESET,
+      type: actionTypes.CREATE_NEW_ROOM_RESET,
     })
   }
 }
 
 export const loading = (loading) => {
   return {
-    type: actionTypes.SIGN_IN_LOADING,
+    type: actionTypes.CREATE_NEW_ROOM_LOADING,
     loading: loading
   }
 }
@@ -76,29 +77,29 @@ export const loading = (loading) => {
 //   }
 // }
 
-export const initSignIn = (email, password) => {
+export const initCreateNewRoom = (roomName) => {
 
   return (dispatch) => {
     dispatch(loading(true));
 
-    axios.post('http://localhost:3000/signIn', {
+    axios.post('http://localhost:3000/createNewRoom', {
     //axios.post('https://c09-project-express-backend.herokuapp.com/signIn', {
 
-      email: email,
-      password: password,
+      roomName: roomName
     })
       .then((res) => {
         if (!res.data.error) {
-          dispatch(signIn(res.data))
-          dispatch(loginActions.authSignIn(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
+          dispatch(createNewRoom(res.data))
+          dispatch(lobbyActions.initRefreshRoom())
         } else {
-          dispatch(signInFailed(res.data.error));
+          dispatch(createNewRoomFailed(res.data.error));
         }
+
 
       })
       .catch((error) => {
         console.log('error: ', error)
-        dispatch(signInFailed(error));
+        dispatch(createNewRoom(error));
       });
   }
 }

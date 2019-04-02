@@ -14,6 +14,9 @@ class NavBar extends Component {
     if (this.props.authState.signedIn === true) {
       rightDisplay =
         <>
+          <a onClick={this.props.toggleCreateNewRoomModal}>
+            <div className={styles.NavItem}>Create New Room</div>
+          </a>
           <p className={styles.LoggedInAs}>Logged in as: {this.props.authState.username}</p>
           <a onClick={this.props.authReset}>
             <div className={styles.NavItem}>Sign Out</div>

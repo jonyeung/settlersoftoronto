@@ -11,6 +11,7 @@ import projectReducer from './store/reducers/project';
 import featuredProjectsReducer from './store/reducers/featuredProjects';
 import signUpReducer from './store/reducers/signUp';
 import signInReducer from './store/reducers/signIn';
+import createNewRoomReducer from './store/reducers/createNewRoom';
 import authReducer from './store/reducers/auth';
 import joinRoomReducer from './store/reducers/joinRoom';
 import lobbyReducer from './store/reducers/lobby';
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   featuredProjectsReducer: featuredProjectsReducer,
   signUpReducer: signUpReducer,
   signInReducer: signInReducer,
+  createNewRoomReducer: createNewRoomReducer,
   authReducer: authReducer,
 
   joinRoomReducer: joinRoomReducer,

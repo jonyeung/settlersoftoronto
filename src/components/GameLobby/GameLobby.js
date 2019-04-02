@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import * as joinRoomActions from '../../store/actions/joinRoom';
 import * as lobbyActions from '../../store/actions/lobby';
+import CreateNewRoom from '../CreateNewRoom/CreateNewRoom';
 
 class GameLobby extends Component {
 
@@ -18,7 +19,8 @@ class GameLobby extends Component {
 
     this.state = {
       showLoginModal: false,
-      showDrawer: false
+      showDrawer: false,
+      showCreateNewRoomModal: false
     }
 
     this.toggleLoginModal = () => {
@@ -29,6 +31,7 @@ class GameLobby extends Component {
     }
 
     this.closeModal = () => {
+      console.log('closemodal should be set to false')
       this.setState({
         ...this.state,
         showLoginModal: false
@@ -56,16 +59,40 @@ class GameLobby extends Component {
       })
     }
 
+    this.toggleCreateNewRoomModal = () => {
+      this.setState({
+        ...this.state,
+        createNewRoomModal: !this.state.createNewRoomModal
+      })
+    }
+
+    this.closeCreateNewRoomModal = () => {
+      this.setState({
+        ...this.state,
+        createNewRoomModal: false
+      })
+    }
+
+    this.openCreateNewRoomModal = () => {
+      this.setState({
+        ...this.state,
+        createNewRoomModal: true
+      })
+    }
+
     // this.joinRoom = () => {
     //   this.props.history.push('/Game')
     // }
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
+    console.log('closemodal state: ', this.state.showLoginModal)
 
   }
 
   render() {
+    // console.log('closemodal state: ', this.state.showLoginModal)
+
     let gameLobbyRoomsDisplay =
       <div className={styles.GameRoomsList}>
         <p className={styles.SignInToPlayMessage}>Welcome to the Settlers of Toronto. Sign in to play!</p>
@@ -96,6 +123,7 @@ class GameLobby extends Component {
           <NavBar toggleLoginModal={this.toggleLoginModal} toggleDrawer={this.toggleDrawer} />
           <Drawer isOpen={this.state.showDrawer} closeDrawer={this.closeDrawer} toggleLoginModal={this.toggleLoginModal}></Drawer>
           <Login isOpen={this.state.showLoginModal} closeLoginModal={this.closeModal} openLoginModal={this.openModal}></Login>
+          <CreateNewRoom isOpen={this.state.showCreateNewRoomModal} closeModal={this.closeCreateNewRoomModal} openModal={this.openCreateNewRoomModal}></CreateNewRoom>
           {gameLobbyRoomsDisplay}
         </div>
         <Footer></Footer>

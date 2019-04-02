@@ -60,7 +60,7 @@ export const initSignUp = (email, password) => {
   return (dispatch) => {
     dispatch(loading(true));
     
-    axios.post('https://localhost:3000/signUp', {
+    axios.post('http://localhost:3000/signUp', {
     //axios.post('https://c09-project-express-backend.herokuapp.com/signUp', {
       email: email,
       password: password,

@@ -12,6 +12,8 @@ import Game from './components/Game/Game';
 import GameLobby from './components/GameLobby/GameLobby';
 import VictoryModal from './components/VictoryModal/VictoryModal';
 import GameInvalidMoveModal from './components/GameInvalidMoveModal/GameInvalidMoveModal';
+import CreateNewRoomForm from './components/CreateNewRoomForm/CreateNewRoomForm';
+import CreateNewRoom from './components/CreateNewRoom/CreateNewRoom';
 
 library.add(faSyncAlt, faSignOutAlt, faHeart);
 
@@ -21,7 +23,7 @@ class App extends Component {
       <Switch>
         <Route path="/Console" component={Console} />
         <Route path="/" exact component={GameLobby} />
-        <Route path="/Test" exact component={GameInvalidMoveModal} />
+        <Route path="/Test" exact component={GameLobby} />
         <Route path="/Game" exact component={Game} />
         <Route path="/RouteError" component={RouteError} />
         <Redirect to="/RouteError" />

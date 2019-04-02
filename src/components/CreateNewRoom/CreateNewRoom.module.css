@@ -1,0 +1,112 @@
+.Close {
+  display: none;
+}
+
+.Open {
+  display: flex;
+}
+
+.darkOverlay {
+  background-color: rgba(0, 0, 0, .5);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 110;
+}
+
+.Content {
+  background-color: white;
+  width: 500px;
+  height: 470px;
+  position: fixed;
+  border-radius: 10px;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px; /* Negative half of height. */
+  margin-left: -250px; /* Negative half of width. */
+  z-index: 120;
+  transition: transform 0.3s ease-out;
+}
+
+@media(max-width: 550px) {
+  .Content {
+    width: 90vw;
+    margin-left: -45vw; /* Negative half of width. */
+    height: 450px;
+  }
+}
+
+.Content h1 {
+  margin-left: 20px;
+}
+
+.Content h1 span{
+  font-size: 14px;
+  color: blue;
+  border-bottom: 1px blue solid;
+  margin-left: 20px;
+  margin-right: auto;
+}
+
+.Content h1 .errorMessage{
+  font-size: 14px;
+  color: red;
+  border-bottom: none;
+  margin-left: auto;
+}
+
+.Content h1 .errorMessage:hover {
+  cursor: default;
+}
+
+@media(max-width: 550px) {
+  .Content h1{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .Content h1 span{
+    margin-left: 0px;
+    margin-right: auto;
+  }
+}
+
+.Content h1 span:hover {
+  cursor: pointer;
+}
+
+.Content .SignUpSuccess {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.Content .SignUpSuccess p{
+  color: green;
+  font-size: 26px;
+  margin: auto;
+}
+
+.Content .SignUpSuccess button{
+  background-color: rgb(247, 103, 36);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  height: 50px;
+  width: 115px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.Content .SignUpSuccess button:hover {
+  background-color: rgb(163, 62, 15);
+}
+
+.Content .SignUpSuccess button {
+  transition: background-color 0.2s ease;
+}

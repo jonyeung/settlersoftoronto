@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import styles from './Login.module.css';
 import LoginForm from '../LoginForm/LoginForm';
 import SignUpForm from '../SignUpForm/SignUpForm';
+import {withRouter} from 'react-router-dom';
+
 import * as signUpActions from '../../store/actions/signUp';
 import * as signInActions from '../../store/actions/signIn';
 
@@ -39,6 +41,12 @@ class Login extends Component {
       console.log(this.props.signUpError)
       this.changeView(views.LOGIN);
     }
+
+    if (this.props.signInError === null && this.state.view === views.SIGN_IN_SUCCESS) {
+      console.log('checking signInError')
+      console.log(this.props.signInError)
+      this.changeView(views.LOGIN);
+    }
   }
 
   componentDidUpdate() {
@@ -46,23 +54,29 @@ class Login extends Component {
       this.changeView(views.SIGN_UP_SUCCESS);
 
     } else if (this.props.signUpError === null && this.state.view === views.SIGN_UP_SUCCESS) {
-      console.log('checking signUpError')
-      console.log(this.props.signUpError)
       this.changeView(views.LOGIN);
     }
 
     if (this.props.signInError === false && this.props.signInLoading === false) {
-      this.props.closeLoginModal();
+      
+      console.log('this.props.closeLoginModal()')
+
+      setTimeout(() => { this.props.closeLoginModal(); }, 10);
       this.props.resetSignInReducer();
       // history.push('/Console');
-    } else if (this.props.signInError === true && this.props.isOpen !== true) {
-      this.props.openLoginModal();
     }
+
+    if (this.props.modalShouldClose === true) {
+      this.props.closeLoginModal();
+
+    }
+    // } else if (this.props.signInError === true && this.props.isOpen !== true) {
+    //   this.props.openLoginModal();
+    // } 
+  
   }
 
   render() {
-    console.log('this.props.signInError: ', this.props.signInError)
-    console.log('this.props.signInLoading: ', this.props.signInLoading)
 
     let attachedClasses = styles.Close;
     if (this.props.isOpen) {
@@ -137,4 +151,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(Login);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(Login));
