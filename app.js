@@ -1,6 +1,5 @@
 /*jshint esversion: 6*/
 const express = require('express');
-// const cookiesMiddleware = require('universal-cookie-express');
 const firebase = require('firebase');
 const admin = require('firebase-admin');
 const app = express();
@@ -10,7 +9,6 @@ const session = require('express-session');
 const fs = require('fs');
 const boardFunctions = require('./board.js');
 const serviceAccount = require('./c09-project-firebase-adminsdk-xuxa7-da3b397950.json');
-// cookieParser = require('cookie-parser');
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,14 +17,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use(express.static('build'));
-
-// app.use(cookiesMiddleware()).use(function (req, res) {
-//     req.universalCookies.set('user', "user123")
-//     console.log("cookie: ", req.universalCookies.get('user'))
-
-// })
-
-// app.use(cookieParser());
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -122,34 +112,6 @@ app.post('/signIn', function (req, res, next) {
         });
     })
 
-
-    // admin.auth().getUserByEmail(req.body.email)
-    // .then(function(userRecord) {
-    //   // See the UserRecord reference doc for the contents of userRecord.
-    //   console.log('Successfully fetched user data:', userRecord.toJSON());
-    //   resObj.idTokenExpiryDate = userRecord.tokensValidAfterTime;
-    //   resObj.username = userRecord.displayName;
-    //   resObj.uid = userRecord.uid;
-    //   admin.auth().createCustomToken(userRecord.uid).then(function(token) {
-    //     resObj.idToken = token;
-    //     res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({uid: resObj.uid, username: resObj.username }), {
-    //         path : '/', 
-    //         maxAge: 60 * 60 * 24 * 7
-    //     }));
-    //     // console.log('res: ', res.getHeaders()['set-cookie'])
-    //     req.session.uid = resObj.uid;
-    //     req.session.user = resObj.username;
-    //     // console.log('resObj: ', resObj)
-    //     return res.json(resObj);
-    //   })
-    //   .catch(function(error) {
-    //     console.log(error)
-    //   })
-    // })
-    // .catch(function(error) {
-    //  console.log('Error fetching user data:', error);
-    // });
-
 });
 
 app.post('/signUp', function (req, res, next) {
@@ -181,42 +143,57 @@ app.post('/signOut', function (req, res, next) {
 })
 
 app.get('/getRooms', function (req, res) {
-    let error = false
-    if (error) {
-        res.status(500);
-        res.json({
-            error: 'GET_ROOMS_FAILED',
-        });
-    }
-    res.json({
-        error: null,
-        rooms: [
-            { name: 'room1', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome1', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room13', numPlayers: 4, maxPlayers: 4 },
-            { name: 'room111', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome2', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room11111', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome3', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room1222', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome4', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room12', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome5', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room31', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome6', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room145', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome7', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room1565', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome8', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room67671', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome9', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room165746', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome10', numPlayers: 1, maxPlayers: 4 },
-            { name: 'room1435634', numPlayers: 3, maxPlayers: 4 },
-            { name: 'room2nameisawesome11', numPlayers: 1, maxPlayers: 4 },
-        ]
+
+    gameStateRef.once("value").then(function(snapshot) {
+        console.log(snapshot.val())
     })
-});
+
+    // let allRooms = gameStateRef.orderByKey().on("value", function(snapshot) {
+    //     res.json({
+    //         error: null,
+    //         rooms: snapshot.val()
+    //     });
+    // });
+    
+})
+
+// app.get('/getRooms', function (req, res) {
+//     let error = false
+//     if (error) {
+//         res.status(500);
+//         res.json({
+//             error: 'GET_ROOMS_FAILED',
+//         });
+//     }
+//     res.json({
+//         error: null,
+//         rooms: [
+//             { name: 'room1', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome1', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room13', numPlayers: 4, maxPlayers: 4 },
+//             { name: 'room111', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome2', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room11111', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome3', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room1222', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome4', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room12', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome5', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room31', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome6', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room145', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome7', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room1565', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome8', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room67671', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome9', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room165746', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome10', numPlayers: 1, maxPlayers: 4 },
+//             { name: 'room1435634', numPlayers: 3, maxPlayers: 4 },
+//             { name: 'room2nameisawesome11', numPlayers: 1, maxPlayers: 4 },
+//         ]
+//     })
+// });
 
 let GameState = (function (state) {
     return {
@@ -303,20 +280,20 @@ function getPlayerByID(playerID, gameState) {
 const https = require('https');
 const PORT = 3000;
 
-const httpsOptions = {
-    key: fs.readFileSync('./securityDev/cert.key'),
-    cert: fs.readFileSync('./securityDev/cert.pem')
-}
+// const httpsOptions = {
+//     key: fs.readFileSync('./securityDev/cert.key'),
+//     cert: fs.readFileSync('./securityDev/cert.pem')
+// }
 
-const server = https.createServer(httpsOptions, app)
-    .listen(process.env.PORT || PORT, () => {
-        console.log('server running at ' + PORT)
-    })
+// const server = https.createServer(httpsOptions, app)
+//     .listen(process.env.PORT || PORT, () => {
+//         console.log('server running at ' + PORT)
+//     })
 
-// let server = app.listen( process.env.PORT || PORT, function (err) {
-//     if (err) console.log(err);
-//     else console.log("HTTP server on http://localhost:%s", PORT);
-// });
+let server = app.listen( process.env.PORT || PORT, function (err) {
+    if (err) console.log(err);
+    else console.log("HTTP server on http://localhost:%s", PORT);
+});
 
 let io = socket(server);
 
@@ -324,6 +301,32 @@ io.on('connection', function (socket) {
     console.log('socket connection successful');
 
     socket.on('PLAYER_CONNECT', (req) => {
+
+        if (req.string == 'reset_game') {
+            let id = req.gameStateId;
+            gameStateRef.child(id).once('value').then(function (snapshot) {
+                let gameState = snapshot.val();
+
+                // reset the game
+                gameState.hexes = boardFunctions.setupHexes();
+                gameState.roads = [];
+                gameState.settlements = [];
+                gameState.cities = [];
+                gameState.setupRoad = 0;
+                gameState.setupSettlement = 0;
+                gameState.currentPlayerNum = 0;
+                gameState.currentTurn = null;
+                gameState.turnPhase = 'game not started';
+                gameState.gameOver = false;
+                gameState.winner = null;
+
+                // store game state
+                gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+                    if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
+                })
+            })
+        }
 
         // create game room
         if (req.string == 'room_setup') {
@@ -337,7 +340,7 @@ io.on('connection', function (socket) {
             // set up board
             let hexes = boardFunctions.setupHexes();
 
-            let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
+            let gameState = new GameState({ gameName: gameName, players: [], hexes: hexes, maxPlayers: players.length });
             let id = gameStateRef.push(JSON.stringify(gameState)).key;
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
