@@ -1,9 +1,76 @@
 # WebSockets Documentation
 
 
-# Login/Signup
+# Lobby API
 
-TO BE IMPLEMENTED IN THE FUTURE
+**'/signIn':**
+ - description: user sign-in request
+ - request: POST
+ 	 - content-type: `application/json`
+	 - body:
+		- email: (string) email of user
+		- password: (string) password of user
+ - response: 200
+ 	- content-type: `application/json`
+ 	- body:
+		- error: null
+		- uid: user ID
+		- idToken: Firebase ID token for the user
+		- idTokenExpiryDate: expiry date for the Firebase token
+		- username: name of the user
+ - response: 401
+ 	- content-type: `application/json`
+	- body:
+		- error: 'INVALID PASSWORD'
+ ```
+ $ curl -H "Content-Type: application/json" -X POST -d '{"email": "johnsmith@gmail.com", "password":"mypassword"}' https://localhost:3000/signIn
+ ```
+ 
+ **'/signUp':**
+ - description: user sign-up request
+ - request: POST
+ 	 - content-type: `application/json`
+	 - body:
+		- email: (string) email of user
+		- password: (string) password of user
+ - response: 200
+ 	- content-type: `application/json`
+ 	- body:
+		- error: null
+ - response: 401
+ 	- content-type: `application/json`
+	- body:
+		- error: 'SIGN_UP_FAILED'
+ ```
+ $ curl -H "Content-Type: application/json" -X POST -d '{"email": "johnsmith@gmail.com", "password":"mypassword"}' https://localhost:3000/signUp
+ ```
+ 
+**'/signOut':**
+ - description: signs the user out
+ - request: POST
+ - response: 200
+```
+$ curl -X POST https://localhost:3000/signOut
+```
+
+
+**'/getRooms':**
+ - description: pulls the list of game rooms from the Firebase Realtime Database
+ - request: GET
+ - response: 200
+ 	- content-type: `application/json`
+	- body:
+		- error: null,
+		- rooms: (list of JSON obj) list of gameState objects
+ - response: 404
+ 	- content-type: `application/json`
+	- body:
+		- error: err code,
+		- rooms: empty list
+```
+$ curl https://localhost:3000/getRooms
+```
+
 
 # Game Phases
 
@@ -11,43 +78,129 @@ setup_placement: each player places a single road and settlement on their turn (
 
 roll_phase: current player can only roll the dice
 
-move_robber (only if the roll_phase caused a 7 to be rolled): current player picks where to move the robber
+move_robber (only if the roll_phase caused a 7 to be rolled, not implemented): current player picks where to move the robber
 
 build/trade/devcard_phase: current player can choose to build roads/settlements/cities, trade with other players or the bank, or buy/play dev cards
 
-# Game Logic
+# WebSocket Interactions
 **'room_setup':**
+ - description: creates a new game room
  - data:
 	 - gameName: (string) name of the room
+	 - uid: (string) user ID of the host player
 	 - username: (string) username of the host player
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
 
 **'player_join':**
+ - description: new player joins the game room
  - data:
-	 - gameName: (string) name of the room
-	 -  username: (string) username of the player
+	 - gameStateId: (string) ID of the game
+	 - uid: (string) user ID of the joining player
+	 - username: (string) username of the player
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
-**'start_game', 'begin_main_game', 'end_turn', 'seven_roll'**
+**'start_game'**
+ - description: initializes the game into the setup_placement phase
  - data:
-	 - gameName: (string) name of the room
+	 - gameStateId: (string) ID of the game
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
-
-**'move_robber'**
+**'end_turn'**
+ - description: ends the current player's turn and goes to the next player
  - data:
-	 - gameName: (string) name of the room
-	 - robberPosition: (int) hex position of where the player chose to place the robber
+ 	 - gameStateId: (string) ID of the game
+	 - uid: (string) user ID of the player initiating this action
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
+
+**'seven_roll'**
+ - description: original plan was to allow user to move the robber but as a placeholder now just gives 1 of each resource
+ - data:
+ 	 - gameStateId: (string) ID of the game
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
 **'regular_roll'**
-- data: 
-	- gameName: (string) name of the room
+ - description: handles the assignment of resources depending on the number of the die roll
+ - data: 
+ 	- gameStateId: (string) ID of the game
 	- roll: (int) int from 2-6, 8-12 showing the dice total rolled
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
-**'build_starting_road', 'build_road'**
+**'build_road'**
+- description: build a road
 - data:
-	- gameName: (string) name of the room
+ 	- gameStateId: (string) ID of the game
+	- uid: (string) user ID of the player initiating this action
 	- start: (int) start location of road
 	- end: (int) end location of road
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 403
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified version of:
+	 	- invalidMove: (string) error message of either: "Insufficient resources", "Invalid road position", "Not your turn!", "Cannot build during roll phase"
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
-**'build_starting_settlement', 'build_settlement', 'build_city'**
-- data:
-	- gameName: (string) name of the room
-	- location: (int) location of the settlement/city
+**'build_settlement'**
+ - description: build a settlement
+ - data:
+ 	- gameStateId: (string) ID of the game
+	- uid: (string) user ID of the player initiating this action
+	- location: (int) location of the settlement
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 403
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified version of:
+	 	- invalidMove: (string) error message of either: "Insufficient resources", "Invalid settlement position", "Not your turn!", "Cannot build during roll phase"
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
+
+
+**'build_city'**
+ - description: upgrade a pre-existing settlement to a city
+ - data:
+ 	- gameStateId: (string) ID of the game
+	- uid: (string) user ID of the player initiating this action
+	- location: (int) location of the city
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 403
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified version of:
+	 	- invalidMove: (string) error message of either: "Insufficient resources", "Invalid city position", "Not your turn!", "Cannot build during roll phase"
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
