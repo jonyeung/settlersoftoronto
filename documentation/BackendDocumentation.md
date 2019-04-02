@@ -89,6 +89,9 @@ build/trade/devcard_phase: current player can choose to build roads/settlements/
 	 - gameName: (string) name of the room
 	 - uid: (string) user ID of the host player
 	 - username: (string) username of the host player
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
 
 **'player_join':**
  - description: new player joins the game room
@@ -96,28 +99,58 @@ build/trade/devcard_phase: current player can choose to build roads/settlements/
 	 - gameStateId: (string) ID of the game
 	 - uid: (string) user ID of the joining player
 	 - username: (string) username of the player
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
 **'start_game'**
  - description: initializes the game into the setup_placement phase
  - data:
 	 - gameStateId: (string) ID of the game
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
 **'end_turn'**
  - description: ends the current player's turn and goes to the next player
  - data:
  	 - gameStateId: (string) ID of the game
 	 - uid: (string) user ID of the player initiating this action
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
 **'seven_roll'**
  - description: original plan was to allow user to move the robber but as a placeholder now just gives 1 of each resource
  - data:
  	 - gameStateId: (string) ID of the game
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
 **'regular_roll'**
  - description: handles the assignment of resources depending on the number of the die roll
  - data: 
  	- gameStateId: (string) ID of the game
 	- roll: (int) int from 2-6, 8-12 showing the dice total rolled
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
 **'build_road'**
 - description: build a road
@@ -126,6 +159,16 @@ build/trade/devcard_phase: current player can choose to build roads/settlements/
 	- uid: (string) user ID of the player initiating this action
 	- start: (int) start location of road
 	- end: (int) end location of road
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 403
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified version of:
+	 	- invalidMove: (string) error message of either: "Insufficient resources", "Invalid road position", "Not your turn!", "Cannot build during roll phase"
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
 **'build_settlement'**
  - description: build a settlement
@@ -133,6 +176,16 @@ build/trade/devcard_phase: current player can choose to build roads/settlements/
  	- gameStateId: (string) ID of the game
 	- uid: (string) user ID of the player initiating this action
 	- location: (int) location of the settlement
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 403
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified version of:
+	 	- invalidMove: (string) error message of either: "Insufficient resources", "Invalid settlement position", "Not your turn!", "Cannot build during roll phase"
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
 
 
 **'build_city'**
@@ -141,3 +194,13 @@ build/trade/devcard_phase: current player can choose to build roads/settlements/
  	- gameStateId: (string) ID of the game
 	- uid: (string) user ID of the player initiating this action
 	- location: (int) location of the city
+ - response: 200
+ 	 - content-type: `text/plain`
+	 - gameState: (string) stringified version of the gameState object
+ - response: 403
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified version of:
+	 	- invalidMove: (string) error message of either: "Insufficient resources", "Invalid city position", "Not your turn!", "Cannot build during roll phase"
+ - response: 404
+ 	 - content-type: `text/plain`
+	 - error: (string) stringified DB error message
