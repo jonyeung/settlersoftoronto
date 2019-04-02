@@ -80,7 +80,11 @@ export const initSignIn = (email, password) => {
 
   return (dispatch) => {
     dispatch(loading(true));
+<<<<<<< HEAD
     axios.post('https://c09-project-express-backend.herokuapp.com/signIn', {
+=======
+    axios.post('https://c09-project.herokuapp.com/signIn', {
+>>>>>>> 21007b59a2ba9b690704f4dcfb596639294d6722
       email: email,
       password: password,
     })
