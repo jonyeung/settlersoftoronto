@@ -39,7 +39,7 @@ let CreateNewRoomForm = props => {
     } else {
       console.log('Valid Submission');
       console.log(values);
-      props.onInitCreateNewRoom(values.roomName);
+      props.onInitCreateNewRoom(values.roomName, props.username, props.uid);
     }
   }
 

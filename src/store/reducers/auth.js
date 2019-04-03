@@ -4,7 +4,8 @@ const initialState = {
   signedIn: false,
   idToken: null,
   idTokenExpiryDate: null,
-  username: null
+  username: null,
+  uid: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -15,7 +16,8 @@ const reducer = (state = initialState, action) => {
         signedIn: true,
         idToken: action.idToken,
         idTokenExpiryDate: action.idTokenExpiryDate,
-        username: action.username
+        username: action.username,
+        uid: action.uid
       }
     case actionTypes.LOGOUT:
       return {

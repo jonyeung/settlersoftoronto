@@ -8,7 +8,7 @@ import history from '../../history';
 
 const views = {
   CREATE_ROOM: 'CREATE_ROOM',
-  CREATE_ROOM_SUCCESS: 'SIGN_UP_SUCCESS'
+  CREATE_ROOM_SUCCESS: 'CREATE_ROOM_SUCCESS'
 };
 
 class CreateNewRoom extends Component {
@@ -40,7 +40,7 @@ class CreateNewRoom extends Component {
 
   componentDidUpdate() {
     if (this.props.createNewRoomError === false && this.state.view !== views.CREATE_ROOM_SUCCESS) {
-      this.changeView(views.SIGN_UP_SUCCESS);
+      this.changeView(views.CREATE_ROOM_SUCCESS);
 
     } else if (this.props.createNewRoomError === null && this.state.view === views.CREATE_ROOM_SUCCESS) {
       console.log('checking createNewRoomError')
@@ -73,12 +73,14 @@ class CreateNewRoom extends Component {
     }
 
     let header = 'Create New Room';
-    let span = <span>Not a member? Sign Up!</span>;
-    
-    let form = <CreateNewRoomForm onInitCreateNewRoom={this.props.onInitCreateNewRoom} />;
+    let span = null;
+    console.log('this.props.username: ', this.props.username)
+    console.log('this.props.uid: ', this.props.uid)
+
+    let form = <CreateNewRoomForm onInitCreateNewRoom={this.props.onInitCreateNewRoom} username={this.props.username} uid={this.props.uid}/>;
 
     if (this.state.view === views.CREATE_ROOM) {
-      form = <CreateNewRoomForm onInitCreateNewRoom={this.props.onInitCreateNewRoom} loading={this.props.createNewRoomLoading} />;
+      form = <CreateNewRoomForm onInitCreateNewRoom={this.props.onInitCreateNewRoom} loading={this.props.createNewRoomLoading} username={this.props.username} uid={this.props.uid} />;
 
     } else if (this.state.view === views.CREATE_ROOM_SUCCESS) {
       form =
@@ -110,12 +112,16 @@ const mapStateToProps = state => {
     createNewRoomErrorMessage: state.createNewRoomReducer.errorMessage,
     createNewRoomError: state.createNewRoomReducer.error,
     createNewRoomLoading: state.createNewRoomReducer.loading,
+
+    username: state.authReducer.username,
+    uid: state.authReducer.uid
+
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onInitCreateNewRoom: (roomName) => dispatch(createNewRoomActions.initCreateNewRoom(roomName)),
+    onInitCreateNewRoom: (roomName, username, uid) => dispatch(createNewRoomActions.initCreateNewRoom(roomName, username, uid)),
     resetCreateNewRoomReducer: () => dispatch(createNewRoomActions.createNewRoomReset()),
   }
 }

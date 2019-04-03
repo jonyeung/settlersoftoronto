@@ -2,12 +2,13 @@ import * as actionTypes from './actionTypes';
 import * as lobbyActions from '../actions/lobby'
 import axios from '../../axios-projects';
 
-export const login = (idToken, idTokenExpiryDate, username) => {
+export const login = (idToken, idTokenExpiryDate, username, uid) => {
   return {
     type: actionTypes.LOGIN,
     idToken: idToken,
     idTokenExpiryDate: idTokenExpiryDate,
-    username: username
+    username: username,
+    uid: uid
   }
 }
 
@@ -23,19 +24,20 @@ export const authReset = () => {
   }
 }
 
-export const authSignIn = (idToken, idTokenExpiryDate, username) => {
+export const authSignIn = (idToken, idTokenExpiryDate, username, uid) => {
   return (dispatch) => {
-    dispatch(login(idToken, idTokenExpiryDate, username))
+    console.log('auth sign in: ', idToken, idTokenExpiryDate, username, uid)
+    dispatch(login(idToken, idTokenExpiryDate, username, uid))
     dispatch(lobbyActions.initRefreshRoom());
   }
 }
-export const authCheckState = (idToken, idTokenExpiryDate, username) => {
+export const authCheckState = (idToken, idTokenExpiryDate, username, uid) => {
   console.log('inside sign in action')
   return (dispatch) => {
 
     //if token did not expire, login
     if (idToken !== null) {
-      dispatch(login(idToken, idTokenExpiryDate, username))
+      dispatch(login(idToken, idTokenExpiryDate, username, uid))
       lobbyActions.initRefreshRoom();
     }
     // else logout

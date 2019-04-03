@@ -77,17 +77,19 @@ export const loading = (loading) => {
 //   }
 // }
 
-export const initCreateNewRoom = (roomName) => {
+export const initCreateNewRoom = (roomName, username, uid) => {
 
   return (dispatch) => {
     dispatch(loading(true));
 
-    axios.post('http://localhost:3000/createNewRoom', {
+    axios.post('http://localhost:3000/roomSetup', {
     //axios.post('https://c09-project-express-backend.herokuapp.com/signIn', {
-
-      roomName: roomName
+      uid: uid,
+      username: username,
+      gameName: roomName
     })
       .then((res) => {
+        console.log('createnewroom response: ', res.data)
         if (!res.data.error) {
           dispatch(createNewRoom(res.data))
           dispatch(lobbyActions.initRefreshRoom())

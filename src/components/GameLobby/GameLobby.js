@@ -31,7 +31,6 @@ class GameLobby extends Component {
     }
 
     this.closeModal = () => {
-      console.log('closemodal should be set to false')
       this.setState({
         ...this.state,
         showLoginModal: false
@@ -60,23 +59,24 @@ class GameLobby extends Component {
     }
 
     this.toggleCreateNewRoomModal = () => {
+      console.log('toggling')
       this.setState({
         ...this.state,
-        createNewRoomModal: !this.state.createNewRoomModal
+        showCreateNewRoomModal: !this.state.showCreateNewRoomModal
       })
     }
 
     this.closeCreateNewRoomModal = () => {
       this.setState({
         ...this.state,
-        createNewRoomModal: false
+        showCreateNewRoomModal: false
       })
     }
 
     this.openCreateNewRoomModal = () => {
       this.setState({
         ...this.state,
-        createNewRoomModal: true
+        showCreateNewRoomModal: true
       })
     }
 
@@ -86,7 +86,6 @@ class GameLobby extends Component {
   }
 
   componentDidUpdate() {
-    console.log('closemodal state: ', this.state.showLoginModal)
 
   }
 
@@ -120,7 +119,7 @@ class GameLobby extends Component {
     return (
       <>
         <div className={styles.Content}>
-          <NavBar toggleLoginModal={this.toggleLoginModal} toggleDrawer={this.toggleDrawer} />
+          <NavBar toggleCreateNewRoomModal={this.toggleCreateNewRoomModal} toggleLoginModal={this.toggleLoginModal} toggleDrawer={this.toggleDrawer} />
           <Drawer isOpen={this.state.showDrawer} closeDrawer={this.closeDrawer} toggleLoginModal={this.toggleLoginModal}></Drawer>
           <Login isOpen={this.state.showLoginModal} closeLoginModal={this.closeModal} openLoginModal={this.openModal}></Login>
           <CreateNewRoom isOpen={this.state.showCreateNewRoomModal} closeModal={this.closeCreateNewRoomModal} openModal={this.openCreateNewRoomModal}></CreateNewRoom>

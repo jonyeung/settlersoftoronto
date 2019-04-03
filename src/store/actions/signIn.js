@@ -90,7 +90,10 @@ export const initSignIn = (email, password) => {
       .then((res) => {
         if (!res.data.error) {
           dispatch(signIn(res.data))
-          dispatch(loginActions.authSignIn(res.data.idToken, res.data.idTokenExpiryDate, res.data.username))
+          console.log('signin data: ',  res.data)
+          console.log('signin data uid: ',  res.data.uid)
+
+          dispatch(loginActions.authSignIn(res.data.idToken, res.data.idTokenExpiryDate, res.data.username, res.data.uid))
         } else {
           dispatch(signInFailed(res.data.error));
         }

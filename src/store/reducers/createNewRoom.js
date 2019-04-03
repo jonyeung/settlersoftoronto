@@ -8,25 +8,25 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.SIGN_IN:
+    case actionTypes.CREATE_NEW_ROOM:
       return {
         ...state,
         errorMessage: '',
         error: false,
         loading: false,
       }
-    case actionTypes.SIGN_IN_FAILED:
+    case actionTypes.CREATE_NEW_ROOM_FAILED:
       return {
         ...state,
         errorMessage: action.errorMessage,
         error: true,
         loading: false
       }
-    case actionTypes.SIGN_IN_RESET:
+    case actionTypes.CREATE_NEW_ROOM_RESET:
       return {
         ...initialState
       }
-    case actionTypes.SIGN_IN_LOADING:
+    case actionTypes.CREATE_NEW_ROOM_LOADING:
       return {
         ...state,
         loading: true
