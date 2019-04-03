@@ -73,10 +73,11 @@ export const rollDice = (socket, roll, gameStateId) => {
   })
 }
 
-export const endTurn = (socket, gameStateId) => {
+export const endTurn = (socket, gameStateId, username) => {
   socket.emit('PLAYER_CONNECT', {
     string: 'end_turn',
     gameStateId: gameStateId,
+    username: username
   })
 }
 

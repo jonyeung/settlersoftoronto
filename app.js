@@ -447,9 +447,17 @@ io.on('connection', function (socket) {
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
 
-                if (gameState.currentTurn._id !== req.uid) io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
-
-                if (gameState.turnPhase == 'setup_placement') io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
+                console.log("current user", req.username)
+                console.log("current turn", gameState.currentTurn.username)
+                console.log("current phase", gameState.turnPhase)
+                if (gameState.currentTurn.username !== req.username) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Not your turn!' }));
+                    return;
+                }
+                if (gameState.turnPhase == 'roll_phase') {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Cannot build during roll phase' }));
+                    return;
+                }
 
                 gameState = boardFunctions.advanceToNextTurn(gameState);
 
@@ -724,7 +732,7 @@ io.on('connection', function (socket) {
                     io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Cannot build during roll phase' }));
                     return;
                 }
-                
+
                 if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
 
                     // REMOVE THIS FOR PRODUCTION

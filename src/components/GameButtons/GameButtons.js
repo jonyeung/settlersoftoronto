@@ -13,7 +13,7 @@ class GameButtons extends Component {
       endClickAction = this.props.rollDice
     } else if (this.props.currentPhase === 'build/trade/devcard_phase') {
       EndButtonStyle = styles.EndTurnButton
-      endClickAction = () => {this.props.endTurn(this.props.socket, this.props.gameStateId)}
+      endClickAction = () => {this.props.endTurn(this.props.socket, this.props.gameStateId, this.props.auth.username)}
     } else if (this.props.currentPhase === 'game not started') {
       EndButtonStyle = styles.StartGameButton
       endClickAction = () => {this.props.startGame(this.props.socket, this.props.gameStateId)}
@@ -39,12 +39,14 @@ const mapStateToProps = state => {
     currentPhase: state.gameReducer.turnPhase,
     currentPlayerNum: state.gameReducer.currentPlayerNum,
     gameStateId: state.gameReducer._id,
+
+    auth: state.authReducer
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    endTurn: (socket, gameStateId) => gameActions.endTurn(socket, gameStateId),
+    endTurn: (socket, gameStateId, username) => gameActions.endTurn(socket, gameStateId, username),
     startGame: (socket, gameStateId) => gameActions.startGame(socket, gameStateId),
   }
 }

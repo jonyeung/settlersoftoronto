@@ -28,6 +28,7 @@ class Game extends Component {
       showDice: false,
       //'EDGE' 'CORNER' or null
       buildType: null,
+      winner: false,
       victory: false,
       invalidMove: false,
       invalidMoveMessage: ''
@@ -180,6 +181,11 @@ class Game extends Component {
 
     this.checkVictory = () => {
       if ((this.props.gameState.gameOver === true && this.state.victory === false)) {
+        if (this.props.gameState.winner.username === this.props.auth.username) {
+          this.setState({
+            winner: true
+          })
+        }
         this.setVictoryTrue()
       }
     }
@@ -244,6 +250,7 @@ class Game extends Component {
 
         <GameInvalidMoveModal close={this.toggleInvalidMove} show={this.state.invalidMove} message={this.state.invalidMoveMessage}></GameInvalidMoveModal>
         <VictoryModal show={this.state.victory}
+        win={this.state.winner}
           quit={() => {
             this.props.leaveRoom(this.props.history)
             this.setState(...this.initialState)
