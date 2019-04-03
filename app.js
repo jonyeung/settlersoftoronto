@@ -171,6 +171,28 @@ app.get('/getRooms', function (req, res) {
 })
 
 
+app.post('/roomSetup', function (req, res) {
+    let gameName = req.body.gameName;
+    playerId = 0
+    // add the host
+    let players = [];
+    let host = new Player(req.body.username);
+    host._id = req.body.uid;
+    players.push(host);
+
+    // set up board
+    let hexes = boardFunctions.setupHexes();
+
+    let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
+    let id = gameStateRef.push(JSON.stringify(gameState)).key;
+    gameStateRef.child(id).once('value').then(function (snapshot) {
+        let gameState = JSON.parse(snapshot.val());
+        gameState._id = id;
+        res.JSON(id);
+    })
+})
+
+
 let GameState = (function (state) {
     return {
         gameName: state.gameName,
