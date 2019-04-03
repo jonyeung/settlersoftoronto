@@ -21,7 +21,7 @@ export const roomActionFailed = () => {
   }
 }
 
-export const initJoinRoom = (room, routerHistory) => {
+export const initJoinRoom = (gameStateId, routerHistory) => {
   return (dispatch) => {
 
     // axios.get('joinRoom/' + room + '.json')

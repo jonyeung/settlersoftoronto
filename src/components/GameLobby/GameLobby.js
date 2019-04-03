@@ -109,7 +109,7 @@ class GameLobby extends Component {
 
             {this.props.rooms.map((room) => {
               return (
-                <GameRoomSlot key={room.name} room={room} joinRoomAction={() => { this.props.initJoinRoom(5, this.props.history) }}></GameRoomSlot>
+                <GameRoomSlot gameStateId={room.id} key={room.name} room={room} joinRoomAction={() => { this.props.initJoinRoom(room.id, this.props.history) }}></GameRoomSlot>
               )
             })}
           </div>

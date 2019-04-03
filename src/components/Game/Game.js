@@ -66,10 +66,16 @@ class Game extends Component {
       }
     })
 
+    console.log('uid: ', this.props.auth.uid)
+    console.log('username: ', this.props.auth.username)
+    console.log('gameStateId: ', this.props.gameStateId)
+
     this.socket.emit('PLAYER_CONNECT', {
-      string: 'room_setup',
-      gameName: 'game1',
-      username: 'tony'
+      string: 'player_join',
+      gameStateId: this.props.gameStateId,
+      username: this.props.auth.username,
+      uid: this.props.auth.uid
+
     })
 
     this.davidJoins = () => {
@@ -338,7 +344,9 @@ const mapStateToProps = state => {
     error: state.lobbyReducer.error,
     gameState: state.gameReducer,
     players: state.gameReducer.players,
-    playerTurn: state.gameReducer.currentPlayerNum
+    playerTurn: state.gameReducer.currentPlayerNum,
+
+    auth: state.authReducer
   };
 };
 

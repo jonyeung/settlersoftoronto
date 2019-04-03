@@ -362,6 +362,7 @@ io.on('connection', function (socket) {
 
         // new player joins
         if (req.string == 'player_join') {
+            console.log('inside player join, id: ', req.gameStateId)
             let newPlayer = new Player(req.username);
 
             newPlayer._id = req.uid;
