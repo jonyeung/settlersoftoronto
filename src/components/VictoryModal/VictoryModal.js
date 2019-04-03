@@ -6,7 +6,7 @@ import styles from './VictoryModal.module.css';
 class VictoryModal extends Component {
   render() {
     let visibility = styles.Hide
-    let status = styles.Loss;
+    let status = null;
     if (this.props.win === false){
       status = styles.Loss
     }
