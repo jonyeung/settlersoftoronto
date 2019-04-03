@@ -166,7 +166,7 @@ app.get('/getRooms', function (req, res) {
     })
     .catch(function (err) {
         res.status(404)
-        res.JSON({
+        res.json({
             error: err,
             rooms: []
         })
@@ -192,7 +192,7 @@ app.post('/roomSetup', function (req, res) {
     gameStateRef.child(id).once('value').then(function (snapshot) {
         let gameState = JSON.parse(snapshot.val());
         gameState._id = id;
-        res.JSON(id);
+        res.json(id);
     })
 })
 
