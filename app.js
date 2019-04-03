@@ -197,6 +197,35 @@ app.post('/roomSetup', function (req, res) {
 })
 
 
+app.post('/playerJoin', function (req, res) {
+    let newPlayer = new Player(req.body.username);
+
+    newPlayer._id = req.body.uid;
+
+    let id = req.body.gameStateId;
+    gameStateRef.child(id).once('value').then(function (snapshot) {
+        let gameState = JSON.parse(snapshot.val());
+
+        // error if the game is full
+        if (gameState.maxPlayerNum == 4) res.status(403).json({error: "Cannot join: room is full"});
+        // if (gameState.maxPlayerNum == 4) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: "Cannot join: room is full"}));
+
+        gameState.players.push(newPlayer);
+        gameState.maxPlayerNum++;
+        // store game state
+        gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
+            if (err) res.status(404).json({error: err});
+            res.status(200).json(gameState);
+            // if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+            // io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
+        })
+    })
+        .catch(function (err) {
+            res.status(404).json({error: err});
+            // io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
+        })
+})
+
 let GameState = (function (state) {
     return {
         gameName: state.gameName,
@@ -370,6 +399,10 @@ io.on('connection', function (socket) {
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
+
+                // error if the game is full
+                if (gameState.maxPlayerNum == 4) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: "Cannot join: room is full"}));
+
                 gameState.players.push(newPlayer);
                 gameState.maxPlayerNum++;
                 // store game state

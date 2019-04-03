@@ -83,7 +83,7 @@ export const initCreateNewRoom = (roomName, username, uid) => {
     dispatch(loading(true));
 
     axios.post('http://localhost:3000/roomSetup', {
-    //axios.post('https://c09-project-express-backend.herokuapp.com/signIn', {
+    //axios.post('https://c09-project-express-backend.herokuapp.com/roomSetup', {
       uid: uid,
       username: username,
       gameName: roomName
