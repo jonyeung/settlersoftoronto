@@ -157,7 +157,6 @@ app.get('/getRooms', function (req, res) {
             }
             rooms.push(roomObj);
         }
-        console.log(rooms)
         res.status(200)
         res.json({
             error: null,
@@ -177,17 +176,17 @@ app.get('/getRooms', function (req, res) {
 
 app.post('/roomSetup', function (req, res) {
     let gameName = req.body.gameName;
-    playerId = 0
+    //playerId = 0
     // add the host
-    let players = [];
-    let host = new Player(req.body.username);
-    host._id = req.body.uid;
-    players.push(host);
+    // let players = [];
+    // let host = new Player(req.body.username);
+    // host._id = req.body.uid;
+    // players.push(host);
 
     // set up board
     let hexes = boardFunctions.setupHexes();
 
-    let gameState = new GameState({ gameName: gameName, players: players, hexes: hexes, maxPlayers: players.length });
+    let gameState = new GameState({ gameName: gameName, players: [], hexes: hexes, maxPlayers: 0});
     let id = gameStateRef.push(JSON.stringify(gameState)).key;
     gameStateRef.child(id).once('value').then(function (snapshot) {
         let gameState = JSON.parse(snapshot.val());
@@ -200,11 +199,15 @@ app.post('/roomSetup', function (req, res) {
 app.post('/playerJoin', function (req, res) {
     let newPlayer = new Player(req.body.username);
 
-    newPlayer._id = req.body.uid;
+    //newPlayer._id = req.body.uid;
 
     let id = req.body.gameStateId;
     gameStateRef.child(id).once('value').then(function (snapshot) {
         let gameState = JSON.parse(snapshot.val());
+
+        gameState._id = id;
+
+        newPlayer._id = gameState.maxPlayerNum;
 
         // error if the game is full
         if (gameState.maxPlayerNum == 4) res.status(403).json({error: "Cannot join: room is full"});
@@ -215,6 +218,8 @@ app.post('/playerJoin', function (req, res) {
         // store game state
         gameStateRef.child(id).set(JSON.stringify(gameState), function (err) {
             if (err) res.status(404).json({error: err});
+            io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
+            gameState.youArePlayer = newPlayer._id;
             res.status(200).json(gameState);
             // if (err) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: err }));
             // io.sockets.emit('PLAYER_CONNECT', JSON.stringify(gameState));
@@ -391,7 +396,6 @@ io.on('connection', function (socket) {
 
         // new player joins
         if (req.string == 'player_join') {
-            console.log('inside player join, id: ', req.gameStateId)
             let newPlayer = new Player(req.username);
 
             newPlayer._id = req.uid;
@@ -399,7 +403,6 @@ io.on('connection', function (socket) {
             let id = req.gameStateId;
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
-
                 // error if the game is full
                 if (gameState.maxPlayerNum == 4) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: "Cannot join: room is full"}));
 
@@ -421,6 +424,7 @@ io.on('connection', function (socket) {
         // game starts
         if (req.string == 'start_game') {
             let id = req.gameStateId
+            console.log("game id: ", id)
             gameStateRef.child(id).once('value').then(function (snapshot) {
                 let gameState = JSON.parse(snapshot.val());
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
@@ -567,8 +571,15 @@ io.on('connection', function (socket) {
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
 
-                if (currentPlayer._id !== req.uid) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Not your turn!' }));
-                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Cannot build during roll phase' }));
+
+                if (currentPlayer.username !== req.username) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Not your turn!' }));
+                    return;
+                }
+                if (gameState.turnPhase == 'roll_phase') {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Cannot build during roll phase' }));
+                    return;
+                }
 
                 if (boardFunctions.isValidRoad(req.start, req.end, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
@@ -623,8 +634,14 @@ io.on('connection', function (socket) {
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
 
-                if (currentPlayer._id !== req.uid) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Not your turn!' }));
-                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Cannot build during roll phase' }));
+                if (currentPlayer.username !== req.username) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Not your turn!' }));
+                    return;
+                }
+                if (gameState.turnPhase == 'roll_phase') {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Cannot build during roll phase' }));
+                    return;
+                }
 
                 if (boardFunctions.isValidSettlement(req.location, currentPlayer, gameState)) {
                     if (gameState.turnPhase !== 'setup_placement') {
@@ -699,9 +716,15 @@ io.on('connection', function (socket) {
                 gameState.currentTurn = gameState.players[gameState.currentPlayerNum];
                 let currentPlayer = gameState.currentTurn;
 
-                if (currentPlayer._id !== req.uid) io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Not your turn!' }));
-                if (gameState.turnPhase == 'roll_phase') io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ invalidMove: 'Cannot build during roll phase' }));
-
+                if (currentPlayer.username !== req.username) {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Not your turn!' }));
+                    return;
+                }
+                if (gameState.turnPhase == 'roll_phase') {
+                    io.sockets.emit('PLAYER_CONNECT', JSON.stringify({ error: 'Cannot build during roll phase' }));
+                    return;
+                }
+                
                 if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
 
                     // REMOVE THIS FOR PRODUCTION
