@@ -2,11 +2,12 @@ import * as actionTypes from './actionTypes';
 import * as gameActions from '../actions/game';
 import axios from '../../axios-projects';
 
-export const joinRoom = (room) => {
-  return {
-    type: actionTypes.JOIN_ROOM,
-    joinedRoom: room
-  }
+export const joinRoom = (gameState) => {
+  return gameActions.updateGameState(gameState)
+  // return {
+  //   type: actionTypes.JOIN_ROOM,
+  //   joinedRoom: room
+  // }
 }
 
 export const leaveRoom = () => {
@@ -21,17 +22,25 @@ export const roomActionFailed = () => {
   }
 }
 
-export const initJoinRoom = (gameStateId, routerHistory) => {
+export const initJoinRoom = (gameStateId, username, uid, routerHistory) => {
   return (dispatch) => {
 
-    // axios.get('joinRoom/' + room + '.json')
-    //   .then(res => {
-    //     dispatch(joinRoom(res.data));
-    //   })
-    //   .catch(error => {
-    //     dispatch(roomActionFailed());
-    //   });
-    routerHistory.push('/Game')
+    axios.post('http://localhost:3000/playerJoin', {
+      username,
+      uid,
+      gameStateId
+    })
+      .then(res => {
+        console.log('join room response: ', res.data)
+        routerHistory.push('/Game')
+
+        // setTimeout(routerHistory.push('/Game'), 50)
+        dispatch(joinRoom(res.data));
+      })
+      .catch(error => {
+        dispatch(roomActionFailed(error));
+      });
+
   }
 }
 

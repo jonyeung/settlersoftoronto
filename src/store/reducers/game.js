@@ -19,12 +19,14 @@ const initialState = {
   gameOver: false,
   winner: null,
   _id: null,
+  
+  youArePlayer: null,
 
   error: null
 }
 
 const reducer = (state = initialState, action) => {
-  // console.log('reducer', state)
+  console.log('game reducer', state)
   switch (action.type) {
     case actionTypes.SELECT_EDGE:
       return {
@@ -54,6 +56,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.newGameState,
+        youArePlayer: state.youArePlayer === null ? action.newGameState.youArePlayer : state.youArePlayer,
         error: null
       }
     case actionTypes.RESET_GAME_STATE:

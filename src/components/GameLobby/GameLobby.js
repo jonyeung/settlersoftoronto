@@ -109,7 +109,7 @@ class GameLobby extends Component {
 
             {this.props.rooms.map((room) => {
               return (
-                <GameRoomSlot gameStateId={room.id} key={room.name} room={room} joinRoomAction={() => { this.props.initJoinRoom(room.id, this.props.history) }}></GameRoomSlot>
+                <GameRoomSlot gameStateId={room.id} key={room.name} room={room} joinRoomAction={() => { this.props.initJoinRoom(room.id, this.props.auth.username, this.props.auth.uid, this.props.history) }}></GameRoomSlot>
               )
             })}
           </div>
@@ -135,13 +135,15 @@ const mapStateToProps = state => {
   return {
     authState: state.authReducer,
     rooms: state.lobbyReducer.rooms,
-    error: state.lobbyReducer.error
+    error: state.lobbyReducer.error,
+
+    auth: state.authReducer
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    initJoinRoom: (room, routerHistory) => dispatch(joinRoomActions.initJoinRoom(room, routerHistory)),
+    initJoinRoom: (gameStateId, username, uid, routerHistory) => dispatch(joinRoomActions.initJoinRoom(gameStateId, username, uid, routerHistory)),
     initRefreshRoom: () => dispatch(lobbyActions.initRefreshRoom())
   }
 }

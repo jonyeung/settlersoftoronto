@@ -19,7 +19,8 @@ class GameBuildOptions extends Component {
             this.props.buildSettlement(
               this.props.socket,
               this.props.selectedCornerId,
-              this.props.gameStateId
+              this.props.gameStateId,
+              this.props.auth.username
             )
           }}>
           <div className={styles.Icon}>
@@ -41,7 +42,8 @@ class GameBuildOptions extends Component {
             this.props.buildCity(
               this.props.socket,
               this.props.selectedCornerId,
-              this.props.gameStateId
+              this.props.gameStateId,
+              this.props.auth.username
             )
           }}>
           <div className={styles.Icon}>
@@ -64,10 +66,12 @@ class GameBuildOptions extends Component {
       <>
         <div className={[styles.Road, styles.Option].join(' ')}
           onClick={() => {
+            console.log()
             this.props.buildRoad(
               this.props.socket,
               this.props.selectedEdgeId,
-              this.props.gameStateId
+              this.props.gameStateId,
+              this.props.auth.username
             )
           }}>
           <div className={styles.Icon}>
@@ -106,15 +110,17 @@ const mapStateToProps = state => {
     selectedCornerId: state.gameReducer.selectedCornerId,
     selectedEdgeId: state.gameReducer.selectedEdgeId,
     gameStateId: state.gameReducer._id,
+
+    auth: state.authReducer,
     error: state.lobbyReducer.error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    buildSettlement: (socket, selectedCornerId, gameStateId) => gameActions.buildSettlement(socket, selectedCornerId, gameStateId),
-    buildCity: (socket, selectedCornerId, gameStateId) => gameActions.buildCity(socket, selectedCornerId, gameStateId),
-    buildRoad: (socket, selectedEdgeId, gameStateId) => gameActions.buildRoad(socket, selectedEdgeId, gameStateId),
+    buildSettlement: (socket, selectedCornerId, gameStateId, username) => gameActions.buildSettlement(socket, selectedCornerId, gameStateId, username),
+    buildCity: (socket, selectedCornerId, gameStateId, username) => gameActions.buildCity(socket, selectedCornerId, gameStateId, username),
+    buildRoad: (socket, selectedEdgeId, gameStateId, username) => gameActions.buildRoad(socket, selectedEdgeId, gameStateId, username),
   }
 }
 

@@ -70,13 +70,13 @@ class Game extends Component {
     console.log('username: ', this.props.auth.username)
     console.log('gameStateId: ', this.props.gameStateId)
 
-    this.socket.emit('PLAYER_CONNECT', {
-      string: 'player_join',
-      gameStateId: this.props.gameStateId,
-      username: this.props.auth.username,
-      uid: this.props.auth.uid
+    // this.socket.emit('PLAYER_CONNECT', {
+    //   string: 'player_join',
+    //   gameStateId: this.props.gameStateId,
+    //   username: this.props.auth.username,
+    //   uid: this.props.auth.uid
 
-    })
+    // })
 
     this.davidJoins = () => {
       console.log('this.props.gameStateId', this.props.gameStateId)
