@@ -2,6 +2,7 @@
 
 ## URL
 https://c09-project-express-backend.herokuapp.com/
+video link: https://youtu.be/8QEM0uK68K4
 
 ## Team Members:
 Ziming Liu,
