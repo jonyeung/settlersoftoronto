@@ -2,6 +2,7 @@
 
 ## URL
 https://c09-project-express-backend.herokuapp.com/
+video link: https://youtu.be/8QEM0uK68K4
 
 ## Team Members:
 Ziming Liu,
@@ -10,7 +11,8 @@ Jonathan Yeung.
 
 ## Description
 A multiplayer (3-4 players) online board game based on the Settlers of Catan but with our own custom rules. 
-Such rules include: 
+Such rules include:
+  - 5 Victory points to win (down from 10)
   - 7 rolls now grant the current player 1 of each resource
   - No dev cards (as of yet)
   - No trading (as of yet)
