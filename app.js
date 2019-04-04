@@ -655,10 +655,10 @@ io.on('connection', function (socket) {
                     if (gameState.turnPhase !== 'setup_placement') {
 
                         // REMOVE FOR PROD
-                        currentPlayer.resources.Brick = currentPlayer.resources.Brick + 1;
-                        currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 1;
-                        currentPlayer.resources.Wood = currentPlayer.resources.Wood + 1;
-                        currentPlayer.resources.Sheep = currentPlayer.resources.Sheep + 1;
+                        // currentPlayer.resources.Brick = currentPlayer.resources.Brick + 1;
+                        // currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 1;
+                        // currentPlayer.resources.Wood = currentPlayer.resources.Wood + 1;
+                        // currentPlayer.resources.Sheep = currentPlayer.resources.Sheep + 1;
 
                         if (currentPlayer.resources.Wood > 0 && currentPlayer.resources.Brick > 0 && currentPlayer.resources.Wheat > 0 && currentPlayer.resources.Sheep > 0) {
                             let settlement = new Settlement({ player: currentPlayer._id, location: req.location });
@@ -736,8 +736,8 @@ io.on('connection', function (socket) {
                 if (boardFunctions.checkValidCity(req.location, gameState, currentPlayer)) {
 
                     // REMOVE THIS FOR PRODUCTION
-                    currentPlayer.resources.Ore = currentPlayer.resources.Ore + 3;
-                    currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 2;
+                    // currentPlayer.resources.Ore = currentPlayer.resources.Ore + 3;
+                    // currentPlayer.resources.Wheat = currentPlayer.resources.Wheat + 2;
 
                     if (currentPlayer.resources.Ore > 2 && currentPlayer.resources.Wheat > 1) {
                         boardFunctions.deleteSettlementAtLocation(req.location, gameState);

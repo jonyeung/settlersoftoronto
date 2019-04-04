@@ -512,7 +512,7 @@ function checkValidCity(location, gameState, currentPlayer) {
 
 // check win condition
 function checkWinCondition(player, gameState) {
-    if (player.VictoryPoints > 2) {
+    if (player.VictoryPoints > 4) {
         gameState.gameOver = true;
         gameState.winner = player;
     } 
