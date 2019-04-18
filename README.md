@@ -13,7 +13,6 @@ Jonathan Yeung.
 A multiplayer (3-4 players) online board game based on the Settlers of Catan but with our own custom rules. 
 Such rules include:
   - 5 Victory points to win (down from 10)
-  - 7 rolls now grant the current player 1 of each resource
   - No dev cards (as of yet)
   - No trading (as of yet)
   - No longest road, longest army conditions
